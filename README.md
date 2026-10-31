@@ -23,6 +23,13 @@ Próximas fases: macros por ración (con Open Food Facts como ayuda opcional), l
 
 ## Instalación
 
+La forma más sencilla es el botón **«Instalar app»** de la propia aplicación (abierta en Chrome):
+- **Móvil:** franja verde arriba, en Recetas.
+- **Ordenador:** en la barra lateral, encima de «Deshacer».
+- **Los dos:** en **Ajustes y avisos → Aplicación**, que además dice si ya está instalada.
+
+El botón solo aparece cuando Chrome permite instalarla (no si ya está instalada). Si no aparece, usa el menú de Chrome:
+
 ### Ordenador (Chrome)
 1. Abre https://carlosmera10.github.io/recetario/ en Chrome.
 2. Pulsa el icono de instalar a la derecha de la barra de direcciones, o el menú **⋮** (arriba a la derecha) → **«Transmitir, guardar y compartir»** → **«Instalar página como aplicación…»** (el nombre exacto puede variar según la versión de Chrome).

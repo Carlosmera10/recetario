@@ -68,6 +68,9 @@ a{color:var(--primary)}
 .btn.sm{min-height:34px}
 .btn.sm.icon{width:34px}
 .btn:disabled{opacity:.35;cursor:default;background:transparent}
+.btn.install{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.install:hover{filter:brightness(1.08);background:var(--accent)}
+.install-bar{width:100%;min-height:46px;margin-bottom:12px;font-size:16px}
 .linkbtn{background:none;border:0;padding:0;color:var(--primary);font:inherit;font-weight:650;cursor:pointer}
 input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 11px;min-width:0;width:100%}
 select{padding-right:6px}
@@ -231,6 +234,8 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
   .sb-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--text);background:none;border:0;font:inherit;font-size:15px;font-weight:650;cursor:pointer;width:100%;text-align:left;white-space:nowrap}
   .sb-item:hover{background:var(--surface-2)}
   .sb-item.on{background:var(--primary-soft);color:var(--primary)}
+  .sb-item.install{background:var(--accent);color:var(--accent-ink);margin-bottom:6px}
+  .sb-item.install:hover{background:var(--accent);filter:brightness(1.08)}
   .sb-item .cnt{margin-left:auto;font-size:12px;color:var(--muted);font-weight:650}
   .sb-sp{flex:1}
   html.sb-c .sb-label,html.sb-c .cnt,html.sb-c .sb-brand span{display:none}
@@ -287,6 +292,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
   <symbol id="i-tm" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5M12 2v3M8 5h8"/></symbol>
   <symbol id="i-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
   <symbol id="i-clip" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></symbol>
+  <symbol id="i-install" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 17v4"/><path d="M8 21h8"/><path d="m15 10-3 3-3-3"/><path d="M12 13V6"/></symbol>
   <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
 </svg>
 
@@ -303,7 +309,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
 /* =========================================================
    Constantes
    ========================================================= */
-const APP_VERSION='1.1.0';
+const APP_VERSION='1.1.1';
 const DB_NAME='recetario_v1', UI_KEY='recetario_v1_ui', CHANNEL_NAME='recetario';
 const UNITS=['g','kg','ml','l','cda','cdta','ud'];
 const UNIT_INFO={g:{fam:'peso',f:1},kg:{fam:'peso',f:1000},ml:{fam:'volumen',f:1},l:{fam:'volumen',f:1000},cda:{fam:'volumen',f:15},cdta:{fam:'volumen',f:5},ud:{fam:'unidades',f:1}};
@@ -319,6 +325,19 @@ const TM_ACC={mariposa:'Mariposa',cestillo:'Cestillo',varoma:'Recipiente Varoma'
 const TM_MODES={amasar:'Amasar',turbo:'Turbo'};
 const TM_OTHER_RE=/alta\s+temperatura|cocci[oó]n\s+lenta|sous[\s-]?vide|fermentar|espesar|hervir\s+(?:huevos|agua)|pelador|cocinar\s+arroz/i;
 const TAB_ID=Math.random().toString(36).slice(2);
+
+/* Instalación (igual que en el Revisor): se captura el aviso de Chrome lo antes posible
+   y se muestra un botón propio «Instalar app». */
+let deferredPrompt=null;
+const isStandalone=()=>!!(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(typeof state!=='undefined'&&state)renderApp()});
+window.addEventListener('appinstalled',()=>{deferredPrompt=null;if(state){renderApp();toast('App instalada',{icon:'install'})}});
+async function promptInstall(){
+  if(!deferredPrompt)return;
+  const p=deferredPrompt;
+  try{p.prompt();await p.userChoice}catch(e){console.warn(e)}
+  deferredPrompt=null;renderApp();
+}
 
 /* =========================================================
    Utilidades
@@ -735,7 +754,7 @@ function renderApp(navChanged=false){
   const act=navActive();
   $('#sidebar').innerHTML=`<div class="sb-brand">${ic('pot')}<span>Recetario</span></div>`+
     NAV.map(n=>`<button class="sb-item ${act===n.v?'on':''}" data-act="nav" data-view="${n.v}" title="${esc(n.label)}">${ic(n.icon)}<span class="sb-label">${n.label}</span>${n.v==='recipes'?`<span class="cnt">${state.recipes.length}</span>`:''}</button>`).join('')+
-    `<div class="sb-sp"></div><button class="sb-item" data-act="undo" title="Deshacer (Ctrl+Z)" ${undoStack.length?'':'disabled style="opacity:.4"'}>${ic('undo')}<span class="sb-label">Deshacer</span></button>`+
+    `<div class="sb-sp"></div>${deferredPrompt?`<button class="sb-item install" data-act="install" title="Instalar app">${ic('install')}<span class="sb-label">Instalar app</span></button>`:''}<button class="sb-item" data-act="undo" title="Deshacer (Ctrl+Z)" ${undoStack.length?'':'disabled style="opacity:.4"'}>${ic('undo')}<span class="sb-label">Deshacer</span></button>`+
     `<button class="sb-item" data-act="toggle-sb" title="${ui.sbCollapsed?'Mostrar barra':'Plegar barra'}">${ic('sidebar')}<span class="sb-label">Plegar barra</span></button>`;
   const am=navActiveMobile();
   $('#bottombar').innerHTML=BOTTOM.map(n=>`<button class="${am===n.v?'on':''}" data-act="nav" data-view="${n.v}">${ic(n.icon)}<span>${n.label}</span></button>`).join('');
@@ -771,6 +790,7 @@ function vRecipes(){
     ...(hasTm&&state.tags.length?['<span class="chip-sep"></span>']:[]),
     ...sortedTags().map(t=>`<button class="chip ${ui.tags.includes(t.id)?'on':''}" data-act="filter-tag" data-id="${t.id}">${esc(t.name)}</button>`)];
   return `<header class="topbar"><h1>Recetas</h1><div class="actions"><button class="btn" data-act="paste-recipe" title="Pegar receta" aria-label="Pegar receta">${ic('clip')}<span class="hide-m">Pegar receta</span></button><button class="btn primary" data-act="new-recipe">${ic('plus')}<span>Nueva<span class="hide-m"> receta</span></span></button></div></header>
+  ${deferredPrompt?`<button class="btn install mobile-only install-bar" data-act="install">${ic('install')}Instalar app</button>`:''}
   ${due?`<div class="banner">${ic('alert')}<span class="grow">${esc(due)}</span><button class="btn sm" data-act="export">${ic('download')}Exportar</button><button class="btn sm ghost" data-act="snooze-backup">Más tarde</button></div>`:''}
   ${state.recipes.length?`<div class="toolbar">
     <label class="search">${ic('search')}<input id="q" type="search" value="${esc(ui.q)}" placeholder="Receta, ingrediente o etiqueta" autocomplete="off" aria-label="Buscar"></label>
@@ -1058,6 +1078,8 @@ function vSettings(){
     <a class="row link" data-act="nav" data-view="tags">${ic('tag')}Etiquetas${ic('left')}</a>
     <a class="row link" data-act="nav" data-view="help">${ic('help')}Instrucciones${ic('left')}</a>
   </div>
+  <h2 class="sec">Aplicación</h2>
+  <div class="list"><div class="setrow"><span class="lbl">Instalar<span class="sub" id="install-status">${isStandalone()?'Ya la estás usando como aplicación instalada':deferredPrompt?'Lista para instalar en este dispositivo':location.protocol==='file:'?'Ábrela desde la web publicada para poder instalarla':'Chrome no ofrece instalarla ahora: puede que ya esté instalada. Mira «Instrucciones»'}</span></span>${deferredPrompt?`<button class="btn install" data-act="install">${ic('install')}Instalar app</button>`:''}</div></div>
   <h2 class="sec">Apariencia</h2>
   <div class="list"><div class="setrow"><span class="lbl">Tema</span><div class="seg">${[['auto','Automático'],['light','Claro'],['dark','Oscuro']].map(([v,l])=>`<button class="${ui.theme===v?'on':''}" data-act="theme" data-v="${v}">${l}</button>`).join('')}</div></div></div>
   <h2 class="sec">Copias de seguridad</h2>
@@ -1127,8 +1149,9 @@ function vHelp(){
   <li><b>Sustituir</b> borra lo que hay y deja solo lo del archivo.</li>
   <li>Para borrar los datos usa <b>Vaciar</b> en Ajustes. No borres los «datos del sitio» desde el navegador: borrarías también los de tus otras aplicaciones.</li></ul>
   <h2>Instalar</h2>
-  <ul><li><b>Ordenador (Chrome):</b> icono de instalar a la derecha de la barra de direcciones, o menú ⋮ → «Transmitir, guardar y compartir» → «Instalar página como aplicación…».</li>
-  <li><b>Android (Chrome):</b> menú ⋮ → «Instalar aplicación» (o «Añadir a la pantalla de inicio» → «Instalar»).</li></ul>
+  <ul><li>Abre la app en <b>Chrome</b> y pulsa el botón <b>Instalar app</b>: en el móvil está arriba, en Recetas; en el ordenador, en la barra lateral. También está en <b>Ajustes y avisos → Aplicación</b>. Confirma con <b>Instalar</b>.</li>
+  <li>El botón solo aparece cuando Chrome permite instalar la app: no sale si ya está instalada ni en otros navegadores. A veces tarda unos segundos en aparecer la primera vez; si no sale, recarga la página.</li>
+  <li>Si aun así no aparece: <b>Ordenador:</b> icono de instalar a la derecha de la barra de direcciones, o menú ⋮ → «Transmitir, guardar y compartir» → «Instalar página como aplicación…». <b>Android:</b> menú ⋮ → «Instalar aplicación» (o «Añadir a la pantalla de inicio» → «Instalar»).</li></ul>
   </div>`;
 }
 
@@ -1449,6 +1472,7 @@ const ACTIONS={
     if(used.length){await modal({title:'No se puede borrar',body:`<p>«${esc(g.name)}» se usa en:</p><ul>${used.slice(0,12).map(r=>`<li>${esc(r.title)}</li>`).join('')}${used.length>12?`<li>y ${used.length-12} más</li>`:''}</ul>`,buttons:[{label:'Entendido',cls:'primary',value:true}]});return}
     commit('Ingrediente borrado',s=>{s.ingredients=s.ingredients.filter(x=>x.id!==g.id)})},
   // Ajustes
+  'install':()=>promptInstall(),
   'theme':el=>{ui.theme=el.dataset.v;saveUI();applyTheme();renderApp()},
   'export':()=>exportJSON(),
   'export-md':()=>{const list=state.recipes.slice().sort((a,b)=>COLL.compare(a.title,b.title));download(`recetario-${ymd()}.md`,list.map(recipeToMarkdown).join('\n\n---\n\n'),'text/markdown');toast('Recetas exportadas en texto')},
