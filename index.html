@@ -553,23 +553,26 @@ function idbGet(store,key){return new Promise((res,rej)=>{const rq=db.transactio
 function idbPut(store,key,val){return new Promise((res,rej)=>{const t=db.transaction(store,'readwrite');t.objectStore(store).put(val,key);t.oncomplete=()=>res();t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)})}
 function idbAll(store){return new Promise((res,rej)=>{const out=[];const rq=db.transaction(store,'readonly').objectStore(store).openCursor();rq.onsuccess=()=>{const c=rq.result;if(c){out.push([c.key,c.value]);c.continue()}else res(out)};rq.onerror=()=>rej(rq.error)})}
 
-// Guardado: el primer cambio se escribe al momento (por si se cierra la app justo después)
-// y los cambios seguidos dentro de 300 ms se agrupan en una sola escritura posterior.
-let saveTimer=null,savePending=false;
+// Guardado: cada cambio se escribe al momento. Los cambios los provoca el usuario (no van letra a letra),
+// así que no hace falta agrupar, y nada queda pendiente si se cierra la app justo después.
+// IndexedDB aplica las escrituras en el orden en que se abren, así que la última siempre gana.
+// Respaldo: si la app se cierra antes de que IndexedDB confirme, el cambio queda apuntado (de forma síncrona)
+// en localStorage y se recupera al arrancar. Se borra en cuanto IndexedDB confirma esa escritura.
+const PENDING_KEY='recetario_v1_pending';
 const channel=('BroadcastChannel' in window)?new BroadcastChannel(CHANNEL_NAME):null;
-function save(){
-  if(saveTimer){savePending=true;return}
-  writeNow();
-  saveTimer=setTimeout(()=>{saveTimer=null;if(savePending){savePending=false;save()}},300);
-}
+let lastTs=0;
+function save(){writeNow()}
 async function writeNow(){
   if(!db)return;
-  try{await idbPut('state','main',state);channel&&channel.postMessage({type:'saved',from:TAB_ID})}
-  catch(e){console.error(e);toast('No se ha podido guardar: '+e.message,{icon:'alert'})}
+  const ts=Math.max(Date.now(),lastTs+1);lastTs=ts;
+  try{localStorage.setItem(PENDING_KEY,JSON.stringify({ts,state}))}catch(e){}
+  try{
+    await idbPutState(state,ts);
+    try{const p=JSON.parse(localStorage.getItem(PENDING_KEY)||'null');if(p&&p.ts===ts)localStorage.removeItem(PENDING_KEY)}catch(e){}
+    channel&&channel.postMessage({type:'saved',from:TAB_ID});
+  }catch(e){console.error(e);toast('No se ha podido guardar: '+e.message,{icon:'alert'})}
 }
-function flushSave(){if(savePending){savePending=false;writeNow()}}
-window.addEventListener('pagehide',flushSave);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushSave()});
+function idbPutState(val,ts){return new Promise((res,rej)=>{const t=db.transaction('state','readwrite');const os=t.objectStore('state');os.put(val,'main');os.put(ts,'savedAt');t.oncomplete=()=>res();t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)})}
 if(channel)channel.onmessage=async e=>{
   if(!e.data||e.data.from===TAB_ID||e.data.type!=='saved'||!db)return;
   try{state=normalizeState(await idbGet('state','main'));undoStack.length=0;renderApp()}catch(err){console.error(err)}
@@ -1555,9 +1558,14 @@ async function boot(){
   applyTheme();
   try{
     db=await openDB();
-    const raw=await idbGet('state','main');
+    let raw=await idbGet('state','main');
+    const savedAt=(await idbGet('state','savedAt'))||0;
+    let recovered=false;
+    try{const p=JSON.parse(localStorage.getItem(PENDING_KEY)||'null');
+      if(p&&p.state&&typeof p.ts==='number'){if(p.ts>savedAt){raw=p.state;recovered=true;lastTs=p.ts}else localStorage.removeItem(PENDING_KEY)}}catch(e){}
+    lastTs=Math.max(lastTs,savedAt);
     state=normalizeState(raw);
-    if(!raw)await writeNow();
+    if(!raw||recovered)await writeNow();
   }catch(e){
     console.error(e);dbError=true;state=normalizeState(null);
     toast('No se puede acceder al almacenamiento: los cambios no se guardarán',{icon:'alert'});

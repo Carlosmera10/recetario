@@ -37,7 +37,7 @@ No abras `index.html` desde el disco (`file://`): no se instala ni funciona el s
 
 ## Datos
 
-- Se guardan **solo en el dispositivo**, en IndexedDB (base de datos `recetario_v1`). Las preferencias de la interfaz van en `localStorage` con la clave `recetario_v1_ui`.
+- Se guardan **solo en el dispositivo**, en IndexedDB (base de datos `recetario_v1`). Las preferencias de la interfaz van en `localStorage` con la clave `recetario_v1_ui`. Cada cambio se apunta también en `recetario_v1_pending` hasta que IndexedDB confirma la escritura, para no perderlo si la app se cierra en ese instante.
 - El repositorio solo contiene código, nunca datos.
 - El origen `carlosmera10.github.io` se comparte con otras apps: **no uses «borrar datos del sitio»**. Para vaciar el recetario usa **Ajustes y avisos → Vaciar**.
 - Para pasar recetas entre el móvil y el ordenador: exporta en uno e importa con «Fusionar» en el otro.
