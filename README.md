@@ -9,7 +9,7 @@ Aplicación web personal (PWA) para guardar recetas, instalable en el ordenador 
 - **Recetas** con título, categoría, etiquetas, descripción, raciones, tiempos de preparación y cocción, ingredientes, pasos, notas y enlace de origen.
 - **Ingredientes estructurados**: cantidad + unidad (`g`, `kg`, `ml`, `l`, `cda`, `cdta`, `ud`) + ingrediente del catálogo. Cantidad vacía = «al gusto». Admite coma, punto y fracciones (`1/2`, `1 1/2`).
 - **Catálogo de ingredientes** con sección del súper. Renombrar un ingrediente lo cambia en todas las recetas; no se puede borrar si alguna receta lo usa.
-- **Ficha de receta** con selector de raciones que escala las cantidades y pasos que se tachan al tocarlos.
+- **Ficha de receta** con selector de raciones que escala las cantidades y pasos que se tachan al tocarlos. En cada paso, los ingredientes que nombra salen resaltados y, debajo, con su cantidad escalada (se reconocen solos, en singular o plural y sin importar tildes).
 - **Búsqueda** por título, ingrediente, etiqueta o categoría; filtros por categoría y etiquetas combinables; orden A-Z, más recientes o más rápidas.
 - **Categorías** (con orden) y **etiquetas** editables.
 - **Deshacer** en cada cambio (aviso con «Deshacer», Ctrl+Z en el ordenador).
@@ -53,4 +53,4 @@ No abras `index.html` desde el disco (`file://`): no se instala ni funciona el s
 
 - HTML, CSS y JS vanilla en un único `index.html`, sin librerías ni compilación.
 - Service worker «primero la red» (`cache: 'no-store'`), registrado con `updateViaCache: 'none'`. **Subir el número de `CACHE` en `sw.js` cada vez que se cambie ese archivo.**
-- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `setState(json)`).
+- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `stepIngredients`, `ingCandidates`, `fold`, `setState(json)`).

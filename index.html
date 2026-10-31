@@ -142,6 +142,13 @@ input.inline:focus{background:var(--surface)}
 .steps li.done{opacity:.45;text-decoration:line-through}
 .notes{white-space:pre-wrap}
 .st-text{white-space:pre-wrap}
+mark.hl{background:var(--accent-soft);color:var(--accent);font-weight:750;border-radius:5px;padding:0 3px;margin:0 -1px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.ichips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;white-space:normal}
+.ichip{display:inline-flex;align-items:baseline;gap:6px;padding:4px 10px;border-radius:8px;border:1.5px solid color-mix(in srgb,var(--accent) 45%,transparent);background:var(--surface);font-size:14.5px;font-weight:650}
+.ichip b{color:var(--accent);font-weight:800}
+.ichip .inote{color:var(--muted);font-weight:500}
+.ichip.again{border-style:dashed;color:var(--muted);font-weight:600}
+.steps li.done mark.hl{background:none;color:inherit}
 .progs{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;white-space:normal}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:var(--primary-soft);color:var(--primary);font-weight:750;font-size:14.5px}
 .pill .ic{width:16px;height:16px}
@@ -309,7 +316,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
 /* =========================================================
    Constantes
    ========================================================= */
-const APP_VERSION='1.1.1';
+const APP_VERSION='1.2.0';
 const DB_NAME='recetario_v1', UI_KEY='recetario_v1_ui', CHANNEL_NAME='recetario';
 const UNITS=['g','kg','ml','l','cda','cdta','ud'];
 const UNIT_INFO={g:{fam:'peso',f:1},kg:{fam:'peso',f:1000},ml:{fam:'volumen',f:1},l:{fam:'volumen',f:1000},cda:{fam:'volumen',f:15},cdta:{fam:'volumen',f:5},ud:{fam:'unidades',f:1}};
@@ -850,11 +857,62 @@ function vRecipe(){
         ${lines?`<ul class="ing-list">${lines}</ul>`:`<p class="muted">Sin ingredientes</p>`}
       </section>
       <section class="panel"><h2>Preparación</h2>
-        ${r.steps.length?`<ol class="steps">${r.steps.map(s=>`<li data-act="step-done">${s.text?`<div class="st-text">${esc(s.text)}</div>`:''}${tm?stepTmHTML(s):''}</li>`).join('')}</ol>`:`<p class="muted">Sin pasos</p>`}
+        ${r.steps.length?(()=>{
+          const found=stepIngredients(r,ingM),firstStep={};
+          return `<ol class="steps">${r.steps.map((s,i)=>{
+            const fi=found[i];
+            // La cantidad va en el primer paso que nombra el ingrediente; en los siguientes, «(paso N)»
+            const chips=fi.lines.map(k=>{const l=r.ingredients[k],g=ingM.get(l.ingId),nm=esc(g?g.name:'?');
+              if(firstStep[k]!=null)return `<span class="ichip again">${nm}<span class="inote">(paso ${firstStep[k]+1})</span></span>`;
+              firstStep[k]=i;
+              return `<span class="ichip"><b>${l.qty==null?'al gusto':esc(fmtQty(l.qty*f,l.unit))}</b>${nm}${l.note?`<span class="inote"> · ${esc(l.note)}</span>`:''}</span>`}).join('');
+            return `<li data-act="step-done">${s.text?`<div class="st-text">${hlText(s.text,fi.ranges)}</div>`:''}${chips?`<div class="ichips">${chips}</div>`:''}${tm?stepTmHTML(s):''}</li>`;
+          }).join('')}</ol>`})():`<p class="muted">Sin pasos</p>`}
         ${r.notes?`<h2 style="margin-top:12px">Notas</h2><p class="notes">${esc(r.notes)}</p>`:''}
         ${r.sourceUrl?`<p><a class="src" href="${esc(safeUrl(r.sourceUrl))}" target="_blank" rel="noopener">${ic('link')}${esc(r.sourceUrl)}</a></p>`:''}
       </section>
     </div>`;
+}
+/* ---------- Ingredientes que se nombran en cada paso ---------- */
+// Pliega mayúsculas y tildes sin cambiar la longitud del texto (para poder resaltar en el original)
+const fold=s=>Array.from(String(s),c=>{const d=c.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();return d.length===1?d:c.toLowerCase().charAt(0)||' '}).join('');
+const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const HEAD_SKIP=/^(?:hojas?|dientes?|ramitas?|ramas?|latas?|botes?|trozos?|filetes?|lonchas?|rodajas?|tiras?|sobres?|vasos?|tazas?|chorritos?|pizcas?|cucharadas?|cucharaditas?|el|la|los|las|un|una|de|del|medio|media)$/;
+function ingCandidates(name){
+  const w=fold(name).replace(/\([^)]*\)/g,' ').replace(/[^a-z0-9ñ ]/g,' ').split(/\s+/).filter(Boolean);
+  if(!w.length)return {full:[],head:null};
+  const full=[w.join(' ')];
+  // «Dientes de ajo», «Hojas de laurel»: lo que va tras «de»
+  if(HEAD_SKIP.test(w[0])&&w[1]==='de'&&w[2])full.push(w.slice(2).join(' '));
+  // Nombre en plural («Huevos») → también en singular
+  for(const f of full.slice()){if(/es$/.test(f)&&f.length>4)full.push(f.slice(0,-2));else if(/s$/.test(f)&&f.length>3)full.push(f.slice(0,-1))}
+  const head=w.length>1&&w[0].length>=3&&!HEAD_SKIP.test(w[0])?w[0]:null;
+  return {full:[...new Set(full)],head};
+}
+function stepIngredients(r,ingM){
+  const items=r.ingredients.map((l,k)=>({k,c:ingCandidates(ingM.get(l.ingId)?.name||'')}));
+  const headCount={};items.forEach(x=>{if(x.c.head)headCount[x.c.head]=(headCount[x.c.head]||0)+1});
+  // Patrones: nombre completo y, si no hay otro ingrediente que empiece igual, la primera palabra («aceite»)
+  const pats=[];
+  items.forEach(x=>{
+    const cands=[...x.c.full];
+    if(x.c.head&&headCount[x.c.head]===1&&!items.some(y=>y!==x&&y.c.full.includes(x.c.head)))cands.push(x.c.head);
+    for(const c of cands)pats.push({k:x.k,re:new RegExp(`(?<![a-z0-9ñ])${c.split(' ').map(reEsc).join('\\s+(?:de\\s+)?')}(?:es|s)?(?![a-z0-9ñ])`,'g')});
+  });
+  return r.steps.map(s=>{
+    const t=fold(s.text||''),hits=[];
+    for(const p of pats){p.re.lastIndex=0;let m;while((m=p.re.exec(t)))hits.push({a:m.index,b:m.index+m[0].length,k:p.k})}
+    hits.sort((x,y)=>x.a-y.a||(y.b-y.a)-(x.b-x.a));
+    const ranges=[];let end=-1;
+    for(const h of hits)if(h.a>=end){ranges.push(h);end=h.b}
+    const lines=[];for(const h of ranges)if(!lines.includes(h.k))lines.push(h.k);
+    return {ranges,lines};
+  });
+}
+function hlText(text,ranges){
+  let out='',pos=0;
+  for(const h of ranges){out+=esc(text.slice(pos,h.a))+`<mark class="hl">${esc(text.slice(h.a,h.b))}</mark>`;pos=h.b}
+  return out+esc(text.slice(pos));
 }
 function stepTmHTML(s){
   const items=[...s.programs.map(p=>`<span class="pill">${ic('tm')}${esc(fmtProgram(p))}</span>`),...s.acc.map(a=>`<span class="acc">${esc(TM_ACC[a])}</span>`)];
@@ -1115,6 +1173,8 @@ function vHelp(){
   <li>Unidades: <b>g</b>, <b>kg</b>, <b>ml</b>, <b>l</b>, <b>cda</b> (cucharada, 15 ml), <b>cdta</b> (cucharadita, 5 ml) y <b>ud</b> (unidades).</li>
   <li>Ordena ingredientes y pasos con las flechas.</li>
   <li>En la ficha, cambia las <b>raciones</b> con − y + para recalcular las cantidades. Toca un paso para tacharlo mientras cocinas.</li>
+  <li>En la <b>preparación</b>, los ingredientes que nombra cada paso salen <b>resaltados en verde</b> y, debajo, con su <b>cantidad</b> (ya ajustada a las raciones). Si un ingrediente se vuelve a nombrar en otro paso, aparece con borde discontinuo y el número del paso donde está la cantidad.</li>
+  <li>Se reconocen solos: en singular o en plural, sin importar tildes ni mayúsculas, y por la primera palabra si no hay duda («aceite» para «Aceite de oliva virgen extra», pero no «pimienta» si la receta lleva dos pimientas). Para que se reconozca uno, escribe en el paso el mismo nombre que en la lista de ingredientes.</li>
   <li>El botón del documento copia la receta como texto para pegarla en notas o WhatsApp.</li>
   <li><b>Duplicar</b> (botón de las dos hojas) crea una copia para adaptarla, por ejemplo para pasar una receta tradicional a Thermomix o al revés.</li></ul>
   <h2>Thermomix ${TM_MODEL}</h2>
@@ -1611,7 +1671,7 @@ async function boot(){
 // Ganchos de prueba
 window.__recetario={
   get state(){return state},normalizeState,convertUnit,toGrams,parseQty,fmtQty,mergeStates,undo,
-  parseRecipeText,extractPrograms,parseIngLine,fmtProgram,stepWarnings,
+  parseRecipeText,extractPrograms,parseIngLine,fmtProgram,stepWarnings,stepIngredients,ingCandidates,fold,
   async setState(j){state=normalizeState(typeof j==='string'?JSON.parse(j):j);undoStack.length=0;await writeNow();renderApp(true)}
 };
 boot();
