@@ -4,7 +4,7 @@ Aplicación web personal (PWA) para guardar recetas, instalable en el ordenador 
 
 **Dirección:** https://carlosmera10.github.io/recetario/
 
-## Funciones (fase 1)
+## Funciones
 
 - **Recetas** con título, categoría, etiquetas, descripción, raciones, tiempos de preparación y cocción, ingredientes, pasos, notas y enlace de origen.
 - **Ingredientes estructurados**: cantidad + unidad (`g`, `kg`, `ml`, `l`, `cda`, `cdta`, `ud`) + ingrediente del catálogo. Cantidad vacía = «al gusto». Admite coma, punto y fracciones (`1/2`, `1 1/2`).
@@ -14,9 +14,12 @@ Aplicación web personal (PWA) para guardar recetas, instalable en el ordenador 
 - **Categorías** (con orden) y **etiquetas** editables.
 - **Deshacer** en cada cambio (aviso con «Deshacer», Ctrl+Z en el ordenador).
 - **Copias de seguridad**: exportar JSON, importar con «Fusionar» o «Sustituir», recordatorio periódico, exportar todas las recetas en Markdown y copiar una receta como texto.
+- **Thermomix TM5**: cada receta es «Tradicional» o «Thermomix TM5». En las de Thermomix, cada paso lleva uno o varios programas (tiempo, temperatura 37-120 °C o Varoma, velocidad cuchara o 0,5-10, velocidad progresiva, giro inverso, Amasar, Turbo con veces) y accesorios (mariposa, cestillo, recipiente Varoma, sin cubilete). Se muestran como «5 min/100 °C/giro inverso/vel cuchara». Avisos de lo que la TM5 no puede hacer (más de 120 °C, más de 99 min, modos de TM6/TM7).
+- **Duplicar** una receta para adaptarla (por ejemplo, de tradicional a Thermomix).
+- **Pegar receta**: analiza un texto copiado (Cookidoo, blogs, notas) y abre el editor sin guardar. Reconoce título, raciones, tiempos, ingredientes (g, kg, ml, cucharadas, fracciones, «1.000 g», latas con peso), pasos con programas de Thermomix, consejos y enlace.
 - Tema automático, claro u oscuro.
 
-Próximas fases: macros por ración, lista de la compra, modo cocina, importar recetas pegando texto, fotos y sincronización.
+Próximas fases: macros por ración (con Open Food Facts como ayuda opcional), lista de la compra, modo cocina, fotos y sincronización.
 
 ## Instalación
 
@@ -43,4 +46,4 @@ No abras `index.html` desde el disco (`file://`): no se instala ni funciona el s
 
 - HTML, CSS y JS vanilla en un único `index.html`, sin librerías ni compilación.
 - Service worker «primero la red» (`cache: 'no-store'`), registrado con `updateViaCache: 'none'`. **Subir el número de `CACHE` en `sw.js` cada vez que se cambie ese archivo.**
-- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `parseQty`, `mergeStates`, `undo`, `setState(json)`).
+- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `setState(json)`).

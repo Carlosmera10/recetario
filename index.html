@@ -138,6 +138,29 @@ input.inline:focus{background:var(--surface)}
 .steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--primary-soft);color:var(--primary);font-weight:750;display:grid;place-items:center;font-size:14px}
 .steps li.done{opacity:.45;text-decoration:line-through}
 .notes{white-space:pre-wrap}
+.st-text{white-space:pre-wrap}
+.progs{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;white-space:normal}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:var(--primary-soft);color:var(--primary);font-weight:750;font-size:14.5px}
+.pill .ic{width:16px;height:16px}
+.acc{display:inline-flex;align-items:center;padding:4px 9px;border-radius:8px;background:var(--surface-2);color:var(--muted);font-weight:650;font-size:13px}
+.warn{display:flex;gap:6px;align-items:flex-start;margin-top:7px;padding:6px 9px;border-radius:8px;background:var(--warn-soft);color:var(--warn);font-size:13.5px;font-weight:650;white-space:normal}
+.warn .ic{width:16px;height:16px;margin-top:1px}
+.steps li.done .progs,.steps li.done .warn{text-decoration:none}
+.badge-tm{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:750;color:var(--primary);background:var(--primary-soft);padding:3px 9px;border-radius:999px}
+.badge-tm .ic{width:15px;height:15px}
+.chip.method.on{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.chip-sep{flex:none;width:1px;background:var(--border);margin:4px 2px}
+.tmbox{grid-column:1/-1;background:var(--surface-2);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.prog{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px;align-items:end;padding-bottom:8px;border-bottom:1px dashed var(--border);min-width:0}
+.prog .pf{display:flex;flex-direction:column;gap:3px;min-width:0}
+.prog .pf>span{font-size:11.5px;font-weight:700;color:var(--muted)}
+.prog input,.prog select{padding:7px 6px;font-size:15px}
+.prog .chip{min-height:38px;justify-content:center}
+.prog-head{display:flex;align-items:center;gap:8px;grid-column:1/-1;min-width:0}
+.prog-head .pill{min-height:28px}
+.tm-foot{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tm-foot .chip{min-height:30px;font-size:13px;padding:0 10px}
+.paste-area{width:100%;min-height:42vh;font-size:15px}
 .src{display:inline-flex;align-items:center;gap:6px;word-break:break-all}
 
 /* ---------- Editor ---------- */
@@ -261,6 +284,9 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
   <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"/></symbol>
   <symbol id="i-sidebar" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></symbol>
   <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="i-tm" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5M12 2v3M8 5h8"/></symbol>
+  <symbol id="i-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></symbol>
   <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
 </svg>
 
@@ -277,7 +303,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
 /* =========================================================
    Constantes
    ========================================================= */
-const APP_VERSION='1.0.0';
+const APP_VERSION='1.1.0';
 const DB_NAME='recetario_v1', UI_KEY='recetario_v1_ui', CHANNEL_NAME='recetario';
 const UNITS=['g','kg','ml','l','cda','cdta','ud'];
 const UNIT_INFO={g:{fam:'peso',f:1},kg:{fam:'peso',f:1000},ml:{fam:'volumen',f:1},l:{fam:'volumen',f:1000},cda:{fam:'volumen',f:15},cdta:{fam:'volumen',f:5},ud:{fam:'unidades',f:1}};
@@ -285,6 +311,13 @@ const DEFAULT_CATS=['Desayunos','Comidas','Cenas','Postres','Salsas y bases','Ot
 const DEFAULT_AISLES=['Frutas y verduras','Carnicería','Pescadería','Lácteos y huevos','Panadería','Despensa','Congelados','Bebidas','Otros'];
 const CAT_COLORS=['#c0603a','#6f8a43','#c4912a','#8d5c43','#3f7c78','#a8455f','#6d5c96','#7d7d35'];
 const TOAST_ICON={'✅':'check','⚠️':'alert','🗑️':'trash','↩️':'undo'};
+// Thermomix TM5
+const TM_MODEL='TM5', TM_MAX_TEMP=120, TM_MAX_MIN=99;
+const TM_TEMPS=[37,40,45,50,55,60,65,70,75,80,85,90,95,98,100,105,110,115,120];
+const TM_SPEEDS=['cuchara',...Array.from({length:20},(_,i)=>String((i+1)/2))];
+const TM_ACC={mariposa:'Mariposa',cestillo:'Cestillo',varoma:'Recipiente Varoma',sincubilete:'Sin cubilete'};
+const TM_MODES={amasar:'Amasar',turbo:'Turbo'};
+const TM_OTHER_RE=/alta\s+temperatura|cocci[oó]n\s+lenta|sous[\s-]?vide|fermentar|espesar|hervir\s+(?:huevos|agua)|pelador|cocinar\s+arroz/i;
 const TAB_ID=Math.random().toString(36).slice(2);
 
 /* =========================================================
@@ -325,6 +358,35 @@ function parseQty(s){
 }
 function parseMin(s){s=String(s??'').trim();if(!s)return null;if(!/^\d+$/.test(s))return undefined;return parseInt(s,10)}
 const fmtMin=m=>m<60?`${m} min`:`${Math.floor(m/60)} h${m%60?` ${m%60} min`:''}`;
+/* ---------- Thermomix: formato y avisos ---------- */
+const fmtSpeed=s=>s==='cuchara'?'cuchara':String(s).replace('.',',');
+function fmtTime(sec){
+  if(sec<60)return `${fmtNum(sec,1)} seg`;
+  const m=Math.floor(sec/60),s=Math.round(sec%60);
+  if(m>=60)return `${Math.floor(m/60)} h${m%60?` ${m%60} min`:''}${s?` ${s} seg`:''}`;
+  return `${m} min${s?` ${s} seg`:''}`;
+}
+function fmtProgram(p){
+  const parts=[];
+  if(p.mode==='turbo'){parts.push('Turbo');if(p.time!=null)parts.push(fmtTime(p.time));if(p.reps)parts.push(`${p.reps} ${p.reps===1?'vez':'veces'}`);return parts.join('/')}
+  if(p.time!=null)parts.push(fmtTime(p.time));
+  if(p.temp!=null)parts.push(p.temp==='varoma'?'Varoma':`${p.temp} °C`);
+  if(p.reverse)parts.push('giro inverso');
+  if(p.mode==='amasar')parts.push('vel espiga');
+  else if(p.speed)parts.push('vel '+fmtSpeed(p.speed)+(p.speedTo?'-'+fmtSpeed(p.speedTo):''));
+  return parts.join('/');
+}
+function stepWarnings(step){
+  const w=[];
+  for(const p of step.programs||[]){
+    if(typeof p.temp==='number'&&p.temp>TM_MAX_TEMP)w.push(`La ${TM_MODEL} llega a ${TM_MAX_TEMP} °C (o Varoma)`);
+    if(typeof p.temp==='number'&&p.temp<37)w.push(`La ${TM_MODEL} calienta desde 37 °C`);
+    if(p.time!=null&&p.time>TM_MAX_MIN*60)w.push(`El temporizador de la ${TM_MODEL} llega a ${TM_MAX_MIN} min: repite el programa`);
+  }
+  const m=TM_OTHER_RE.exec(step.text||'');
+  if(m)w.push(`«${m[0]}» es un modo de TM6/TM7 que la ${TM_MODEL} no tiene: adáptalo`);
+  return [...new Set(w)];
+}
 function fmtQty(q,unit){
   let v=q,u=unit;
   if(u==='g'&&v>=1000){v/=1000;u='kg'}else if(u==='ml'&&v>=1000){v/=1000;u='l'}
@@ -404,11 +466,16 @@ function normalizeItemRecipe(r,ctx){
     const q=posOrNull(l.qty);
     lines.push({ingId,qty:q,unit:UNIT_INFO[l.unit]?l.unit:'g',note:str(l.note,200).trim()});
   }
-  const steps=arr(r.steps).map(s=>typeof s==='string'?{id:uid(),text:s}:(s&&typeof s==='object'?{id:str(s.id,80)||uid(),text:str(s.text,5000)}:null)).filter(s=>s&&s.text.trim());
+  const steps=arr(r.steps).map(s=>typeof s==='string'?{text:s}:s).filter(s=>s&&typeof s==='object').map(s=>({
+    id:str(s.id,80)||uid(),text:str(s.text,5000),
+    programs:arr(s.programs).map(normalizeProgram).filter(Boolean).slice(0,10),
+    acc:[...new Set(arr(s.acc).filter(a=>TM_ACC[a]))]
+  })).filter(s=>s.text.trim()||s.programs.length);
   const created=isoOr(r.createdAt,now);
   return {
     id:str(r.id,80)||uid(),
     title:str(r.title,200).trim()||'Sin título',
+    method:r.method==='thermomix'?'thermomix':'tradicional',
     categoryId:ctx.catIds.has(r.categoryId)?r.categoryId:null,
     tags:[...new Set(arr(r.tags).filter(t=>ctx.tagIds.has(t)))],
     description:str(r.description,5000),
@@ -418,6 +485,20 @@ function normalizeItemRecipe(r,ctx){
     notes:str(r.notes,10000),sourceUrl:str(r.sourceUrl,1000).trim(),
     createdAt:created,updatedAt:isoOr(r.updatedAt,created)
   };
+}
+function normalizeProgram(p){
+  if(!p||typeof p!=='object')return null;
+  const t=numOrNull(p.time);
+  const temp=p.temp==='varoma'?'varoma':(()=>{const n=numOrNull(p.temp);return n!=null&&n>=20&&n<=250?Math.round(n):null})();
+  const sp=v=>v==null||v===''?null:(TM_SPEEDS.includes(String(v))?String(v):null);
+  const mode=TM_MODES[p.mode]?p.mode:null;
+  const reps=intOrNull(p.reps);
+  const out={time:t!=null&&t>0?Math.round(t*10)/10:null,temp,speed:sp(p.speed),speedTo:sp(p.speedTo),reverse:!!p.reverse,mode,reps:reps>0?reps:null};
+  if(out.speedTo&&(!out.speed||out.speed==='cuchara'||+out.speedTo<=+out.speed))out.speedTo=null;
+  if(mode==='amasar'){out.temp=null;out.speed=null;out.speedTo=null;out.reverse=false}
+  if(mode==='turbo'){out.temp=null;out.speed=null;out.speedTo=null;out.reverse=false}
+  if(mode!=='turbo')out.reps=null;
+  return (out.time!=null||out.temp!=null||out.speed||out.mode||out.reverse)?out:null;
 }
 function uniqById(list){const seen=new Set();return list.filter(x=>x&&!seen.has(x.id)&&seen.add(x.id))}
 function normalizeState(raw){
@@ -494,9 +575,9 @@ if(channel)channel.onmessage=async e=>{
   try{state=normalizeState(await idbGet('state','main'));undoStack.length=0;renderApp()}catch(err){console.error(err)}
 };
 
-const ui=Object.assign({view:'recipes',recipeId:null,q:'',cat:'',tags:[],sort:'az',theme:'auto',sbCollapsed:false,ingQ:''},loadUI());
+const ui=Object.assign({view:'recipes',recipeId:null,q:'',cat:'',tags:[],method:'',sort:'az',theme:'auto',sbCollapsed:false,ingQ:''},loadUI());
 function loadUI(){try{const u=JSON.parse(localStorage.getItem(UI_KEY)||'{}');return u&&typeof u==='object'?u:{}}catch(e){return {}}}
-function saveUI(){try{localStorage.setItem(UI_KEY,JSON.stringify({view:ui.view==='edit'?(ui.recipeId?'recipe':'recipes'):ui.view,recipeId:ui.recipeId,q:ui.q,cat:ui.cat,tags:ui.tags,sort:ui.sort,theme:ui.theme,sbCollapsed:ui.sbCollapsed,ingQ:ui.ingQ}))}catch(e){}}
+function saveUI(){try{localStorage.setItem(UI_KEY,JSON.stringify({view:ui.view==='edit'?(ui.recipeId?'recipe':'recipes'):ui.view,recipeId:ui.recipeId,q:ui.q,cat:ui.cat,tags:ui.tags,method:ui.method,sort:ui.sort,theme:ui.theme,sbCollapsed:ui.sbCollapsed,ingQ:ui.ingQ}))}catch(e){}}
 let saveUITimer=null;const saveUISoon=()=>{clearTimeout(saveUITimer);saveUITimer=setTimeout(saveUI,400)};
 
 /* =========================================================
@@ -541,8 +622,9 @@ function filteredRecipes(){
   const list=state.recipes.filter(r=>{
     if(ui.cat==='none'?r.categoryId:(ui.cat&&r.categoryId!==ui.cat))return false;
     if(ui.tags.length&&!ui.tags.every(t=>r.tags.includes(t)))return false;
+    if(ui.method&&r.method!==ui.method)return false;
     if(toks.length){
-      const hay=norm([r.title,catM.get(r.categoryId)?.name,...r.tags.map(t=>tagM.get(t)?.name),...r.ingredients.map(l=>ingM.get(l.ingId)?.name)].join(' '));
+      const hay=norm([r.title,r.method==='thermomix'?'thermomix':'',catM.get(r.categoryId)?.name,...r.tags.map(t=>tagM.get(t)?.name),...r.ingredients.map(l=>ingM.get(l.ingId)?.name)].join(' '));
       if(!toks.every(t=>hay.includes(t)))return false;
     }
     return true;
@@ -567,16 +649,18 @@ function toast(msg,o={}){
   box.appendChild(el);while(box.children.length>3)box.firstChild.remove();
   setTimeout(()=>el.remove(),o.undo?6000:3500);
 }
-function modal({title,body='',buttons}){
+function modal({title,body='',buttons,withData=false}){
   return new Promise(res=>{
     const ov=document.createElement('div');ov.className='overlay';
     ov.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><h2>${esc(title)}</h2>${body}<div class="btns">${buttons.map((b,i)=>`<button class="btn ${b.cls||''}" data-mi="${i}">${esc(b.label)}</button>`).join('')}</div></div>`;
-    const close=v=>{ov.remove();document.removeEventListener('keydown',onk,true);res(v)};
+    const close=v=>{
+      const data={};ov.querySelectorAll('[name]').forEach(e=>data[e.name]=e.value);
+      ov.remove();document.removeEventListener('keydown',onk,true);res(withData?(v==null?null:[v,data]):v)};
     const onk=e=>{if(e.key==='Escape'){e.stopPropagation();close(null)}};
     ov.addEventListener('click',e=>{if(e.target===ov)return close(null);const b=e.target.closest('[data-mi]');if(b)close(buttons[+b.dataset.mi].value)});
     document.addEventListener('keydown',onk,true);
     document.body.appendChild(ov);
-    const f=ov.querySelector('.btn.primary,.btn.danger');f&&f.focus();
+    const f=ov.querySelector('textarea,input')||ov.querySelector('.btn.primary,.btn.danger');f&&f.focus();
   });
 }
 const confirmBox=(title,text,label='Borrar',cls='danger')=>modal({title,body:text?`<p>${esc(text)}</p>`:'',buttons:[{label:'Cancelar',value:false},{label,cls,value:true}]});
@@ -604,7 +688,8 @@ function go(view,params={},opt={}){
   scrollMem[viewKey()]=window.scrollY;
   const from=ui.view;
   ui.view=view;ui.recipeId=params.recipeId??null;
-  editor=view==='edit'?makeEditor(ui.recipeId,from):null;
+  editor=view==='edit'?makeEditor(ui.recipeId,from,params):null;
+  if(editor&&(params.copy||params.draft))ui.recipeId=null;
   const st={view,recipeId:ui.recipeId};
   if(opt.replace)history.replaceState(st,'');else history.pushState(st,'');
   if(view==='recipe'||view==='edit')scrollMem[viewKey()]=0;
@@ -662,6 +747,7 @@ function renderApp(navChanged=false){
   if(ui.view==='settings')fillStorageInfo();
   document.title=ui.view==='recipe'&&recipeById(ui.recipeId)?recipeById(ui.recipeId).title+' · Recetario':'Recetario';
 }
+const warnHTML=ws=>ws.map(w=>`<div class="warn">${ic('alert')}<span>${esc(w)}</span></div>`).join('');
 function autosize(t){t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px'}
 const backBtn=(cls='')=>`<button class="btn icon ghost ${cls}" data-act="back" aria-label="Volver">${ic('left')}</button>`;
 
@@ -677,19 +763,23 @@ function backupDue(){
 function vRecipes(){
   const cats=sortedCats(),due=backupDue();
   const sorts=[['az','A-Z'],['recent','Más recientes'],['time','Más rápidas']];
-  return `<header class="topbar"><h1>Recetas</h1><div class="actions"><button class="btn primary" data-act="new-recipe">${ic('plus')}<span>Nueva<span class="hide-m"> receta</span></span></button></div></header>
+  const hasTm=state.recipes.some(r=>r.method==='thermomix');
+  const chips=[...(hasTm?[['thermomix','Thermomix'],['tradicional','Tradicional']].map(([v,l])=>`<button class="chip method ${ui.method===v?'on':''}" data-act="filter-method" data-v="${v}">${l}</button>`):[]),
+    ...(hasTm&&state.tags.length?['<span class="chip-sep"></span>']:[]),
+    ...sortedTags().map(t=>`<button class="chip ${ui.tags.includes(t.id)?'on':''}" data-act="filter-tag" data-id="${t.id}">${esc(t.name)}</button>`)];
+  return `<header class="topbar"><h1>Recetas</h1><div class="actions"><button class="btn" data-act="paste-recipe" title="Pegar receta" aria-label="Pegar receta">${ic('clip')}<span class="hide-m">Pegar receta</span></button><button class="btn primary" data-act="new-recipe">${ic('plus')}<span>Nueva<span class="hide-m"> receta</span></span></button></div></header>
   ${due?`<div class="banner">${ic('alert')}<span class="grow">${esc(due)}</span><button class="btn sm" data-act="export">${ic('download')}Exportar</button><button class="btn sm ghost" data-act="snooze-backup">Más tarde</button></div>`:''}
   ${state.recipes.length?`<div class="toolbar">
     <label class="search">${ic('search')}<input id="q" type="search" value="${esc(ui.q)}" placeholder="Receta, ingrediente o etiqueta" autocomplete="off" aria-label="Buscar"></label>
     <select data-ui="cat" aria-label="Categoría"><option value="">Todas</option>${cats.map(c=>`<option value="${c.id}" ${ui.cat===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}${state.recipes.some(r=>!r.categoryId)?`<option value="none" ${ui.cat==='none'?'selected':''}>Sin categoría</option>`:''}</select>
     <select data-ui="sort" aria-label="Orden">${sorts.map(([v,l])=>`<option value="${v}" ${ui.sort===v?'selected':''}>${l}</option>`).join('')}</select>
   </div>
-  ${state.tags.length?`<div class="chips" data-scroll-key="tagchips">${sortedTags().map(t=>`<button class="chip ${ui.tags.includes(t.id)?'on':''}" data-act="filter-tag" data-id="${t.id}">${esc(t.name)}</button>`).join('')}</div>`:''}`:''}
+  ${chips.length?`<div class="chips" data-scroll-key="tagchips">${chips.join('')}</div>`:''}`:''}
   <div id="results">${vResults()}</div>`;
 }
 function vResults(){
-  if(!state.recipes.length)return `<div class="empty">${ic('pot')}<h2>Todavía no hay recetas</h2><button class="btn primary" data-act="new-recipe">${ic('plus')}Crear la primera receta</button></div>`;
-  const list=filteredRecipes(),filt=ui.q||ui.cat||ui.tags.length;
+  if(!state.recipes.length)return `<div class="empty">${ic('pot')}<h2>Todavía no hay recetas</h2><div class="chips wrap" style="justify-content:center"><button class="btn primary" data-act="new-recipe">${ic('plus')}Crear la primera receta</button><button class="btn" data-act="paste-recipe">${ic('clip')}Pegar una receta</button></div></div>`;
+  const list=filteredRecipes(),filt=ui.q||ui.cat||ui.tags.length||ui.method;
   if(!list.length)return `<div class="empty">${ic('search')}<h2>Sin resultados</h2><button class="btn" data-act="clear-filters">Quitar filtros</button></div>`;
   return `<div class="count">${list.length} ${list.length===1?'receta':'recetas'}${filt?` · <button class="linkbtn" data-act="clear-filters">Quitar filtros</button>`:''}</div><div class="grid cards">${list.map(cardHTML).join('')}</div>`;
 }
@@ -697,7 +787,7 @@ function cardHTML(r){
   const c=catById(r.categoryId),has=r.prepMin!=null||r.cookMin!=null,t=(r.prepMin||0)+(r.cookMin||0);
   const tags=r.tags.map(tagById).filter(Boolean).sort(byName);
   return `<article class="rcard" data-act="open-recipe" data-id="${r.id}" style="--cat:${catColor(c)}" tabindex="0">
-    <div class="eyebrow">${esc(c?c.name:'Sin categoría')}</div><h3>${esc(r.title)}</h3>
+    <div class="eyebrow">${esc(c?c.name:'Sin categoría')}${r.method==='thermomix'?' · Thermomix':''}</div><h3>${esc(r.title)}</h3>
     <div class="meta">${has?`<span>${ic('clock')}${fmtMin(t)}</span>`:''}<span>${ic('users')}${fmtNum(r.servings)} rac.</span><span>${ic('list')}${r.ingredients.length} ingr.</span></div>
     ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t.name)}</span>`).join('')}</div>`:''}
   </article>`;
@@ -708,7 +798,7 @@ const detailServ={};
 function vRecipe(){
   const r=recipeById(ui.recipeId);
   if(!r)return `<header class="topbar">${backBtn()}<h1>Receta</h1></header><div class="empty">${ic('alert')}<h2>Esta receta ya no existe</h2><button class="btn" data-act="nav" data-view="recipes">Ver recetas</button></div>`;
-  const c=catById(r.categoryId),serv=detailServ[r.id]??r.servings,f=serv/r.servings,ingM=ingMap();
+  const c=catById(r.categoryId),serv=detailServ[r.id]??r.servings,f=serv/r.servings,ingM=ingMap(),tm=r.method==='thermomix';
   const tags=r.tags.map(tagById).filter(Boolean).sort(byName);
   const facts=[];
   if(r.prepMin!=null)facts.push(['Preparación',fmtMin(r.prepMin)]);
@@ -720,12 +810,13 @@ function vRecipe(){
     return `<li>${q}<span>${esc(g?g.name:'?')}${l.note?` <span class="note">· ${esc(l.note)}</span>`:''}</span></li>`;
   }).join('');
   return `<header class="topbar">${backBtn()}<h1></h1><div class="actions">
-      <button class="btn icon ghost" data-act="copy-recipe" data-id="${r.id}" title="Copiar como texto" aria-label="Copiar como texto">${ic('copy')}</button>
+      <button class="btn icon ghost" data-act="copy-recipe" data-id="${r.id}" title="Copiar como texto" aria-label="Copiar como texto">${ic('text')}</button>
+      <button class="btn icon ghost" data-act="dup-recipe" data-id="${r.id}" title="Duplicar" aria-label="Duplicar">${ic('copy')}</button>
       <button class="btn icon ghost danger" data-act="del-recipe" data-id="${r.id}" title="Borrar" aria-label="Borrar">${ic('trash')}</button>
       <button class="btn primary" data-act="edit-recipe" data-id="${r.id}">${ic('edit')}Editar</button></div></header>
     <div style="--cat:${catColor(c)}"><div class="eyebrow">${esc(c?c.name:'Sin categoría')}</div></div>
     <h1 class="detail-title">${esc(r.title)}</h1>
-    ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t.name)}</span>`).join('')}</div>`:''}
+    ${tags.length||tm?`<div class="tags">${tm?`<span class="badge-tm">${ic('tm')}Thermomix ${TM_MODEL}</span>`:''}${tags.map(t=>`<span class="tag">${esc(t.name)}</span>`).join('')}</div>`:''}
     ${r.description?`<p class="desc">${esc(r.description)}</p>`:''}
     ${facts.length?`<div class="facts">${facts.map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('')}</div>`:'<div style="height:12px"></div>'}
     <div class="detail-grid">
@@ -736,43 +827,74 @@ function vRecipe(){
         ${lines?`<ul class="ing-list">${lines}</ul>`:`<p class="muted">Sin ingredientes</p>`}
       </section>
       <section class="panel"><h2>Preparación</h2>
-        ${r.steps.length?`<ol class="steps">${r.steps.map(s=>`<li data-act="step-done">${esc(s.text)}</li>`).join('')}</ol>`:`<p class="muted">Sin pasos</p>`}
+        ${r.steps.length?`<ol class="steps">${r.steps.map(s=>`<li data-act="step-done">${s.text?`<div class="st-text">${esc(s.text)}</div>`:''}${tm?stepTmHTML(s):''}</li>`).join('')}</ol>`:`<p class="muted">Sin pasos</p>`}
         ${r.notes?`<h2 style="margin-top:12px">Notas</h2><p class="notes">${esc(r.notes)}</p>`:''}
         ${r.sourceUrl?`<p><a class="src" href="${esc(safeUrl(r.sourceUrl))}" target="_blank" rel="noopener">${ic('link')}${esc(r.sourceUrl)}</a></p>`:''}
       </section>
     </div>`;
 }
+function stepTmHTML(s){
+  const items=[...s.programs.map(p=>`<span class="pill">${ic('tm')}${esc(fmtProgram(p))}</span>`),...s.acc.map(a=>`<span class="acc">${esc(TM_ACC[a])}</span>`)];
+  return (items.length?`<div class="progs">${items.join('')}</div>`:'')+warnHTML(stepWarnings(s));
+}
 function safeUrl(u){return /^https?:\/\//i.test(u)?u:'https://'+u}
 function recipeToMarkdown(r){
   const c=catById(r.categoryId),ingM=ingMap(),tags=r.tags.map(tagById).filter(Boolean).map(t=>t.name);
-  const out=[`# ${r.title}`];
-  const sub=[c?c.name:'',tags.join(', ')].filter(Boolean).join(' · ');if(sub)out.push(sub);
+  const out=[`# ${r.title}`],tm=r.method==='thermomix';
+  const sub=[c?c.name:'',tm?`Thermomix ${TM_MODEL}`:'',tags.join(', ')].filter(Boolean).join(' · ');if(sub)out.push(sub);
   if(r.description)out.push('',r.description);
   const info=[`Raciones: ${fmtNum(r.servings)}`];
   if(r.prepMin!=null)info.push(`Preparación: ${fmtMin(r.prepMin)}`);
   if(r.cookMin!=null)info.push(`Cocción: ${fmtMin(r.cookMin)}`);
   out.push('',info.join(' · '),'','## Ingredientes');
   for(const l of r.ingredients){const g=ingM.get(l.ingId);out.push(`- ${l.qty==null?'':fmtQty(l.qty,l.unit)+' '}${g?g.name:'?'}${l.qty==null?' (al gusto)':''}${l.note?`, ${l.note}`:''}`)}
-  out.push('','## Preparación');r.steps.forEach((s,i)=>out.push(`${i+1}. ${s.text}`));
+  out.push('','## Preparación');
+  r.steps.forEach((s,i)=>{
+    const extra=tm?[...s.programs.map(fmtProgram),...s.acc.map(a=>TM_ACC[a].toLowerCase())]:[];
+    out.push(`${i+1}. ${[s.text,extra.length?`**${extra.join(' · ')}**`:''].filter(Boolean).join(' ')}`);
+  });
   if(r.notes)out.push('','## Notas',r.notes);
   if(r.sourceUrl)out.push('',`Fuente: ${r.sourceUrl}`);
   return out.join('\n');
 }
 
 /* ---------- Editor ---------- */
-function makeEditor(id,from){
-  const r=id?recipeById(id):null,ingM=ingMap();
+// Programas en el editor: todo como texto, tal como está en los campos
+const progToEd=p=>({min:p.time!=null&&p.time>=60?String(Math.floor(p.time/60)):'',sec:p.time!=null?(p.time>=60?(p.time%60?qtyStr(Math.round(p.time%60*10)/10):''):qtyStr(p.time)):'',
+  temp:p.temp==null?'':String(p.temp),speed:p.speed||'',speedTo:p.speedTo||'',reverse:!!p.reverse,mode:p.mode||'',reps:p.reps?String(p.reps):''});
+const emptyProg=()=>({min:'',sec:'',temp:'',speed:'',speedTo:'',reverse:false,mode:'',reps:''});
+function edToProg(e){
+  const mn=e.min.trim()===''?0:parseQty(e.min),sc=e.sec.trim()===''?0:parseQty(e.sec);
+  if(Number.isNaN(mn)||Number.isNaN(sc)||mn<0||sc<0)return {error:'Tiempo no válido'};
+  const time=(e.min.trim()===''&&e.sec.trim()==='')?null:mn*60+sc;
+  const reps=e.reps.trim()===''?null:parseInt(e.reps,10);
+  return normalizeProgram({time,temp:e.temp===''?null:(e.temp==='varoma'?'varoma':+e.temp),speed:e.speed||null,speedTo:e.speedTo||null,reverse:e.reverse,mode:e.mode||null,reps});
+}
+function edStepAsStep(s){return {text:s.text,programs:s.programs.map(edToProg).filter(p=>p&&!p.error)}}
+function makeEditor(id,from,params={}){
+  const dr=params.draft;
+  if(dr){
+    return {id:uid(),isNew:true,createdAt:null,from,method:dr.method,
+      title:dr.title||'',categoryId:'',servings:dr.servings?qtyStr(dr.servings):'4',
+      prepMin:dr.prepMin!=null?String(dr.prepMin):'',cookMin:dr.cookMin!=null?String(dr.cookMin):'',
+      description:dr.description||'',tagNames:[],
+      lines:dr.ingredients.length?dr.ingredients.map(l=>{const ex=findIngByName(state.ingredients,l.name);return {qty:l.qty==null?'':qtyStr(l.qty),unit:l.unit,name:ex?ex.name:l.name,note:l.note,gpu:l.gpu}}):[{qty:'',unit:'g',name:'',note:''}],
+      steps:dr.steps.length?dr.steps.map(s=>({id:uid(),text:s.text,programs:s.programs.map(progToEd),acc:s.acc.slice()})):[{id:uid(),text:'',programs:[],acc:[]}],
+      notes:dr.notes||'',sourceUrl:dr.sourceUrl||'',dirty:true};
+  }
+  const r=id?recipeById(id):null,ingM=ingMap(),copy=!!(params.copy&&r);
   return {
-    id:r?r.id:uid(),isNew:!r,createdAt:r?r.createdAt:null,from,
-    title:r?r.title:'',
+    id:r&&!copy?r.id:uid(),isNew:!r||copy,createdAt:r&&!copy?r.createdAt:null,from,
+    method:r?r.method:(ui.method==='thermomix'?'thermomix':'tradicional'),
+    title:r?(copy?`${r.title} (copia)`:r.title):'',
     categoryId:r?(r.categoryId||''):(ui.cat&&ui.cat!=='none'?ui.cat:''),
     servings:r?qtyStr(r.servings):'4',
     prepMin:r&&r.prepMin!=null?String(r.prepMin):'',cookMin:r&&r.cookMin!=null?String(r.cookMin):'',
     description:r?r.description:'',
     tagNames:r?r.tags.map(t=>tagById(t)?.name).filter(Boolean):[],
     lines:r&&r.ingredients.length?r.ingredients.map(l=>({qty:l.qty==null?'':qtyStr(l.qty),unit:l.unit,name:ingM.get(l.ingId)?.name||'',note:l.note})):[{qty:'',unit:'g',name:'',note:''}],
-    steps:r&&r.steps.length?r.steps.map(s=>({id:s.id,text:s.text})):[{id:uid(),text:''}],
-    notes:r?r.notes:'',sourceUrl:r?r.sourceUrl:'',dirty:false
+    steps:r&&r.steps.length?r.steps.map(s=>({id:copy?uid():s.id,text:s.text,programs:s.programs.map(progToEd),acc:s.acc.slice()})):[{id:uid(),text:'',programs:[],acc:[]}],
+    notes:r?r.notes:'',sourceUrl:r?r.sourceUrl:'',dirty:copy
   };
 }
 function vEdit(){
@@ -787,11 +909,35 @@ function vEdit(){
       <div class="ing-row2"><input data-line="${i}" data-lf="note" value="${esc(l.note)}" placeholder="Nota" aria-label="Nota" autocomplete="off">
         <div class="row-btns"><button type="button" class="btn icon sm ghost" data-act="ed-line-move" data-i="${i}" data-d="-1" ${i===0?'disabled':''} aria-label="Subir">${ic('up')}</button><button type="button" class="btn icon sm ghost" data-act="ed-line-move" data-i="${i}" data-d="1" ${i===d.lines.length-1?'disabled':''} aria-label="Bajar">${ic('down')}</button><button type="button" class="btn icon sm ghost danger" data-act="ed-line-del" data-i="${i}" aria-label="Quitar ingrediente">${ic('x')}</button></div>
       </div></div>`;
+  const tm=d.method==='thermomix';
+  const opt=(v,l,cur)=>`<option value="${esc(v)}" ${cur===v?'selected':''}>${esc(l)}</option>`;
+  const progRow=(p,i,j)=>{
+    const a=`data-si="${i}" data-pj="${j}"`;
+    const pr=edToProg(p),prev=pr&&!pr.error?fmtProgram(pr):'';
+    const temps=['',...TM_TEMPS.map(String),'varoma'];if(p.temp&&!temps.includes(p.temp))temps.push(p.temp);
+    const tl=v=>v===''?'—':v==='varoma'?'Varoma':(+v>TM_MAX_TEMP?`${v} °C (no ${TM_MODEL})`:`${v} °C`);
+    const sec=`<label class="pf"><span>Seg</span><input ${a} data-pf="sec" inputmode="decimal" value="${esc(p.sec)}" autocomplete="off"></label>`;
+    const min=`<label class="pf"><span>Min</span><input ${a} data-pf="min" inputmode="numeric" value="${esc(p.min)}" autocomplete="off"></label>`;
+    let f;
+    if(p.mode==='turbo')f=sec+`<label class="pf"><span>Veces</span><input ${a} data-pf="reps" inputmode="numeric" value="${esc(p.reps)}" autocomplete="off"></label>`;
+    else if(p.mode==='amasar')f=min+sec;
+    else f=min+sec+
+      `<label class="pf"><span>Temp.</span><select ${a} data-pf="temp">${temps.map(v=>opt(v,tl(v),p.temp)).join('')}</select></label>`+
+      `<label class="pf"><span>Vel.</span><select ${a} data-pf="speed">${opt('','—',p.speed)}${TM_SPEEDS.map(v=>opt(v,v==='cuchara'?'Cuchara':fmtSpeed(v),p.speed)).join('')}</select></label>`+
+      `<label class="pf"><span>Hasta vel.</span><select ${a} data-pf="speedTo">${opt('','—',p.speedTo)}${TM_SPEEDS.slice(1).map(v=>opt(v,fmtSpeed(v),p.speedTo)).join('')}</select></label>`+
+      `<div class="pf"><span>Giro</span><button type="button" class="chip ${p.reverse?'on':''}" data-act="ed-prog-rev" ${a}>Inverso</button></div>`;
+    return `<div class="prog"><div class="prog-head"><span class="pill" data-prev="${i}:${j}">${ic('tm')}<span>${esc(prev||'Sin datos')}</span></span><span class="grow"></span><button type="button" class="btn icon sm ghost danger" data-act="ed-prog-del" ${a} aria-label="Quitar programa">${ic('x')}</button></div>
+      ${f}<label class="pf"><span>Modo</span><select ${a} data-pf="mode">${opt('','Normal',p.mode)}${Object.entries(TM_MODES).map(([k,l])=>opt(k,l,p.mode)).join('')}</select></label></div>`;
+  };
+  const tmBox=(s,i)=>!tm?'':`<div class="tmbox">${s.programs.map((p,j)=>progRow(p,i,j)).join('')}
+      <div class="tm-foot"><button type="button" class="btn sm" data-act="ed-prog-add" data-i="${i}">${ic('plus')}Programa</button>${Object.entries(TM_ACC).map(([k,l])=>`<button type="button" class="chip ${s.acc.includes(k)?'on':''}" data-act="ed-acc" data-i="${i}" data-k="${k}">${l}</button>`).join('')}</div>
+      <div data-warn="${i}">${warnHTML(stepWarnings(edStepAsStep(s)))}</div></div>`;
   const stepRow=(s,i)=>`<div class="step-row"><span class="num">${i+1}</span>
       <textarea class="autosize" data-step="${i}" rows="2" aria-label="Paso ${i+1}">${esc(s.text)}</textarea>
-      <div class="row-btns col"><button type="button" class="btn icon sm ghost" data-act="ed-step-move" data-i="${i}" data-d="-1" ${i===0?'disabled':''} aria-label="Subir">${ic('up')}</button><button type="button" class="btn icon sm ghost" data-act="ed-step-move" data-i="${i}" data-d="1" ${i===d.steps.length-1?'disabled':''} aria-label="Bajar">${ic('down')}</button><button type="button" class="btn icon sm ghost danger" data-act="ed-step-del" data-i="${i}" aria-label="Quitar paso">${ic('x')}</button></div></div>`;
+      <div class="row-btns col"><button type="button" class="btn icon sm ghost" data-act="ed-step-move" data-i="${i}" data-d="-1" ${i===0?'disabled':''} aria-label="Subir">${ic('up')}</button><button type="button" class="btn icon sm ghost" data-act="ed-step-move" data-i="${i}" data-d="1" ${i===d.steps.length-1?'disabled':''} aria-label="Bajar">${ic('down')}</button><button type="button" class="btn icon sm ghost danger" data-act="ed-step-del" data-i="${i}" aria-label="Quitar paso">${ic('x')}</button></div>${tmBox(s,i)}</div>`;
   return `<header class="topbar">${backBtn()}<h1>${d.isNew?'Nueva receta':'Editar receta'}</h1><div class="actions"><button class="btn primary" data-act="ed-save">${ic('check')}Guardar</button></div></header>
   <section class="panel"><div class="ed-grid">
+    <div class="field wide"><span>Tipo</span><div class="seg">${[['tradicional','Tradicional'],['thermomix','Thermomix '+TM_MODEL]].map(([v,l])=>`<button type="button" class="${d.method===v?'on':''}" data-act="ed-method" data-v="${v}">${l}</button>`).join('')}</div></div>
     <label class="field wide"><span>Título</span><input class="title-input" data-ed="title" value="${esc(d.title)}" maxlength="200" autocomplete="off"></label>
     <label class="field half"><span>Categoría</span><select data-ed="categoryId"><option value="">Sin categoría</option>${cats.map(c=>`<option value="${c.id}" ${d.categoryId===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}${newCat?`<option value="${esc(d.categoryId)}" selected>${esc(d.categoryId.slice(4))}</option>`:''}<option value="__new">+ Nueva categoría…</option></select></label>
     <label class="field half"><span>Raciones</span><input data-ed="servings" inputmode="decimal" value="${esc(d.servings)}" autocomplete="off"></label>
@@ -809,7 +955,7 @@ function vEdit(){
   <div class="ed-foot">${d.isNew?'':`<button class="btn danger" data-act="del-recipe" data-id="${d.id}">${ic('trash')}Borrar</button>`}<span class="grow"></span><button class="btn" data-act="back">Cancelar</button><button class="btn primary" data-act="ed-save">${ic('check')}Guardar</button></div>
   <datalist id="ing-names">${state.ingredients.slice().sort(byName).map(i=>`<option value="${esc(i.name)}">`).join('')}</datalist>`;
 }
-function editorSave(){
+async function editorSave(){
   const d=editor;if(!d)return;
   const title=d.title.trim();
   if(!title){toast('Falta el título',{icon:'alert'});$('[data-ed=title]')?.focus();return}
@@ -824,9 +970,18 @@ function editorSave(){
     if(!name){toast('Falta el nombre de un ingrediente',{icon:'alert'});return}
     const q=parseQty(qs);
     if(Number.isNaN(q)||(q!==null&&q<=0)){toast(`Cantidad no válida en «${name}»`,{icon:'alert'});return}
-    lines.push({name,qty:q,unit:l.unit,note:l.note.trim()});
+    lines.push({name,qty:q,unit:l.unit,note:l.note.trim(),gpu:l.gpu||null});
   }
-  const steps=d.steps.map(s=>({id:s.id,text:s.text.trim()})).filter(s=>s.text);
+  const steps=[];let hasProgs=false;
+  for(const [i,s] of d.steps.entries()){
+    const progs=[];
+    for(const e of s.programs){const p=edToProg(e);if(p&&p.error){toast(`Paso ${i+1}: ${p.error}`,{icon:'alert'});return}if(p)progs.push(p)}
+    if(progs.length||s.acc.length)hasProgs=true;
+    const text=s.text.trim();
+    if(d.method==='thermomix'){if(text||progs.length)steps.push({id:s.id,text,programs:progs,acc:s.acc.slice()})}
+    else if(text)steps.push({id:s.id,text,programs:[],acc:[]});
+  }
+  if(d.method!=='thermomix'&&hasProgs&&!await confirmBox('¿Guardar como receta tradicional?','Se quitarán los programas y accesorios de Thermomix de los pasos.','Guardar','primary'))return;
   const ok=commit(d.isNew?'Receta creada':'Receta guardada',s=>{
     const now=nowISO();
     let catId=d.categoryId||null;
@@ -835,14 +990,18 @@ function editorSave(){
       if(ex)catId=ex.id;else{const c={id:uid(),name:nm,order:s.categories.length,updatedAt:now};s.categories.push(c);catId=c.id}
     }
     const tagIds=d.tagNames.map(nm=>{let t=s.tags.find(t=>norm(t.name)===norm(nm));if(!t){t={id:uid(),name:nm.trim(),updatedAt:now};s.tags.push(t)}return t.id});
-    const ingLines=lines.map(l=>{let g=s.ingredients.find(i=>norm(i.name)===norm(l.name));if(!g){g=newIngredient(l.name,now);s.ingredients.push(g)}return {ingId:g.id,qty:l.qty,unit:l.unit,note:l.note}});
-    const rec={id:d.id,title,categoryId:catId,tags:tagIds,description:d.description.trim(),servings:serv,prepMin:prep,cookMin:cook,ingredients:ingLines,steps,notes:d.notes.trim(),sourceUrl:d.sourceUrl.trim(),createdAt:d.createdAt||now,updatedAt:now};
+    const ingLines=lines.map(l=>{
+      let g=findIngByName(s.ingredients,l.name);
+      if(!g){g=newIngredient(cap(l.name),now);s.ingredients.push(g)}
+      if(l.gpu>0&&l.unit==='ud'&&g.gramsPerUnit==null){g.gramsPerUnit=Math.round(l.gpu*10)/10;g.updatedAt=now}
+      return {ingId:g.id,qty:l.qty,unit:l.unit,note:l.note}});
+    const rec={id:d.id,title,method:d.method,categoryId:catId,tags:tagIds,description:d.description.trim(),servings:serv,prepMin:prep,cookMin:cook,ingredients:ingLines,steps,notes:d.notes.trim(),sourceUrl:d.sourceUrl.trim(),createdAt:d.createdAt||now,updatedAt:now};
     const i=s.recipes.findIndex(r=>r.id===d.id);
     if(i>=0)s.recipes[i]=rec;else s.recipes.push(rec);
   });
   if(!ok)return;
   d.dirty=false;delete detailServ[d.id];
-  if(d.from==='recipe')history.back();
+  if(d.from==='recipe'&&!d.isNew)history.back();
   else go('recipe',{recipeId:d.id},{replace:true});
 }
 function moveItem(list,i,dir){const j=i+dir;if(j<0||j>=list.length)return;[list[i],list[j]]=[list[j],list[i]]}
@@ -931,9 +1090,25 @@ function vHelp(){
   <li>Unidades: <b>g</b>, <b>kg</b>, <b>ml</b>, <b>l</b>, <b>cda</b> (cucharada, 15 ml), <b>cdta</b> (cucharadita, 5 ml) y <b>ud</b> (unidades).</li>
   <li>Ordena ingredientes y pasos con las flechas.</li>
   <li>En la ficha, cambia las <b>raciones</b> con − y + para recalcular las cantidades. Toca un paso para tacharlo mientras cocinas.</li>
-  <li>El botón de copiar pasa la receta a texto para pegarla en notas o WhatsApp.</li></ul>
+  <li>El botón del documento copia la receta como texto para pegarla en notas o WhatsApp.</li>
+  <li><b>Duplicar</b> (botón de las dos hojas) crea una copia para adaptarla, por ejemplo para pasar una receta tradicional a Thermomix o al revés.</li></ul>
+  <h2>Thermomix ${TM_MODEL}</h2>
+  <ul><li>En el editor, elige <b>Tipo: Thermomix ${TM_MODEL}</b>. Cada paso tiene sus <b>programas</b>: minutos y segundos, temperatura (37-120 °C o Varoma), velocidad (cuchara o de 0,5 a 10), <b>Hasta vel.</b> para velocidad progresiva (vel 5-10), giro inverso y modo (Amasar o Turbo con número de veces).</li>
+  <li>Un paso puede tener varios programas (por ejemplo, trocear y después sofreír): pulsa <b>+ Programa</b>.</li>
+  <li>Marca los accesorios del paso: mariposa, cestillo, recipiente Varoma o sin cubilete.</li>
+  <li>En la ficha, cada programa se ve como en el libro: «5 min/100 °C/giro inverso/vel cuchara».</li>
+  <li>La app avisa de lo que tu ${TM_MODEL} no puede hacer: más de ${TM_MAX_TEMP} °C, más de ${TM_MAX_MIN} minutos seguidos y modos de TM6/TM7 (alta temperatura, cocción lenta, sous-vide, fermentar, espesar…). Adapta ese paso a mano.</li>
+  <li>Si cambias una receta de Thermomix a tradicional y guardas, se quitan los programas (pide confirmación).</li></ul>
+  <h2>Pegar una receta</h2>
+  <ul><li>En Recetas, pulsa <b>Pegar receta</b> (botón del portapapeles), pega el texto copiado de Cookidoo, de un blog o de una nota y pulsa <b>Analizar</b>.</li>
+  <li>Se reconoce el título, las raciones, los tiempos, los ingredientes (con gramos, kg, ml, cucharadas, fracciones como ½, latas con su peso entre paréntesis…), los pasos, los consejos y el enlace.</li>
+  <li>Funciona mejor si el texto tiene los encabezados <b>Ingredientes</b> y <b>Preparación</b>.</li>
+  <li>En los pasos se reconocen los programas como «5 min/100°C/vel 1», «10 seg/vel 5», «Turbo/1 seg/3 veces», «2 min/vel espiga» o «vel 5-10 progresivamente». Si alguno sale, la receta se marca como Thermomix.</li>
+  <li>La receta se abre en el editor <b>sin guardar</b>: revísala y pulsa <b>Guardar</b>. Si un ingrediente ya existe en el catálogo (aunque esté en singular o plural), se usa el mismo.</li>
+  <li>Si pone «1 cebolla (100 g)», el peso por unidad se guarda en el catálogo para calcular los macros más adelante.</li></ul>
   <h2>Buscar y filtrar</h2>
-  <ul><li>El buscador mira el título, los ingredientes, las etiquetas y la categoría. Con varias palabras («pollo arroz») salen las recetas que tienen todas.</li>
+  <ul><li>Los botones <b>Thermomix</b> y <b>Tradicional</b> de arriba filtran por tipo de receta (aparecen cuando hay alguna de Thermomix).</li>
+  <li>El buscador mira el título, los ingredientes, las etiquetas y la categoría. Con varias palabras («pollo arroz») salen las recetas que tienen todas.</li>
   <li>Las etiquetas de arriba se combinan: si marcas dos, salen las recetas que tienen las dos.</li></ul>
   <h2>Ingredientes, categorías y etiquetas</h2>
   <ul><li>Cambiar el nombre de un ingrediente lo cambia en todas las recetas.</li>
@@ -1019,6 +1194,196 @@ async function importFile(file){
 }
 
 /* =========================================================
+   Pegar receta: análisis del texto
+   ========================================================= */
+const L='a-záéíóúüñ';
+const RX_TIME=`\\d+(?:[.,]\\d+)?\\s*(?:h|horas?)(?![${L}])(?:\\s*\\d+\\s*min(?:utos?)?(?![${L}]))?|\\d+\\s*min(?:utos?)?(?![${L}])(?:\\s*\\d+\\s*seg(?:undos?)?(?![${L}]))?|\\d+(?:[.,]\\d+)?\\s*seg(?:undos?)?(?![${L}])`;
+const RX_TEMP=`\\d{2,3}\\s*(?:[°º]\\s*C?|grados)(?![${L}])|varoma(?![${L}])`;
+const RX_REV=`giro\\s+(?:inverso|a\\s+la\\s+izquierda)|[↺⟲]`;
+const RX_VELNUM=`(?:cuchara|espiga|\\d+(?:[.,]\\d+)?(?:\\s*-\\s*\\d+(?:[.,]\\d+)?)?)(?:\\s*progresivamente)?`;
+const RX_VEL=`vel(?:ocidad|\\.)?(?:\\s*${RX_VELNUM})?`;
+const RX_OTHER=`alta\\s+temperatura|cocci[oó]n\\s+lenta|sous[\\s-]?vide|fermentar|espesar`;
+const RX_TOK=`(?:${RX_TIME}|${RX_TEMP}|${RX_REV}|${RX_VEL}|turbo|\\d+\\s*veces|${RX_OTHER})`;
+const RX_CHAIN=new RegExp(`(?<![\\w${L}])(?:${RX_TOK}(?:\\.?\\s*\\/\\s*${RX_TOK})+|vel(?:ocidad|\\.)?\\s*${RX_VELNUM})(?![\\w${L}])`,'gi');
+function speedKey(v){v=String(v).trim().replace(',','.');const n=parseFloat(v);if(!Number.isFinite(n))return null;const k=String(Math.round(n*2)/2);return TM_SPEEDS.includes(k)?k:null}
+function parseDuration(s){
+  s=norm(s).replace(/(seg|min|h)\./g,'$1').replace(/,/g,'.');
+  let m=/^(\d+(?:\.\d+)?)\s*(?:h|horas?)\s*(?:(\d+)\s*min(?:utos?)?)?\s*$/.exec(s);if(m)return Math.round(+m[1]*3600+(+m[2]||0)*60);
+  m=/^(\d+)\s*min(?:utos?)?\s*(?:(\d+)\s*seg(?:undos?)?)?\s*$/.exec(s);if(m)return +m[1]*60+(+m[2]||0);
+  m=/^(\d+(?:\.\d+)?)\s*seg(?:undos?)?\s*$/.exec(s);if(m)return +m[1];
+  return null;
+}
+function parseChain(str){
+  const p={time:null,temp:null,speed:null,speedTo:null,reverse:false,mode:null,reps:null};
+  let ok=false;
+  for(const raw of str.split(/\.?\s*\/\s*/)){
+    const t=norm(raw.trim());let m;
+    if(new RegExp(`^(?:${RX_OTHER})$`,'i').test(t))return null;     // modo de TM6/TM7: se deja el texto tal cual
+    if(t==='turbo'){p.mode='turbo';ok=true;continue}
+    if((m=/^(\d+)\s*veces$/.exec(t))){p.reps=+m[1];continue}
+    if(/^(?:giro|↺|⟲)/.test(t)){p.reverse=true;continue}
+    if(/^vel/.test(t)){
+      ok=true;const v=t.replace(/^vel(?:ocidad|\.)?\s*/,'').replace(/\s*progresivamente$/,'');
+      if(v==='espiga')p.mode='amasar';
+      else if(!v||v==='cuchara')p.speed='cuchara';
+      else{const [a,b]=v.split(/\s*-\s*/);p.speed=speedKey(a);if(b)p.speedTo=speedKey(b)}
+      continue;
+    }
+    if(t==='varoma'){p.temp='varoma';continue}
+    if((m=/^(\d{2,3})\s*(?:[°º]|grados)/.exec(t))){p.temp=+m[1];continue}
+    const sec=parseDuration(t);if(sec!=null){p.time=sec;continue}
+  }
+  return ok?normalizeProgram(p):null;
+}
+function extractPrograms(text){
+  const programs=[];
+  let out=String(text).replace(RX_CHAIN,m=>{const p=parseChain(m);if(!p)return m;programs.push(p);return '\u0000'});
+  out=out.replace(/\(\s*\u0000\s*\)/g,'\u0000')
+    .replace(/(?:\s+y)?\s+(?:programe|programar|programa)\s*\u0000/gi,'\u0000')
+    .replace(/\s+(?:durante|a|en)\s*\u0000/gi,'\u0000')
+    .replace(/\s*\u0000\s*/g,' ').replace(/\s+([.,;:])/g,'$1').replace(/([.,;:]){2,}/g,'$1').replace(/\(\s*\)/g,'').replace(/[ \t]{2,}/g,' ').trim();
+  return {text:out,programs};
+}
+function detectAcc(t){const n=norm(t),a=[];if(/mariposa/.test(n))a.push('mariposa');if(/cestillo/.test(n))a.push('cestillo');if(/\bvaroma\b/.test(n))a.push('varoma');if(/sin (?:el )?cubilete/.test(n))a.push('sincubilete');return a}
+
+const FRAC={'½':.5,'¼':.25,'¾':.75,'⅓':1/3,'⅔':2/3,'⅛':.125};
+const UNIT_WORDS=[[/^(?:kg|kgs|kilos?|kilogramos?)$/,'kg'],[/^(?:g|gr|grs|gramos?)$/,'g'],[/^(?:ml|mililitros?)$/,'ml'],[/^cl$/,'cl'],[/^dl$/,'dl'],[/^(?:l|lt|lts|litros?)$/,'l'],
+  [/^(?:cucharadas?|cdas?|c\/s|cs)$/,'cda'],[/^(?:cucharaditas?|cdtas?|cditas?|c\/c|cc)$/,'cdta']];
+const COUNT_RE=/^(?:dientes?|hojas?|ramitas?|ramas?|rodajas?|lonchas?|latas?|botes?|sobres?|paquetes?|vasos?|tazas?|tarros?|bricks?|cucharones?|piezas?|unidades?|uds?|filetes?|trozos?|tiras?|tallos?|cabezas?|pizcas?|chorritos?|chorros?|puñados?|pellizcos?)$/;
+const TOTASTE_RE=/^(?:pizcas?|chorritos?|chorros?|puñados?|pellizcos?)$/;
+const CONTAINER_RE=/^(?:latas?|botes?|sobres?|paquetes?|tarros?|bricks?|vasos?|tazas?)$/;
+function parseNum(t){t=t.trim();if(FRAC[t]!=null)return FRAC[t];if(/^\d{1,3}(?:\.\d{3})+$/.test(t))return +t.replace(/\./g,'');return parseQty(t)}
+const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+function parseIngLine(raw){
+  let s=String(raw).replace(/^[\s\-•*·–—]+/,'').replace(/\s+/g,' ').trim();
+  if(!s)return null;
+  s=s.replace(/(\d)([½¼¾⅓⅔⅛])/g,'$1 $2');
+  let qty=null,unit='g',notes=[],gpu=null,range='';
+  const m=/^(\d+(?:[.,]\d+)*(?:\s+\d+\/\d+|\/\d+)?|[½¼¾⅓⅔⅛])(\s*[½¼¾⅓⅔⅛])?/.exec(s);
+  if(m){
+    qty=parseNum(m[1]);if(m[2])qty+=FRAC[m[2].trim()];
+    if(!Number.isFinite(qty)||qty<=0)qty=null;
+    s=s.slice(m[0].length).trim();
+    const r=/^(?:-|a)\s*(\d+(?:[.,]\d+)?)\s*/i.exec(s);
+    if(r&&qty!=null){range=`${qtyStr(qty)}-${r[1]}`;s=s.slice(r[0].length)}
+  }
+  // Paréntesis: «(aprox. 100 g)», «(400 g)»
+  const parens=[];s=s.replace(/\(([^)]*)\)/g,(_,x)=>{parens.push(x.trim());return ' '}).replace(/\s+/g,' ').trim();
+  let parenW=null;
+  let usedParen=null;
+  for(const p of parens){const w=/(\d+(?:[.,]\d+)?)\s*(g|gr|gramos|kg|ml|l)\b/i.exec(p);if(w&&!parenW){let v=parseQty(w[1]);let u=w[2].toLowerCase();if(u==='gr'||u==='gramos')u='g';parenW={v,u,src:p}}}
+  if(qty!=null){
+    const w=/^([a-záéíóúüñ\/]+)\.?(?=\s|$)/i.exec(s);
+    const word=w?w[1].toLowerCase():'';
+    const uw=word&&UNIT_WORDS.find(([re])=>re.test(word));
+    if(uw){
+      unit=uw[1];s=s.slice(w[0].length).trim();
+      if(unit==='cl'){qty*=10;unit='ml'}else if(unit==='dl'){qty*=100;unit='ml'}
+    }else if(word&&COUNT_RE.test(word)){
+      s=s.slice(w[0].length).trim();
+      if(TOTASTE_RE.test(word)){notes.push(`${qtyStr(qty)} ${word}`);qty=null}
+      else if(CONTAINER_RE.test(word)&&parenW){notes.push(`${qtyStr(qty)} ${word}`);qty=parenW.v;unit=parenW.u;usedParen=parenW.src;parenW=null}
+      else{unit='ud';if(!/^(?:unidades?|uds?|piezas?)$/.test(word)){notes.push(range?`${range} ${word}`:word);range=''}}
+    }else unit='ud';
+  }
+  s=s.replace(/^(?:de\s+(?:la|las|los|el)\s+|del\s+|de\s+)/i,'');
+  if(unit==='ud'&&qty!=null&&parenW&&parenW.u==='g')gpu=parenW.v/qty;
+  // Nombre, nota tras la coma y «para …»
+  let name=s,rest='';
+  const c=s.indexOf(',');if(c>=0){name=s.slice(0,c);rest=s.slice(c+1).trim()}
+  const pm=/\s+(para\s+.+)$/i.exec(name);if(pm){name=name.slice(0,pm.index);notes.push(pm[1])}
+  name=name.replace(/\b(?:al gusto|opcional)\b/gi,m=>{if(/opcional/i.test(m))notes.push('opcional');return ''}).replace(/[.:;]+$/,'').replace(/\s+/g,' ').trim();
+  if(range)notes.unshift(range);
+  notes.push(...parens.filter(p=>p&&p!==usedParen));
+  if(rest)notes.push(rest);
+  return {qty,unit,name:cap(name),note:notes.join(', ').slice(0,200),gpu};
+}
+function parseMinutesText(s){const sec=parseDuration(String(s).replace(/(\d)\s*h(?=\s|\d|$)/i,'$1 h'));return sec==null?null:Math.round(sec/60)}
+function parseRecipeText(text){
+  const lines=String(text).replace(/\r/g,'').split('\n').map(l=>l.replace(/ /g,' ').trim());
+  const out={title:'',description:[],servings:null,prepMin:null,cookMin:null,totalMin:null,ingredients:[],steps:[],notes:[],sourceUrl:''};
+  const H_ING=/^ingredientes\b/, H_STEP=/^(?:preparacion|elaboracion|pasos|modo de preparacion|instrucciones|procedimiento)\b/, H_NOTE=/^(?:notas?|consejos?|sugerencias?|trucos?|variantes?|conservacion)\b/, H_SKIP=/^(?:utensilios|accesorios|valores nutricionales|informacion nutricional|por (?:1 )?racion|dificultad|etiquetas)\b/;
+  const isDur=l=>/^\d+(?:[.,]\d+)?\s*(?:h|horas?|min|minutos?)\b/i.test(norm(l));
+  let sec='head',lastStepOpen=false,guessed=false;
+  const servRe=/(\d+(?:[.,]\d+)?)\s*(?:raciones|porciones|personas|comensales|racion|porcion|persona)\b/;
+  for(let i=0;i<lines.length;i++){
+    const line=lines[i];if(!line)continue;
+    const n=norm(line).replace(/[:.]+$/,'');
+    if(/^https?:\/\/\S+$/i.test(line)){if(!out.sourceUrl)out.sourceUrl=line;continue}
+    // Datos de cabecera («Tiempo total», «Raciones»…), en la misma línea o en la siguiente
+    const meta=/^(tiempo de preparacion|preparacion|tiempo total|total|tiempo de coccion|coccion|raciones|porciones|comensales|dificultad)\s*:?\s*(.*)$/.exec(n);
+    if(meta&&n.length<60&&(sec==='head'||meta[1]!=='preparacion')){
+      let val=meta[2];
+      if(!val&&lines[i+1]&&(meta[1]==='dificultad'||isDur(lines[i+1])||/^\d/.test(lines[i+1]))){val=norm(lines[i+1]);i++}
+      if(val||meta[1]!=='preparacion'){
+        if(/raciones|porciones|comensales/.test(meta[1])){const v=parseFloat(String(val).replace(',','.'));if(v>0)out.servings=v}
+        else if(meta[1]!=='dificultad'&&val){const v=parseMinutesText(val);if(v!=null){if(/total/.test(meta[1]))out.totalMin=v;else if(/coccion/.test(meta[1]))out.cookMin=v;else out.prepMin=v}}
+        continue;
+      }
+    }
+    if(n.length<=45&&H_ING.test(n)){sec='ing';const sv=servRe.exec(n);if(sv)out.servings=parseFloat(sv[1].replace(',','.'));continue}
+    if(n.length<=45&&H_STEP.test(n)){sec='step';continue}
+    if(n.length<=45&&H_NOTE.test(n)){sec='note';continue}
+    if(n.length<=45&&H_SKIP.test(n)){sec='skip';continue}
+    if(sec==='head'){
+      const sv=servRe.exec(n);
+      if(sv&&n.length<40){out.servings=parseFloat(sv[1].replace(',','.'));continue}
+      if(!out.title){out.title=line;continue}
+      // Sin encabezado «Ingredientes»: las líneas que empiezan por cantidad son ingredientes
+      if(/^[\-•*·]?\s*(?:\d|[½¼¾⅓⅔⅛])/.test(line)&&!isDur(line)){sec='ing';guessed=true}
+      else{out.description.push(line);continue}
+    }
+    // Sin encabezados: una frase sin cantidad (acaba en punto o tiene 5 palabras o más) empieza la preparación
+    if(sec==='ing'&&guessed&&!/^[\-•*·]?\s*(?:\d|[½¼¾⅓⅔⅛])/.test(line)&&(/[.!]$/.test(line)||line.split(/\s+/).length>=5))sec='step';
+    if(sec==='ing'){
+      if(/:$/.test(line)||(/^para\s/i.test(line)&&!/\d/.test(line)))continue;
+      let l=line;
+      // «200 g» en una línea y el nombre en la siguiente
+      if(/^(?:\d+(?:[.,]\d+)?|[½¼¾⅓⅔⅛])\s*(?:(?:g|gr|grs|gramos?|kg|kilos?|ml|cl|dl|l|litros?|cdas?|cdtas?|cucharadas?|cucharaditas?)\.?)?$/i.test(l)&&lines[i+1]&&!/^(?:\d|[½¼¾⅓⅔⅛])/.test(lines[i+1])&&!H_STEP.test(norm(lines[i+1]))){l+=' '+lines[i+1];i++}
+      const p=parseIngLine(l);if(p&&p.name)out.ingredients.push(p);
+      continue;
+    }
+    if(sec==='step'){
+      if(/^(?:paso\s*)?\d+\.?$/i.test(line)){lastStepOpen=false;continue}
+      const t=line.replace(/^(?:paso\s*)?\d+\s*[.)\-:]\s*/i,'').replace(/^[\-•*·]\s*/,'');
+      const prev=out.steps[out.steps.length-1];
+      if(prev&&lastStepOpen&&/^[a-záéíóúñ]/.test(t)&&!/[.!?:]$/.test(prev)){out.steps[out.steps.length-1]=prev+' '+t}
+      else out.steps.push(t);
+      lastStepOpen=true;
+      continue;
+    }
+    if(sec==='note'){out.notes.push(line);continue}
+  }
+  if(out.totalMin!=null&&out.prepMin!=null&&out.cookMin==null&&out.totalMin>out.prepMin)out.cookMin=out.totalMin-out.prepMin;
+  if(out.totalMin!=null&&out.prepMin==null&&out.cookMin==null)out.prepMin=out.totalMin;
+  const steps=out.steps.map(t=>{const e=extractPrograms(t);return {text:e.text,programs:e.programs,acc:e.programs.length?detectAcc(e.text):[]}});
+  const tm=steps.some(s=>s.programs.length);
+  return {
+    title:out.title,description:out.description.join('\n'),servings:out.servings,prepMin:out.prepMin,cookMin:out.cookMin,
+    method:tm?'thermomix':'tradicional',ingredients:out.ingredients,
+    steps:tm?steps:steps.map(s=>({text:s.text,programs:[],acc:[]})),
+    notes:out.notes.join('\n'),sourceUrl:out.sourceUrl
+  };
+}
+function findIngByName(list,name){
+  const n=norm(name);if(!n)return null;
+  return list.find(i=>norm(i.name)===n)||list.find(i=>{const m=norm(i.name);return m+'s'===n||m+'es'===n||n+'s'===m||n+'es'===m})||null;
+}
+async function pasteRecipe(){
+  const res=await modal({title:'Pegar receta',withData:true,
+    body:`<textarea name="text" class="paste-area" placeholder="Título\n\nIngredientes\n200 g de arroz\n…\n\nPreparación\n1. Sofría 5 min/120°C/vel 1…" aria-label="Texto de la receta"></textarea>`,
+    buttons:[{label:'Cancelar',value:null},{label:'Analizar',cls:'primary',value:'ok'}]});
+  if(!res||res[0]!=='ok')return;
+  const text=(res[1].text||'').trim();
+  if(!text){toast('No has pegado nada',{icon:'alert'});return}
+  const r=parseRecipeText(text);
+  if(!r.title&&!r.ingredients.length&&!r.steps.length){toast('No se ha reconocido ninguna receta',{icon:'alert'});return}
+  go('edit',{draft:r});
+  const nw=r.steps.reduce((a,s)=>a+stepWarnings(s).length,0);
+  toast(`${r.ingredients.length} ingredientes y ${r.steps.length} pasos. Revisa y guarda${nw?` (${nw} ${nw===1?'aviso':'avisos'})`:''}`,{icon:nw?'alert':'check'});
+}
+
+/* =========================================================
    Eventos
    ========================================================= */
 const ACTIONS={
@@ -1043,14 +1408,22 @@ const ACTIONS={
   'serv':el=>{const r=recipeById(ui.recipeId);if(!r)return;const cur=detailServ[r.id]??r.servings;let v=Math.round(cur)+(+el.dataset.d);if(Math.round(cur)!==cur&&+el.dataset.d<0)v=Math.floor(cur);if(Math.round(cur)!==cur&&+el.dataset.d>0)v=Math.ceil(cur);detailServ[r.id]=Math.max(1,v);renderApp()},
   'step-done':el=>el.classList.toggle('done'),
   'filter-tag':el=>{const id=el.dataset.id;ui.tags=ui.tags.includes(id)?ui.tags.filter(t=>t!==id):[...ui.tags,id];saveUI();renderApp()},
-  'clear-filters':()=>{ui.q='';ui.cat='';ui.tags=[];saveUI();renderApp()},
+  'clear-filters':()=>{ui.q='';ui.cat='';ui.tags=[];ui.method='';saveUI();renderApp()},
+  'filter-method':el=>{ui.method=ui.method===el.dataset.v?'':el.dataset.v;saveUI();renderApp()},
+  'paste-recipe':()=>pasteRecipe(),
+  'dup-recipe':el=>{if(recipeById(el.dataset.id))go('edit',{recipeId:el.dataset.id,copy:true})},
+  'ed-method':el=>{editor.method=el.dataset.v;if(editor.method==='thermomix'&&!editor.steps.some(s=>s.programs.length))editor.steps.forEach(s=>{if(!s.programs.length)s.programs.push(emptyProg())});editor.dirty=true;renderApp()},
+  'ed-prog-add':el=>{editor.steps[+el.dataset.i].programs.push(emptyProg());editor.dirty=true;renderApp()},
+  'ed-prog-del':el=>{editor.steps[+el.dataset.si].programs.splice(+el.dataset.pj,1);editor.dirty=true;renderApp()},
+  'ed-prog-rev':el=>{const p=editor.steps[+el.dataset.si].programs[+el.dataset.pj];p.reverse=!p.reverse;editor.dirty=true;el.classList.toggle('on',p.reverse);updateStepLive(+el.dataset.si)},
+  'ed-acc':el=>{const s=editor.steps[+el.dataset.i],k=el.dataset.k;s.acc=s.acc.includes(k)?s.acc.filter(x=>x!==k):[...s.acc,k];editor.dirty=true;el.classList.toggle('on',s.acc.includes(k))},
   'snooze-backup':()=>{state.settings.backupSnooze=ymd(addDays(new Date(),3));save();renderApp()},
   // Editor
   'ed-save':()=>editorSave(),
   'ed-line-add':()=>{editor.lines.push({qty:'',unit:'g',name:'',note:''});editor.dirty=true;renderApp();$$('[data-lf=qty]').at(-1)?.focus()},
   'ed-line-del':el=>{editor.lines.splice(+el.dataset.i,1);editor.dirty=true;renderApp()},
   'ed-line-move':el=>{moveItem(editor.lines,+el.dataset.i,+el.dataset.d);editor.dirty=true;renderApp()},
-  'ed-step-add':()=>{editor.steps.push({id:uid(),text:''});editor.dirty=true;renderApp();$$('[data-step]').at(-1)?.focus()},
+  'ed-step-add':()=>{editor.steps.push({id:uid(),text:'',programs:editor.method==='thermomix'?[emptyProg()]:[],acc:[]});editor.dirty=true;renderApp();$$('[data-step]').at(-1)?.focus()},
   'ed-step-del':el=>{editor.steps.splice(+el.dataset.i,1);editor.dirty=true;renderApp()},
   'ed-step-move':el=>{moveItem(editor.steps,+el.dataset.i,+el.dataset.d);editor.dirty=true;renderApp()},
   'ed-tag':el=>{const n=el.dataset.name,i=editor.tagNames.findIndex(x=>norm(x)===norm(n));if(i>=0)editor.tagNames.splice(i,1);else editor.tagNames.push(n);editor.dirty=true;renderApp()},
@@ -1084,6 +1457,11 @@ const ACTIONS={
     commit('Recetario vaciado',()=>{const settings=state.settings;state=normalizeState({});state.settings=settings});
   }
 };
+function updateStepLive(i){
+  const s=editor&&editor.steps[i];if(!s)return;
+  s.programs.forEach((p,j)=>{const el=$(`[data-prev="${i}:${j}"] span`);if(!el)return;const pr=edToProg(p);el.textContent=pr&&pr.error?pr.error:(pr?fmtProgram(pr):'Sin datos')});
+  const w=$(`[data-warn="${i}"]`);if(w)w.innerHTML=warnHTML(stepWarnings(edStepAsStep(s)));
+}
 function addEditorTag(){
   const inp=$('#newtag');if(!inp)return;const n=inp.value.trim();if(!n)return;
   if(!editor.tagNames.some(x=>norm(x)===norm(n))){const ex=state.tags.find(t=>norm(t.name)===norm(n));editor.tagNames.push(ex?ex.name:n);editor.dirty=true}
@@ -1107,9 +1485,15 @@ document.addEventListener('input',e=>{
   if(t.id==='q'){ui.q=t.value;saveUISoon();$('#results').innerHTML=vResults();return}
   if(t.id==='ingq'){ui.ingQ=t.value;saveUISoon();$('#ing-results').innerHTML=vIngResults();return}
   if(!editor)return;
+  if(t.dataset.pf){
+    const si=+t.dataset.si,p=editor.steps[si].programs[+t.dataset.pj];
+    p[t.dataset.pf]=t.value;editor.dirty=true;
+    if(t.dataset.pf==='mode')renderApp();else updateStepLive(si);
+    return;
+  }
   if(t.dataset.ed&&t.dataset.ed!=='categoryId'){editor[t.dataset.ed]=t.value;editor.dirty=true}
   else if(t.dataset.line!=null){editor.lines[+t.dataset.line][t.dataset.lf]=t.value;editor.dirty=true}
-  else if(t.dataset.step!=null){editor.steps[+t.dataset.step].text=t.value;editor.dirty=true}
+  else if(t.dataset.step!=null){editor.steps[+t.dataset.step].text=t.value;editor.dirty=true;if(editor.method==='thermomix')updateStepLive(+t.dataset.step)}
   if(t.classList.contains('autosize'))autosize(t);
 });
 document.addEventListener('change',async e=>{
@@ -1195,6 +1579,7 @@ async function boot(){
 // Ganchos de prueba
 window.__recetario={
   get state(){return state},normalizeState,convertUnit,toGrams,parseQty,fmtQty,mergeStates,undo,
+  parseRecipeText,extractPrograms,parseIngLine,fmtProgram,stepWarnings,
   async setState(j){state=normalizeState(typeof j==='string'?JSON.parse(j):j);undoStack.length=0;await writeNow();renderApp(true)}
 };
 boot();
