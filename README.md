@@ -17,9 +17,10 @@ Aplicación web personal (PWA) para guardar recetas, instalable en el ordenador 
 - **Thermomix TM5**: cada receta es «Tradicional» o «Thermomix TM5». En las de Thermomix, cada paso lleva uno o varios programas (tiempo, temperatura 37-120 °C o Varoma, velocidad cuchara o 0,5-10, velocidad progresiva, giro inverso, Amasar, Turbo con veces) y accesorios (mariposa, cestillo, recipiente Varoma, sin cubilete). Se muestran como «5 min/100 °C/giro inverso/vel cuchara». Avisos de lo que la TM5 no puede hacer (más de 120 °C, más de 99 min, modos de TM6/TM7).
 - **Duplicar** una receta para adaptarla (por ejemplo, de tradicional a Thermomix).
 - **Pegar receta**: analiza un texto copiado (Cookidoo, blogs, notas) y abre el editor sin guardar. Reconoce título, raciones, tiempos, ingredientes (g, kg, ml, cucharadas, fracciones, «1.000 g», latas con peso), pasos con programas de Thermomix, consejos y enlace.
+- **Lista de la compra**: marca recetas con el carrito de la tarjeta o desde la ficha (con las raciones elegidas). Suma los ingredientes entre recetas (500 g, 3 huevos, 3 dientes de ajo), los agrupa por sección del súper y permite tachar, ocultar lo que ya tienes, añadir artículos sueltos, copiar como texto lo que falta y vaciar la lista. Las secciones del súper se editan (nombre, orden, añadir y borrar).
 - Tema automático, claro u oscuro.
 
-Próximas fases: macros por ración (con Open Food Facts como ayuda opcional), lista de la compra, modo cocina, fotos y sincronización.
+Próximas fases: macros por ración (con Open Food Facts como ayuda opcional), modo cocina, fotos y sincronización.
 
 ## Instalación
 
@@ -53,4 +54,4 @@ No abras `index.html` desde el disco (`file://`): no se instala ni funciona el s
 
 - HTML, CSS y JS vanilla en un único `index.html`, sin librerías ni compilación.
 - Service worker «primero la red» (`cache: 'no-store'`), registrado con `updateViaCache: 'none'`. **Subir el número de `CACHE` en `sw.js` cada vez que se cambie ese archivo.**
-- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `stepIngredients`, `ingCandidates`, `fold`, `setState(json)`).
+- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `stepIngredients`, `ingCandidates`, `fold`, `buildShoppingList`, `shoppingText`, `setState(json)`).
