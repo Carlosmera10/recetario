@@ -255,7 +255,10 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
 .modal .off-note{font-size:12.5px;margin:6px 0 0}
 
 /* ---------- Lista de la compra ---------- */
-h2.sec-a{display:flex;align-items:center;gap:9px;color:var(--text);margin:20px 2px 8px;letter-spacing:.04em}
+h2.sec-a{color:var(--text);margin:14px 0 4px;letter-spacing:.04em}
+.sec-btn{display:flex;align-items:center;gap:9px;width:100%;min-height:46px;padding:4px 2px;background:none;border:0;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;text-align:left;cursor:pointer}
+.sec-btn .a-chev{flex:none;width:20px;height:20px;color:var(--muted);transition:transform .15s}
+.sec-btn[aria-expanded=false] .a-chev{transform:rotate(-90deg)}
 .a-ic{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--sec,var(--a-other));color:var(--a-ink)}
 .a-ic .ic{width:19px;height:19px}
 .row .a-ic{width:26px;height:26px;margin-left:2px}
@@ -401,7 +404,7 @@ h2.sec-a{display:flex;align-items:center;gap:9px;color:var(--text);margin:20px 2
 /* =========================================================
    Constantes
    ========================================================= */
-const APP_VERSION='1.5.0';
+const APP_VERSION='1.6.0';
 const DB_NAME='recetario_v1', UI_KEY='recetario_v1_ui', CHANNEL_NAME='recetario';
 const UNITS=['g','kg','ml','l','cda','cdta','ud'];
 const UNIT_INFO={g:{fam:'peso',f:1},kg:{fam:'peso',f:1000},ml:{fam:'volumen',f:1},l:{fam:'volumen',f:1000},cda:{fam:'volumen',f:15},cdta:{fam:'volumen',f:5},ud:{fam:'unidades',f:1}};
@@ -721,9 +724,10 @@ if(channel)channel.onmessage=async e=>{
   try{state=normalizeState(await idbGet('state','main'));undoStack.length=0;renderApp()}catch(err){console.error(err)}
 };
 
-const ui=Object.assign({view:'recipes',recipeId:null,q:'',cat:'',tags:[],method:'',sort:'az',theme:'auto',sbCollapsed:false,ingQ:''},loadUI());
+const ui=Object.assign({view:'recipes',recipeId:null,q:'',cat:'',tags:[],method:'',sort:'az',theme:'auto',sbCollapsed:false,ingQ:'',shopCollapsed:[]},loadUI());
+if(!Array.isArray(ui.shopCollapsed))ui.shopCollapsed=[];
 function loadUI(){try{const u=JSON.parse(localStorage.getItem(UI_KEY)||'{}');return u&&typeof u==='object'?u:{}}catch(e){return {}}}
-function saveUI(){try{localStorage.setItem(UI_KEY,JSON.stringify({view:ui.view==='edit'?(ui.recipeId?'recipe':'recipes'):ui.view,recipeId:ui.recipeId,q:ui.q,cat:ui.cat,tags:ui.tags,method:ui.method,sort:ui.sort,theme:ui.theme,sbCollapsed:ui.sbCollapsed,ingQ:ui.ingQ}))}catch(e){}}
+function saveUI(){try{localStorage.setItem(UI_KEY,JSON.stringify({view:ui.view==='edit'?(ui.recipeId?'recipe':'recipes'):ui.view,recipeId:ui.recipeId,q:ui.q,cat:ui.cat,tags:ui.tags,method:ui.method,sort:ui.sort,theme:ui.theme,sbCollapsed:ui.sbCollapsed,ingQ:ui.ingQ,shopCollapsed:ui.shopCollapsed}))}catch(e){}}
 let saveUITimer=null;const saveUISoon=()=>{clearTimeout(saveUITimer);saveUITimer=setTimeout(saveUI,400)};
 
 /* =========================================================
@@ -1373,7 +1377,8 @@ function vShopping(){
   const extras=`<h2 class="sec">Artículos sueltos</h2>${sh.extras.length?`<div class="list">${sh.extras.map(x=>`<div class="sl-item"><div class="sl-row ${x.done?'done':''}" data-act="shop-extra" data-id="${x.id}" role="checkbox" aria-checked="${x.done}" tabindex="0"><span class="sl-box">${ic('check')}</span><span class="sl-name">${esc(x.text)}</span></div><button class="btn icon sm ghost danger" data-act="shop-extra-del" data-id="${x.id}" aria-label="Quitar ${esc(x.text)}">${ic('x')}</button></div>`).join('')}</div>`:''}
     <form class="addrow" data-form="extra-add"><input name="name" placeholder="Añadir artículo" autocomplete="off" maxlength="200" aria-label="Añadir artículo"><button class="btn primary" aria-label="Añadir">${ic('plus')}</button></form>`;
   const sections=list.sections.map(sec=>{const left=sec.lines.filter(l=>!l.checked).length;
-    return `<h2 class="sec sec-a">${aisleIcon(sec.aisle)}<span>${esc(sec.aisle)}</span><span class="a-n">${left||ic('check')}</span></h2><div class="list sl-sec" style="--sec:${aisleStyle(sec.aisle).color}">${sec.lines.map(l=>shopLine(l,false)).join('')}</div>`}).join('');
+    const open=!ui.shopCollapsed.includes(sec.aisle);
+    return `<h2 class="sec sec-a"><button class="sec-btn" data-act="shop-sec" data-a="${esc(sec.aisle)}" aria-expanded="${open}">${aisleIcon(sec.aisle)}<span>${esc(sec.aisle)}</span><span class="a-n">${left||ic('check')}</span>${ic('down','a-chev')}</button></h2>${open?`<div class="list sl-sec" style="--sec:${aisleStyle(sec.aisle).color}">${sec.lines.map(l=>shopLine(l,false)).join('')}</div>`:''}`}).join('');
   const hidden=list.hidden.length?`<p class="count"><button class="linkbtn" data-act="shop-show-have">${ui.shopHave?'Ocultar':'Ver'} lo que ya tienes (${list.hidden.length})</button></p>${ui.shopHave?`<div class="list">${list.hidden.map(l=>shopLine(l,true)).join('')}</div>`:''}`:'';
   const empty=nSel?'':`<div class="empty">${ic('cart')}<h2>No hay recetas en la lista</h2><button class="btn primary" data-act="nav" data-view="recipes">${ic('book')}Elegir recetas</button></div>`;
   return head+`<div class="shop-grid"><div>
@@ -1543,6 +1548,7 @@ function vHelp(){
   <li><b>Artículos sueltos</b> sirve para lo que no sale de una receta, como el papel de cocina.</li>
   <li>El botón del documento copia lo que queda por comprar, para pegarlo en notas o WhatsApp. La papelera vacía la lista: recetas marcadas, tachados y artículos sueltos.</li>
   <li>Las secciones se cambian en <b>Editar secciones</b> (o en Ajustes): nombre, orden, añadir y borrar. Al borrar una, sus ingredientes pasan a «Otros».</li>
+  <li>Toca la cabecera de una sección para <b>plegarla</b> o desplegarla. Sigue contando lo que queda por tachar y se recuerda en cada dispositivo.</li>
   <li>Cada sección tiene su <b>color e icono</b>, que salen de su nombre: «Frutería» sigue siendo la manzana verde. Una sección nueva sin parecido lleva una bolsa. El número de la derecha es lo que queda por tachar en esa sección.</li></ul>
   <h2>Buscar y filtrar</h2>
   <ul><li>Los botones <b>Thermomix</b> y <b>Tradicional</b> de arriba filtran por tipo de receta (aparecen cuando hay alguna de Thermomix).</li>
@@ -1868,6 +1874,7 @@ const ACTIONS={
   'shop-serv':el=>{const id=el.dataset.id,d=+el.dataset.d;commit('',s=>{const x=s.shopping.selected.find(y=>y.recipeId===id);if(!x)return false;const v=stepServ(x.servings,d);if(v===x.servings)return false;x.servings=v})},
   'shop-check':el=>{const k=el.dataset.key;commit('',s=>{if(s.shopping.checked[k])delete s.shopping.checked[k];else s.shopping.checked[k]=true})},
   'shop-have':el=>{const k=el.dataset.key,on=!!state.shopping.have[k];commit('',s=>{if(on)delete s.shopping.have[k];else s.shopping.have[k]=true})},
+  'shop-sec':el=>{const a=el.dataset.a;ui.shopCollapsed=ui.shopCollapsed.includes(a)?ui.shopCollapsed.filter(x=>x!==a):[...ui.shopCollapsed,a];saveUI();renderApp()},
   'shop-show-have':()=>{ui.shopHave=!ui.shopHave;renderApp()},
   'shop-extra':el=>{const id=el.dataset.id;commit('',s=>{const x=s.shopping.extras.find(y=>y.id===id);if(!x)return false;x.done=!x.done})},
   'shop-extra-del':el=>{const id=el.dataset.id;commit('Artículo quitado',s=>{s.shopping.extras=s.shopping.extras.filter(x=>x.id!==id)})},

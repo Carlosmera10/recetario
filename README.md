@@ -18,7 +18,7 @@ Aplicación web personal (PWA) para guardar recetas, instalable en el ordenador 
 - **Duplicar** una receta para adaptarla (por ejemplo, de tradicional a Thermomix).
 - **Pegar receta**: analiza un texto copiado (Cookidoo, blogs, notas) y abre el editor sin guardar. Reconoce título, raciones, tiempos, ingredientes (g, kg, ml, cucharadas, fracciones, «1.000 g», latas con peso), pasos con programas de Thermomix, consejos y enlace.
 - **Macros**: cada ingrediente del catálogo guarda sus valores por 100 g en crudo, la densidad y el peso por unidad. La ficha calcula los macros por ración y el total, con aviso «Incompleto» y la lista de lo que falta; las tarjetas muestran las kcal por ración. Open Food Facts es una ayuda opcional para copiar los datos de productos envasados.
-- **Lista de la compra**: marca recetas con el carrito de la tarjeta o desde la ficha (con las raciones elegidas). Suma los ingredientes entre recetas (500 g, 3 huevos, 3 dientes de ajo), los agrupa por sección del súper, cada una con su color e icono, y permite tachar, ocultar lo que ya tienes, añadir artículos sueltos, copiar como texto lo que falta y vaciar la lista. Las secciones del súper se editan (nombre, orden, añadir y borrar).
+- **Lista de la compra**: marca recetas con el carrito de la tarjeta o desde la ficha (con las raciones elegidas). Suma los ingredientes entre recetas (500 g, 3 huevos, 3 dientes de ajo), los agrupa por sección del súper, cada una con su color e icono y plegable, y permite tachar, ocultar lo que ya tienes, añadir artículos sueltos, copiar como texto lo que falta y vaciar la lista. Las secciones del súper se editan (nombre, orden, añadir y borrar).
 - Tema automático, claro u oscuro.
 
 Próximas fases: modo cocina, fotos y sincronización.
