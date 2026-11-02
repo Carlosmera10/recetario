@@ -22,6 +22,8 @@ var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('cont
   --danger:#b3261e;--danger-soft:#f9e0de;--warn:#8a5d00;--warn-soft:#fbf0d5;
   --toast-bg:#2b211b;--toast-text:#fbf5ee;--toast-accent:#f2a27e;--overlay:rgba(30,18,8,.45);
   --shadow:0 1px 2px rgba(60,40,20,.06),0 4px 14px rgba(60,40,20,.06);
+  --a-fruit:#4b7f2e;--a-meat:#b23a3a;--a-fish:#3565a8;--a-dairy:#927000;--a-bread:#9c5f1c;--a-pantry:#7f4f38;--a-frozen:#1f8a99;--a-drink:#7a4fa8;--a-other:#6f6054;
+  --a-x1:#a8455f;--a-x2:#2f7a70;--a-x3:#5a56a8;--a-x4:#6f6f22;--a-ink:#fff;
   --radius:14px;--sidebar-w:236px;color-scheme:light;
 }
 :root[data-theme=dark]{
@@ -31,6 +33,8 @@ var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('cont
   --danger:#f08a80;--danger-soft:#3e2220;--warn:#f0c46a;--warn-soft:#3a2f17;
   --toast-bg:#f1e9e0;--toast-text:#1c1714;--toast-accent:#b5532e;--overlay:rgba(0,0,0,.6);
   --shadow:0 1px 2px rgba(0,0,0,.25),0 4px 14px rgba(0,0,0,.2);color-scheme:dark;
+  --a-fruit:#9bc46f;--a-meat:#ee8a80;--a-fish:#84ade8;--a-dairy:#e6c35c;--a-bread:#e5a862;--a-pantry:#d0a083;--a-frozen:#6fd0dc;--a-drink:#c5a2ec;--a-other:#b3a596;
+  --a-x1:#e79ab0;--a-x2:#7fcfc3;--a-x3:#aeb0ef;--a-x4:#c9c96f;--a-ink:#1c1714;
 }
 html.sb-c{--sidebar-w:68px}
 *{box-sizing:border-box}
@@ -251,6 +255,16 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
 .modal .off-note{font-size:12.5px;margin:6px 0 0}
 
 /* ---------- Lista de la compra ---------- */
+h2.sec-a{display:flex;align-items:center;gap:9px;color:var(--text);margin:20px 2px 8px;letter-spacing:.04em}
+.a-ic{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--sec,var(--a-other));color:var(--a-ink)}
+.a-ic .ic{width:19px;height:19px}
+.row .a-ic{width:26px;height:26px;margin-left:2px}
+.row .a-ic .ic{width:17px;height:17px}
+.row input.inline[data-aisle-name]{padding-left:4px;padding-right:0}
+.a-n{margin-left:auto;font-size:13px;font-weight:700;letter-spacing:0;color:var(--muted);display:inline-flex}
+.a-n .ic{width:18px;height:18px;color:var(--accent);stroke-width:3}
+.sl-sec{position:relative;padding-left:6px}
+.sl-sec::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--sec,var(--a-other))}
 .shop-grid{display:flex;flex-direction:column}
 .shop-recipes{order:2}
 .shop-add{width:100%;margin-top:12px}
@@ -362,6 +376,15 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
   <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-7h6v7"/></symbol>
   <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+  <symbol id="i-a-fruit" viewBox="0 0 24 24"><path d="M12 7c-1.5-1.5-4-2-6 0-2.5 2.5-1.5 8 1 11.5 1.2 1.7 2.7 2.5 5 1.5 2.3 1 3.8.2 5-1.5 2.5-3.5 3.5-9 1-11.5-2-2-4.5-1.5-6 0z"/><path d="M12 7c0-2 1-4 3-5"/></symbol>
+  <symbol id="i-a-meat" viewBox="0 0 24 24"><path d="M15.4 15.63a7.875 6 135 1 1 6.23-6.23 4.5 3.43 135 0 0-6.23 6.23"/><path d="m8.29 12.71-2.6 2.6a2.5 2.5 0 1 0-1.65 4.65A2.5 2.5 0 1 0 8.7 18.3l2.59-2.59"/></symbol>
+  <symbol id="i-a-fish" viewBox="0 0 24 24"><path d="M3 12c3-5 9-7 14-3l4-3v12l-4-3c-5 4-11 2-14-3z"/><path d="M8 11h.01"/></symbol>
+  <symbol id="i-a-dairy" viewBox="0 0 24 24"><path d="M8 2h8"/><path d="M9 2v3.5a4 4 0 0 1-1 2.6 4 4 0 0 0-1 2.6V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.3a4 4 0 0 0-1-2.6 4 4 0 0 1-1-2.6V2"/><path d="M7 14h10"/></symbol>
+  <symbol id="i-a-bread" viewBox="0 0 24 24"><path d="M4 10a3 3 0 0 1 2-5.5h12A3 3 0 0 1 20 10v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-a-pantry" viewBox="0 0 24 24"><rect x="5" y="8" width="14" height="14" rx="3"/><path d="M8 8V5h8v3"/><path d="M6 3h12"/><path d="M5 14h14"/></symbol>
+  <symbol id="i-a-frozen" viewBox="0 0 24 24"><path d="M12 2v20M4 6l16 12M20 6 4 18"/><path d="m9 4 3 3 3-3M9 20l3-3 3 3"/></symbol>
+  <symbol id="i-a-drink" viewBox="0 0 24 24"><path d="M10 2h4v4l2 3v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9l2-3z"/><path d="M8 13h8"/></symbol>
+  <symbol id="i-a-other" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
   <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
 </svg>
 
@@ -378,7 +401,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
 /* =========================================================
    Constantes
    ========================================================= */
-const APP_VERSION='1.4.1';
+const APP_VERSION='1.5.0';
 const DB_NAME='recetario_v1', UI_KEY='recetario_v1_ui', CHANNEL_NAME='recetario';
 const UNITS=['g','kg','ml','l','cda','cdta','ud'];
 const UNIT_INFO={g:{fam:'peso',f:1},kg:{fam:'peso',f:1000},ml:{fam:'volumen',f:1},l:{fam:'volumen',f:1000},cda:{fam:'volumen',f:15},cdta:{fam:'volumen',f:5},ud:{fam:'unidades',f:1}};
@@ -1255,6 +1278,17 @@ function vIngResults(){
     <button class="btn icon sm ghost danger" data-act="ing-del" data-id="${g.id}" aria-label="Borrar">${ic('trash')}</button></div>`).join('')}</div>`;
 }
 /* ---------- Lista de la compra ---------- */
+// Color e icono de cada sección, según su nombre: siguen funcionando si se renombra («Frutería», «Carnes»…)
+const AISLE_STYLES=[[/frut|verdur|hortaliz/,'fruit'],[/carne|carnic|charcut|pollo/,'meat'],[/pescad|pesca|marisco/,'fish'],[/lacteo|huevo|queso|leche|yogur/,'dairy'],
+  [/panader|^pan\b|bolleria|horno|pasteler/,'bread'],[/congelad/,'frozen'],[/bebida|refresco|vino|cerveza|agua/,'drink'],[/despensa|conserva|alimentacion|legumbre|pasta|arroz/,'pantry'],[/^otros$/,'other']];
+function aisleStyle(name){
+  const n=norm(name),hit=AISLE_STYLES.find(([re])=>re.test(n));
+  if(hit)return {icon:'a-'+hit[1],color:`var(--a-${hit[1]})`};
+  // Sección nueva sin parecido: bolsa y un color fijo según el nombre
+  const sum=[...n].reduce((a,c)=>a+c.charCodeAt(0),0);
+  return {icon:'a-other',color:`var(--a-x${sum%4+1})`};
+}
+const aisleIcon=name=>{const a=aisleStyle(name);return `<span class="a-ic" style="--sec:${a.color}">${ic(a.icon)}</span>`};
 const inShopping=id=>state.shopping.selected.some(x=>x.recipeId===id);
 const stepServ=(cur,d)=>Math.max(1,Number.isInteger(cur)?cur+d:(d<0?Math.floor(cur):Math.ceil(cur)));
 // «2 dientes», «3 hojas»: el analizador guarda esa palabra en la nota de los ingredientes en unidades
@@ -1338,7 +1372,8 @@ function vShopping(){
     <button class="btn icon sm ghost danger" data-act="shop-remove" data-id="${r.id}" aria-label="Quitar ${esc(r.title)}">${ic('x')}</button></div>`}).join('');
   const extras=`<h2 class="sec">Artículos sueltos</h2>${sh.extras.length?`<div class="list">${sh.extras.map(x=>`<div class="sl-item"><div class="sl-row ${x.done?'done':''}" data-act="shop-extra" data-id="${x.id}" role="checkbox" aria-checked="${x.done}" tabindex="0"><span class="sl-box">${ic('check')}</span><span class="sl-name">${esc(x.text)}</span></div><button class="btn icon sm ghost danger" data-act="shop-extra-del" data-id="${x.id}" aria-label="Quitar ${esc(x.text)}">${ic('x')}</button></div>`).join('')}</div>`:''}
     <form class="addrow" data-form="extra-add"><input name="name" placeholder="Añadir artículo" autocomplete="off" maxlength="200" aria-label="Añadir artículo"><button class="btn primary" aria-label="Añadir">${ic('plus')}</button></form>`;
-  const sections=list.sections.map(sec=>`<h2 class="sec">${esc(sec.aisle)}</h2><div class="list">${sec.lines.map(l=>shopLine(l,false)).join('')}</div>`).join('');
+  const sections=list.sections.map(sec=>{const left=sec.lines.filter(l=>!l.checked).length;
+    return `<h2 class="sec sec-a">${aisleIcon(sec.aisle)}<span>${esc(sec.aisle)}</span><span class="a-n">${left||ic('check')}</span></h2><div class="list sl-sec" style="--sec:${aisleStyle(sec.aisle).color}">${sec.lines.map(l=>shopLine(l,false)).join('')}</div>`}).join('');
   const hidden=list.hidden.length?`<p class="count"><button class="linkbtn" data-act="shop-show-have">${ui.shopHave?'Ocultar':'Ver'} lo que ya tienes (${list.hidden.length})</button></p>${ui.shopHave?`<div class="list">${list.hidden.map(l=>shopLine(l,true)).join('')}</div>`:''}`:'';
   const empty=nSel?'':`<div class="empty">${ic('cart')}<h2>No hay recetas en la lista</h2><button class="btn primary" data-act="nav" data-view="recipes">${ic('book')}Elegir recetas</button></div>`;
   return head+`<div class="shop-grid"><div>
@@ -1353,7 +1388,7 @@ function vAisles(){
   const list=state.aisles;
   return `<header class="topbar">${backBtn()}<h1>Secciones del súper</h1></header>
   <form class="addrow" data-form="aisle-add"><input name="name" placeholder="Nueva sección" autocomplete="off" maxlength="60" aria-label="Nueva sección"><button class="btn primary">${ic('plus')}Añadir</button></form>
-  <div class="list">${list.map((a,i)=>`<div class="row">
+  <div class="list">${list.map((a,i)=>`<div class="row">${aisleIcon(a)}
     <input class="inline grow" data-aisle-name="${esc(a)}" value="${esc(a)}" maxlength="60" aria-label="Nombre de la sección" ${a==='Otros'?'readonly':''}>
     <span class="cnt-btn hide-m" style="cursor:default" title="Ingredientes">${cnt.get(a)||0} ingr.</span>
     <button class="btn icon sm ghost" data-act="aisle-move" data-i="${i}" data-d="-1" ${i===0?'disabled':''} aria-label="Subir">${ic('up')}</button>
@@ -1507,7 +1542,8 @@ function vHelp(){
   <li>Los ingredientes de la sección «Otros» llevan debajo un desplegable para elegir su sección. El cambio vale para todas las recetas.</li>
   <li><b>Artículos sueltos</b> sirve para lo que no sale de una receta, como el papel de cocina.</li>
   <li>El botón del documento copia lo que queda por comprar, para pegarlo en notas o WhatsApp. La papelera vacía la lista: recetas marcadas, tachados y artículos sueltos.</li>
-  <li>Las secciones se cambian en <b>Editar secciones</b> (o en Ajustes): nombre, orden, añadir y borrar. Al borrar una, sus ingredientes pasan a «Otros».</li></ul>
+  <li>Las secciones se cambian en <b>Editar secciones</b> (o en Ajustes): nombre, orden, añadir y borrar. Al borrar una, sus ingredientes pasan a «Otros».</li>
+  <li>Cada sección tiene su <b>color e icono</b>, que salen de su nombre: «Frutería» sigue siendo la manzana verde. Una sección nueva sin parecido lleva una bolsa. El número de la derecha es lo que queda por tachar en esa sección.</li></ul>
   <h2>Buscar y filtrar</h2>
   <ul><li>Los botones <b>Thermomix</b> y <b>Tradicional</b> de arriba filtran por tipo de receta (aparecen cuando hay alguna de Thermomix).</li>
   <li>El buscador mira el título, los ingredientes, las etiquetas y la categoría. Con varias palabras («pollo arroz») salen las recetas que tienen todas.</li>
