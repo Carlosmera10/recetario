@@ -205,7 +205,9 @@ mark.hl{background:var(--accent-soft);color:var(--accent);font-weight:750;border
 .dot{width:12px;height:12px;border-radius:50%;flex:none;margin-left:6px}
 .cnt-btn{flex:none;background:var(--surface-2);border:0;border-radius:999px;padding:4px 10px;font:inherit;font-size:13px;font-weight:650;color:var(--muted);cursor:pointer}
 .cnt-btn:hover{color:var(--primary)}
-.ingrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px}
+.ingrow{display:grid;grid-template-columns:minmax(0,1fr) 92px 62px 34px;gap:6px;align-items:center}
+.ingrow .cnt-btn{padding:4px 2px}
+.cnt-btn.inc{background:var(--warn-soft);color:var(--warn)}
 .ingrow .nm{grid-column:1/-1}
 .ingrow select{padding:6px 8px;font-size:14px}
 .addrow{display:flex;gap:8px;margin-bottom:14px}
@@ -220,6 +222,30 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
 .prose h2{font-size:18px;margin:22px 0 6px}
 .prose p,.prose li{margin:6px 0}
 .prose ul{padding-left:20px}
+
+/* ---------- Macros ---------- */
+.mac{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.mac-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.mac-head h3{margin:0;font-size:16px}
+.mac-inc{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:var(--warn-soft);color:var(--warn);font-size:13px;font-weight:700}
+.mac-inc .ic{width:15px;height:15px}
+.mac-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.mac-tiles div{background:var(--surface-2);border-radius:10px;padding:7px 4px;text-align:center;min-width:0}
+.mac-tiles b{display:block;font-size:16px}
+.mac-tiles span{display:block;font-size:11.5px;color:var(--muted);font-weight:650}
+.mac-line{margin:8px 0 0;font-size:14px;color:var(--muted)}
+.mac-miss{list-style:none;margin:10px 0 0;padding:0;font-size:14px}
+.mac-miss li{padding:3px 0;color:var(--muted)}
+.ed-sec{margin:16px 0 6px;font-size:14px;color:var(--text)}
+.ed-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#off-box:not(:empty){margin-top:10px}
+.off-search{display:flex;gap:6px}
+.off-list{margin:8px 0 0;max-height:220px;overflow:auto;border:1px solid var(--border);border-radius:10px}
+.off-item{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--border);padding:8px 10px;font:inherit;font-size:14px;color:var(--text);cursor:pointer}
+.off-item:last-child{border-bottom:0}
+.off-item:hover{background:var(--surface-2)}
+.off-item small{display:block;color:var(--muted);font-size:12.5px}
+.modal .off-note{font-size:12.5px;margin:6px 0 0}
 
 /* ---------- Lista de la compra ---------- */
 .shop-grid{display:flex;flex-direction:column}
@@ -282,7 +308,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
   .detail-title{font-size:34px}
   .facts{max-width:480px}
   .detail-grid{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:16px;align-items:start}
-  .ingredients-panel{position:sticky;top:80px}
+  .ingredients-panel{position:sticky;top:80px;max-height:calc(100vh - 96px);overflow:auto}
   .shop-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,380px);gap:20px;align-items:start}
   .shop-recipes{order:0;position:sticky;top:80px}
   .panel{padding:20px}
@@ -290,7 +316,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
   .row-btns.col{flex-direction:row}
   .ing-row{grid-template-columns:88px 92px minmax(0,1.3fr) minmax(0,1fr) auto;align-items:center}
   .ing-row2{display:contents}
-  .ingrow{grid-template-columns:minmax(0,1fr) 210px auto auto}
+  .ingrow{grid-template-columns:minmax(0,1fr) 210px 96px 66px 34px}
   .ingrow .nm{grid-column:auto}
   #toasts{left:calc(var(--sidebar-w) + 20px);right:20px;bottom:20px}
   .overlay{align-items:center}
@@ -332,6 +358,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
   <symbol id="i-install" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 17v4"/><path d="M8 21h8"/><path d="m15 10-3 3-3-3"/><path d="M12 13V6"/></symbol>
   <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-7h6v7"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
   <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
 </svg>
 
@@ -348,7 +375,7 @@ h2.sec{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--
 /* =========================================================
    Constantes
    ========================================================= */
-const APP_VERSION='1.3.0';
+const APP_VERSION='1.4.0';
 const DB_NAME='recetario_v1', UI_KEY='recetario_v1_ui', CHANNEL_NAME='recetario';
 const UNITS=['g','kg','ml','l','cda','cdta','ud'];
 const UNIT_INFO={g:{fam:'peso',f:1},kg:{fam:'peso',f:1000},ml:{fam:'volumen',f:1},l:{fam:'volumen',f:1000},cda:{fam:'volumen',f:15},cdta:{fam:'volumen',f:5},ud:{fam:'unidades',f:1}};
@@ -468,6 +495,38 @@ function convertUnit(qty,from,to,ing){
   if(b.fam==='peso')return g/b.f;
   if(b.fam==='volumen')return ing&&ing.gPerMl?g/ing.gPerMl/b.f:null;
   return ing&&ing.gramsPerUnit?g/ing.gramsPerUnit:null;
+}
+
+/* ---------- Macros ---------- */
+const MAC_MAIN=['kcal','protein','carbs','fat'];
+const hasMacros=g=>!!g&&MAC_MAIN.every(k=>g.per100[k]!=null);
+const REASON={macros:'macros',density:'densidad',unitWeight:'peso por unidad'};
+// Suma sin redondear: el redondeo se hace solo al mostrar. Lo «al gusto» no cuenta.
+function computeMacros(r,ingM){
+  const total={kcal:0,protein:0,carbs:0,fat:0,fiber:0},missing=[];
+  let quantified=0,counted=0,fiberOk=true;
+  const miss=(ingId,name,reason)=>{let m=missing.find(x=>x.ingId===ingId);if(!m){m={ingId,name,reasons:[]};missing.push(m)}if(!m.reasons.includes(reason))m.reasons.push(reason)};
+  for(const l of r.ingredients){
+    if(l.qty==null)continue;
+    quantified++;
+    const g=ingM.get(l.ingId),name=g?g.name:'?',grams=toGrams(l.qty,l.unit,g);
+    if(!hasMacros(g))miss(l.ingId,name,'macros');
+    if(grams==null)miss(l.ingId,name,UNIT_INFO[l.unit].fam==='volumen'?'density':'unitWeight');
+    if(grams==null||!hasMacros(g))continue;
+    counted++;
+    for(const k of MAC_MAIN)total[k]+=grams/100*g.per100[k];
+    if(g.per100.fiber==null)fiberOk=false;else total.fiber+=grams/100*g.per100.fiber;
+  }
+  if(!fiberOk)total.fiber=null;
+  const perServing={};
+  for(const k in total)perServing[k]=total[k]==null?null:total[k]/r.servings;
+  return {total,perServing,quantified,counted,complete:!missing.length,missing};
+}
+const fmtKcal=n=>fmtNum(n,0);
+const fmtG=n=>fmtNum(n,1)+' g';
+function missText(m){
+  const t=m.reasons.map(x=>REASON[x]);
+  return `${m.reasons.includes('macros')||t.length>1?'faltan':'falta'} ${t.join(' y ')}`;
 }
 
 /* =========================================================
@@ -710,7 +769,7 @@ function toast(msg,o={}){
   box.appendChild(el);while(box.children.length>3)box.firstChild.remove();
   setTimeout(()=>el.remove(),o.undo?6000:3500);
 }
-function modal({title,body='',buttons,withData=false}){
+function modal({title,body='',buttons,withData=false,sticky=false,noFocus=false}){
   return new Promise(res=>{
     const ov=document.createElement('div');ov.className='overlay';
     ov.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><h2>${esc(title)}</h2>${body}<div class="btns">${buttons.map((b,i)=>`<button class="btn ${b.cls||''}" data-mi="${i}">${esc(b.label)}</button>`).join('')}</div></div>`;
@@ -718,10 +777,10 @@ function modal({title,body='',buttons,withData=false}){
       const data={};ov.querySelectorAll('[name]').forEach(e=>data[e.name]=e.value);
       ov.remove();document.removeEventListener('keydown',onk,true);res(withData?(v==null?null:[v,data]):v)};
     const onk=e=>{if(e.key==='Escape'){e.stopPropagation();close(null)}};
-    ov.addEventListener('click',e=>{if(e.target===ov)return close(null);const b=e.target.closest('[data-mi]');if(b)close(buttons[+b.dataset.mi].value)});
+    ov.addEventListener('click',e=>{if(e.target===ov){if(!sticky)close(null);return}const b=e.target.closest('[data-mi]');if(b)close(buttons[+b.dataset.mi].value)});
     document.addEventListener('keydown',onk,true);
     document.body.appendChild(ov);
-    const f=ov.querySelector('textarea,input')||ov.querySelector('.btn.primary,.btn.danger');f&&f.focus();
+    if(!noFocus){const f=ov.querySelector('textarea,input')||ov.querySelector('.btn.primary,.btn.danger');f&&f.focus()}
   });
 }
 const confirmBox=(title,text,label='Borrar',cls='danger')=>modal({title,body:text?`<p>${esc(text)}</p>`:'',buttons:[{label:'Cancelar',value:false},{label,cls,value:true}]});
@@ -842,17 +901,18 @@ function vRecipes(){
 }
 function vResults(){
   if(!state.recipes.length)return `<div class="empty">${ic('pot')}<h2>Todavía no hay recetas</h2><div class="chips wrap" style="justify-content:center"><button class="btn primary" data-act="new-recipe">${ic('plus')}Crear la primera receta</button><button class="btn" data-act="paste-recipe">${ic('clip')}Pegar una receta</button></div></div>`;
-  const list=filteredRecipes(),filt=ui.q||ui.cat||ui.tags.length||ui.method;
+  const list=filteredRecipes(),filt=ui.q||ui.cat||ui.tags.length||ui.method,ingM=ingMap();
   if(!list.length)return `<div class="empty">${ic('search')}<h2>Sin resultados</h2><button class="btn" data-act="clear-filters">Quitar filtros</button></div>`;
-  return `<div class="count">${list.length} ${list.length===1?'receta':'recetas'}${filt?` · <button class="linkbtn" data-act="clear-filters">Quitar filtros</button>`:''}</div><div class="grid cards">${list.map(cardHTML).join('')}</div>`;
+  return `<div class="count">${list.length} ${list.length===1?'receta':'recetas'}${filt?` · <button class="linkbtn" data-act="clear-filters">Quitar filtros</button>`:''}</div><div class="grid cards">${list.map(r=>cardHTML(r,ingM)).join('')}</div>`;
 }
-function cardHTML(r){
+function cardHTML(r,ingM){
+  const mc=computeMacros(r,ingM);
   const c=catById(r.categoryId),has=r.prepMin!=null||r.cookMin!=null,t=(r.prepMin||0)+(r.cookMin||0);
   const tags=r.tags.map(tagById).filter(Boolean).sort(byName);
   return `<article class="rcard" data-act="open-recipe" data-id="${r.id}" style="--cat:${catColor(c)}" tabindex="0">
     <button class="rc-cart ${inShopping(r.id)?'on':''}" data-act="shop-card" data-id="${r.id}" title="${inShopping(r.id)?'Quitar de la compra':'Añadir a la compra'}" aria-label="${inShopping(r.id)?'Quitar de la compra':'Añadir a la compra'}" aria-pressed="${inShopping(r.id)}">${ic('cart')}</button>
     <div class="eyebrow">${esc(c?c.name:'Sin categoría')}${r.method==='thermomix'?' · Thermomix':''}</div><h3>${esc(r.title)}</h3>
-    <div class="meta">${has?`<span>${ic('clock')}${fmtMin(t)}</span>`:''}<span>${ic('users')}${fmtNum(r.servings)} rac.</span><span>${ic('list')}${r.ingredients.length} ingr.</span></div>
+    <div class="meta">${has?`<span>${ic('clock')}${fmtMin(t)}</span>`:''}<span>${ic('users')}${fmtNum(r.servings)} rac.</span><span>${ic('list')}${r.ingredients.length} ingr.</span>${mc.counted?`<span title="Por ración${mc.complete?'':' (incompleto)'}">${ic('flame')}${fmtKcal(mc.perServing.kcal)}${mc.complete?'':'+'} kcal</span>`:''}</div>
     ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t.name)}</span>`).join('')}</div>`:''}
   </article>`;
 }
@@ -890,6 +950,7 @@ function vRecipe(){
         </div>
         ${lines?`<ul class="ing-list">${lines}</ul>`:`<p class="muted">Sin ingredientes</p>`}
         ${r.ingredients.length?shopButton(r,serv):''}
+        ${macrosHTML(r,serv,ingM)}
       </section>
       <section class="panel"><h2>Preparación</h2>
         ${r.steps.length?(()=>{
@@ -907,6 +968,17 @@ function vRecipe(){
         ${r.sourceUrl?`<p><a class="src" href="${esc(safeUrl(r.sourceUrl))}" target="_blank" rel="noopener">${ic('link')}${esc(r.sourceUrl)}</a></p>`:''}
       </section>
     </div>`;
+}
+function macrosHTML(r,serv,ingM){
+  const m=computeMacros(r,ingM);if(!m.quantified)return '';
+  const p=m.perServing;
+  const tiles=[[fmtKcal(p.kcal),'kcal'],[fmtG(p.protein),'Proteínas'],[fmtG(p.carbs),'Hidratos'],[fmtG(p.fat),'Grasas']];
+  return `<div class="mac"><div class="mac-head"><h3>Macros por ración</h3>${m.complete?'':`<span class="mac-inc">${ic('alert')}Incompleto</span>`}</div>
+    ${m.counted?`<div class="mac-tiles">${tiles.map(([a,b])=>`<div><b>${esc(a)}</b><span>${b}</span></div>`).join('')}</div>
+    ${p.fiber!=null?`<p class="mac-line">Fibra: ${esc(fmtG(p.fiber))}</p>`:''}
+    <p class="mac-line">Total ${esc(fmtNum(serv))} rac.: ${esc(fmtKcal(p.kcal*serv))} kcal · ${esc(fmtG(p.protein*serv))} proteínas · ${esc(fmtG(p.carbs*serv))} hidratos · ${esc(fmtG(p.fat*serv))} grasas</p>`:''}
+    ${m.missing.length?`<ul class="mac-miss">${m.missing.map(x=>`<li><button class="linkbtn" data-act="ing-edit" data-id="${esc(x.ingId)}">${esc(x.name)}</button>: ${missText(x)}</li>`).join('')}</ul>`:''}
+  </div>`;
 }
 function shopButton(r,serv){
   const sel=state.shopping.selected.find(x=>x.recipeId===r.id);
@@ -1151,19 +1223,31 @@ function vTags(){
 }
 /* ---------- Catálogo de ingredientes ---------- */
 function vIngredients(){
+  const uses=ingUses(),nInc=state.ingredients.filter(g=>ingNeeds(g,uses).length).length;
+  if(!nInc)ui.ingPending=false;
   return `<header class="topbar"><h1>Ingredientes</h1></header>
   <form class="addrow" data-form="ing-add"><input name="name" placeholder="Nuevo ingrediente" autocomplete="off" maxlength="120" aria-label="Nuevo ingrediente"><button class="btn primary">${ic('plus')}Añadir</button></form>
   ${state.ingredients.length>8?`<div class="toolbar one"><label class="search">${ic('search')}<input id="ingq" type="search" value="${esc(ui.ingQ)}" placeholder="Buscar ingrediente" autocomplete="off" aria-label="Buscar ingrediente"></label></div>`:''}
+  ${nInc?`<div class="chips"><button class="chip ${ui.ingPending?'on':''}" data-act="ing-filter">Incompletos (${nInc})</button></div>`:''}
   <div id="ing-results">${vIngResults()}</div>`;
+}
+function ingUses(){const m=new Map();for(const r of state.recipes)for(const l of r.ingredients){if(l.qty==null)continue;if(!m.has(l.ingId))m.set(l.ingId,new Set());m.get(l.ingId).add(UNIT_INFO[l.unit].fam)}return m}
+function ingNeeds(g,uses){
+  const fams=uses.get(g.id),out=[];
+  if(fams&&!hasMacros(g))out.push('macros');
+  if(fams&&fams.has('volumen')&&g.gPerMl==null)out.push('density');
+  if(fams&&fams.has('unidades')&&g.gramsPerUnit==null)out.push('unitWeight');
+  return out;
 }
 function vIngResults(){
   if(!state.ingredients.length)return `<div class="empty">${ic('leaf')}<h2>El catálogo está vacío</h2></div>`;
-  const q=state.ingredients.length>8?norm(ui.ingQ):'',cnt=usageCount('ing');
-  const list=state.ingredients.filter(i=>!q||norm(i.name).includes(q)).sort(byName);
+  const q=state.ingredients.length>8?norm(ui.ingQ):'',cnt=usageCount('ing'),uses=ingUses();
+  const list=state.ingredients.filter(i=>(!q||norm(i.name).includes(q))&&(!ui.ingPending||ingNeeds(i,uses).length)).sort(byName);
   if(!list.length)return `<div class="empty">${ic('search')}<h2>Sin resultados</h2></div>`;
   return `<div class="count">${list.length} ${list.length===1?'ingrediente':'ingredientes'}</div><div class="list">${list.map(g=>`<div class="row ingrow">
     <input class="inline nm" data-rename="ing" data-id="${g.id}" value="${esc(g.name)}" maxlength="120" aria-label="Nombre del ingrediente">
     <select data-aisle="${g.id}" aria-label="Sección del súper">${state.aisles.map(a=>`<option ${g.aisle===a?'selected':''}>${esc(a)}</option>`).join('')}</select>
+    ${(()=>{const n=ingNeeds(g,uses);return `<button class="cnt-btn ${n.length?'inc':''}" data-act="ing-edit" data-id="${g.id}" aria-label="Datos de ${esc(g.name)}">${n.length?'Incompleto':hasMacros(g)?esc(fmtKcal(g.per100.kcal))+' kcal':'Sin macros'}</button>`})()}
     <button class="cnt-btn" data-act="ing-open" data-id="${g.id}">${cnt.get(g.id)||0} rec.</button>
     <button class="btn icon sm ghost danger" data-act="ing-del" data-id="${g.id}" aria-label="Borrar">${ic('trash')}</button></div>`).join('')}</div>`;
 }
@@ -1273,6 +1357,70 @@ function vAisles(){
     <button class="btn icon sm ghost" data-act="aisle-move" data-i="${i}" data-d="1" ${i===list.length-1?'disabled':''} aria-label="Bajar">${ic('down')}</button>
     <button class="btn icon sm ghost danger" data-act="aisle-del" data-i="${i}" ${a==='Otros'?'disabled':''} aria-label="Borrar">${ic('trash')}</button></div>`).join('')}</div>`;
 }
+/* ---------- Datos de un ingrediente: macros y conversiones ---------- */
+const ING_FIELDS=[['kcal','Energía (kcal)'],['protein','Proteínas (g)'],['carbs','Hidratos (g)'],['fat','Grasas (g)'],['fiber','Fibra (g)']];
+async function editIngredient(id,draft){
+  const g=state.ingredients.find(i=>i.id===id);if(!g)return;
+  const v=draft||{...Object.fromEntries(ING_FIELDS.map(([k])=>[k,g.per100[k]==null?'':qtyStr(g.per100[k])])),gPerMl:g.gPerMl==null?'':qtyStr(g.gPerMl),gramsPerUnit:g.gramsPerUnit==null?'':qtyStr(g.gramsPerUnit)};
+  const fld=(k,l)=>`<label class="field"><span>${l}</span><input name="${k}" inputmode="decimal" value="${esc(v[k])}" autocomplete="off"></label>`;
+  const res=await modal({title:g.name,withData:true,sticky:true,noFocus:true,
+    body:`<button type="button" class="btn sm" data-act="off-open" data-q="${esc(g.name)}">${ic('search')}Buscar en Open Food Facts</button><div id="off-box"></div>
+      <h3 class="ed-sec">Por 100 g, en crudo</h3><div class="ed-2">${ING_FIELDS.map(([k,l])=>fld(k,l)).join('')}</div>
+      <h3 class="ed-sec">Para pasar a gramos</h3><div class="ed-2">${fld('gPerMl','Densidad (g/ml)')}${fld('gramsPerUnit','Peso de 1 unidad (g)')}</div>`,
+    buttons:[{label:'Cancelar',value:null},{label:'Guardar',cls:'primary',value:'ok'}]});
+  if(!res||res[0]!=='ok')return;
+  const d=res[1],vals={};
+  for(const k of ['kcal','protein','carbs','fat','fiber','gPerMl','gramsPerUnit']){
+    const n=parseQty(d[k]);
+    const max=k==='kcal'?1000:(k==='gPerMl'?5:(k==='gramsPerUnit'?Infinity:100));
+    const pos=k==='gPerMl'||k==='gramsPerUnit';
+    if(Number.isNaN(n)||(n!=null&&(n<0||n>max||(pos&&n===0)))){
+      toast(`Valor no válido: ${({gPerMl:'densidad',gramsPerUnit:'peso de 1 unidad'})[k]||ING_FIELDS.find(f=>f[0]===k)[1]}`,{icon:'alert'});
+      return editIngredient(id,d);
+    }
+    vals[k]=n;
+  }
+  commit('Datos guardados',s=>{
+    const x=s.ingredients.find(i=>i.id===id);if(!x)return false;
+    x.per100={kcal:vals.kcal,protein:vals.protein,carbs:vals.carbs,fat:vals.fat,fiber:vals.fiber};
+    x.gPerMl=vals.gPerMl;x.gramsPerUnit=vals.gramsPerUnit;x.updatedAt=nowISO();
+  });
+}
+// Open Food Facts: ayuda opcional. Se busca solo al pulsar (el servicio limita las búsquedas por minuto).
+const OFF_HOST='https://es.openfoodfacts.org';
+const OFF_LINK=q=>`${OFF_HOST}/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process`;
+let offResults=[];
+function parseOff(data){
+  const out=[];
+  for(const p of arr(data&&data.products)){
+    const n=p&&p.nutriments;if(!n||typeof n!=='object')continue;
+    const num=k=>nonNegOrNull(n[k]);
+    let kcal=num('energy-kcal_100g');
+    if(kcal==null&&num('energy_100g')!=null)kcal=Math.round(num('energy_100g')/4.184);
+    const vals={kcal,protein:num('proteins_100g'),carbs:num('carbohydrates_100g'),fat:num('fat_100g'),fiber:num('fiber_100g')};
+    if(MAC_MAIN.some(k=>vals[k]==null))continue;
+    out.push({name:str(p.product_name,120).trim()||'Sin nombre',brand:str(p.brands,80).trim(),...vals});
+  }
+  return out.slice(0,10);
+}
+const offNote=()=>`<p class="off-note">Datos de <a href="https://es.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> (licencia ODbL)</p>`;
+function offForm(q){return `<div class="off-search"><input id="off-q" value="${esc(q)}" autocomplete="off" aria-label="Producto"><button type="button" class="btn primary" data-act="off-search">Buscar</button></div><div id="off-res"></div>`}
+async function offSearch(){
+  const inp=$('#off-q'),box=$('#off-res'),btn=$('[data-act=off-search]');if(!inp||!box)return;
+  const q=inp.value.trim();if(!q)return;
+  btn.disabled=true;box.innerHTML=`<p class="off-note">Buscando…</p>`;
+  const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),12000);
+  try{
+    const res=await fetch(`${OFF_HOST}/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=20&fields=product_name,brands,nutriments`,{signal:ctl.signal});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    offResults=parseOff(await res.json());
+    if(!$('#off-res'))return;
+    $('#off-res').innerHTML=offResults.length?`<div class="off-list">${offResults.map((p,i)=>`<button type="button" class="off-item" data-act="off-pick" data-i="${i}">${esc(p.name)}${p.brand?` · ${esc(p.brand)}`:''}<small>${esc(fmtKcal(p.kcal))} kcal · ${esc(fmtG(p.protein))} prot. · ${esc(fmtG(p.carbs))} hidr. · ${esc(fmtG(p.fat))} grasas</small></button>`).join('')}</div>${offNote()}`:`<p class="off-note">Sin resultados con datos completos.</p>${offNote()}`;
+  }catch(e){
+    console.warn(e);
+    if($('#off-res'))$('#off-res').innerHTML=`<p class="off-note">No se ha podido buscar desde aquí. <a href="${esc(OFF_LINK(q))}" target="_blank" rel="noopener">Abrir la búsqueda en Open Food Facts</a></p>`;
+  }finally{clearTimeout(t);const b=$('[data-act=off-search]');if(b)b.disabled=false}
+}
 /* ---------- Ajustes ---------- */
 function vSettings(){
   const s=state.settings,last=parseYMD(s.lastBackup);
@@ -1339,7 +1487,14 @@ function vHelp(){
   <li>Funciona mejor si el texto tiene los encabezados <b>Ingredientes</b> y <b>Preparación</b>.</li>
   <li>En los pasos se reconocen los programas como «5 min/100°C/vel 1», «10 seg/vel 5», «Turbo/1 seg/3 veces», «2 min/vel espiga» o «vel 5-10 progresivamente». Si alguno sale, la receta se marca como Thermomix.</li>
   <li>La receta se abre en el editor <b>sin guardar</b>: revísala y pulsa <b>Guardar</b>. Si un ingrediente ya existe en el catálogo (aunque esté en singular o plural), se usa el mismo.</li>
-  <li>Si pone «1 cebolla (100 g)», el peso por unidad se guarda en el catálogo para calcular los macros más adelante.</li></ul>
+  <li>Si pone «1 cebolla (100 g)», el peso por unidad se guarda en el catálogo y sirve para los macros y la compra.</li></ul>
+  <h2>Macros</h2>
+  <ul><li>Los macros de cada receta se calculan solos a partir de los datos de sus ingredientes. Se rellenan una vez y sirven para todas las recetas.</li>
+  <li>En <b>Ingredientes</b>, pulsa la etiqueta <b>Incompleto</b> (o las kcal) de un ingrediente. Pon los valores <b>por 100 g y en crudo</b>, los de la tabla del envase. La fibra es opcional. <b>Incompletos</b> deja solo los que faltan para calcular alguna receta; lo que usas solo «al gusto» no hace falta rellenarlo.</li>
+  <li>Para pasar a gramos: la <b>densidad</b> hace falta si usas ml, l, cda o cdta (agua y leche, cerca de 1; aceite, 0,92) y el <b>peso de 1 unidad</b>, si usas ud (un huevo, unos 60 g).</li>
+  <li>En la ficha ves los macros <b>por ración</b> y el total de las raciones elegidas. Cambiar las raciones cambia el total, no lo de cada ración.</li>
+  <li><b>Incompleto</b> significa que faltan datos: los números cuentan solo lo que se puede calcular y debajo sale lo que falta. Toca un ingrediente para completarlo. En la tarjeta se ve con un <b>+</b>, como «350+ kcal». Lo que va «al gusto» no cuenta.</li>
+  <li><b>Buscar en Open Food Facts</b> es una ayuda opcional: busca productos envasados y al elegir uno copia sus valores, que puedes corregir antes de guardar. Los datos los aportan voluntarios, así que compáralos con el envase. En líquidos, el valor suele ser por 100 ml.</li></ul>
   <h2>Lista de la compra</h2>
   <ul><li>Marca una receta con el <b>carrito</b> de su tarjeta o con <b>Añadir a la compra</b> en la ficha, que usa las raciones que tengas puestas. Si cambias las raciones, el botón pasa a <b>Actualizar compra</b>.</li>
   <li>En <b>Compra</b> ajusta las raciones de cada receta con − y +, o quítala con la X.</li>
@@ -1708,6 +1863,13 @@ const ACTIONS={
     if(!await confirmBox('¿Borrar la etiqueta?',`«${t.name}»${n?` · se quitará de ${n} ${n===1?'receta':'recetas'}`:''}`))return;
     commit('Etiqueta borrada',s=>{s.tags=s.tags.filter(x=>x.id!==t.id);s.recipes.forEach(r=>{if(r.tags.includes(t.id)){r.tags=r.tags.filter(x=>x!==t.id);r.updatedAt=nowISO()}})})},
   // Ingredientes
+  'ing-edit':el=>editIngredient(el.dataset.id),
+  'ing-filter':()=>{ui.ingPending=!ui.ingPending;renderApp()},
+  'off-open':el=>{const b=$('#off-box');if(b&&!b.innerHTML){b.innerHTML=offForm(el.dataset.q);el.remove();offSearch()}},
+  'off-search':()=>offSearch(),
+  'off-pick':el=>{const p=offResults[+el.dataset.i];if(!p)return;const ov=el.closest('.overlay');
+    for(const k of ['kcal','protein','carbs','fat','fiber']){const i=$(`[name=${k}]`,ov);if(i)i.value=p[k]==null?'':qtyStr(p[k])}
+    $('#off-res').innerHTML=`<p class="off-note">Copiado: ${esc(p.name)}</p>${offNote()}`},
   'ing-open':el=>{const g=state.ingredients.find(i=>i.id===el.dataset.id);if(!g)return;ui.q=g.name;ui.cat='';ui.tags=[];go('recipes')},
   'ing-del':async el=>{const g=state.ingredients.find(i=>i.id===el.dataset.id);if(!g)return;
     const used=state.recipes.filter(r=>r.ingredients.some(l=>l.ingId===g.id));
@@ -1746,6 +1908,7 @@ document.addEventListener('keydown',e=>{
   const typing=e.target.closest('input,textarea,select,[contenteditable]');
   if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&e.key.toLowerCase()==='z'&&!typing&&!$('.overlay')){e.preventDefault();undo();return}
   if(e.key==='Enter'&&e.target.matches('.rcard')){e.target.click();return}
+  if(e.key==='Enter'&&e.target.id==='off-q'){e.preventDefault();offSearch();return}
   if((e.key==='Enter'||e.key===' ')&&e.target.matches('.sl-row[data-act]')){e.preventDefault();e.target.click();return}
   if(e.key==='Enter'&&e.target.id==='newtag'){e.preventDefault();addEditorTag();return}
   if(e.key==='Enter'&&(e.target.id==='serv'||e.target.dataset.shopServ)){e.target.blur()}
@@ -1876,7 +2039,7 @@ async function boot(){
 // Ganchos de prueba
 window.__recetario={
   get state(){return state},normalizeState,convertUnit,toGrams,parseQty,fmtQty,mergeStates,undo,
-  parseRecipeText,extractPrograms,parseIngLine,fmtProgram,stepWarnings,stepIngredients,ingCandidates,fold,buildShoppingList,shoppingText,
+  parseRecipeText,extractPrograms,parseIngLine,fmtProgram,stepWarnings,stepIngredients,ingCandidates,fold,buildShoppingList,shoppingText,computeMacros,parseOff,
   async setState(j){state=normalizeState(typeof j==='string'?JSON.parse(j):j);undoStack.length=0;await writeNow();renderApp(true)}
 };
 boot();
