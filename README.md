@@ -19,9 +19,13 @@ Aplicación web personal (PWA) para guardar recetas, instalable en el ordenador 
 - **Pegar receta**: analiza un texto copiado (Cookidoo, blogs, notas) y abre el editor sin guardar. Reconoce título, raciones, tiempos, ingredientes (g, kg, ml, cucharadas, fracciones, «1.000 g», latas con peso), pasos con programas de Thermomix, consejos y enlace.
 - **Macros**: cada ingrediente del catálogo guarda sus valores por 100 g en crudo, la densidad y el peso por unidad. La ficha calcula los macros por ración y el total, con aviso «Incompleto» y la lista de lo que falta; las tarjetas muestran las kcal por ración. Open Food Facts es una ayuda opcional para copiar los datos de productos envasados.
 - **Lista de la compra**: marca recetas con el carrito de la tarjeta o desde la ficha (con las raciones elegidas). Suma los ingredientes entre recetas (500 g, 3 huevos, 3 dientes de ajo), los agrupa por sección del súper, cada una con su color e icono y plegable, y permite tachar, ocultar lo que ya tienes, añadir artículos sueltos, copiar como texto lo que falta y vaciar la lista. Las secciones del súper se editan (nombre, orden, añadir y borrar).
+- **Favoritas**: estrella en la tarjeta y en la ficha, con filtro propio combinable con los demás.
+- **Fotos**: desde la ficha o el editor, con la cámara o la galería. Se reducen a 1024 px; la lista carga miniaturas solo al aparecer en pantalla. Las recetas sin foto muestran una ilustración según su categoría. Van en las copias y en la sincronización.
+- **Modo cocina**: un paso por pantalla en letra grande o lista completa, ingredientes siempre a mano, pantalla siempre encendida y, en Thermomix, el programa en grande. Se avanza con botones, deslizando o con las flechas, y al volver a la app sigues en el mismo paso.
+- **Sincronización** entre dispositivos con Gists secretos de GitHub, cifrados con AES-GCM y una contraseña propia. Se activa en **Ajustes y avisos → Sincronización**, donde están los pasos para crear el token.
 - Tema automático, claro u oscuro.
 
-Próximas fases: modo cocina, fotos y sincronización.
+Próximas ideas: planificador semanal con el menú del colegio.
 
 ## Instalación
 
@@ -49,10 +53,11 @@ No abras `index.html` desde el disco (`file://`): no se instala ni funciona el s
 - Se guardan **solo en el dispositivo**, en IndexedDB (base de datos `recetario_v1`). Las preferencias de la interfaz van en `localStorage` con la clave `recetario_v1_ui`. Cada cambio se apunta también en `recetario_v1_pending` hasta que IndexedDB confirma la escritura, para no perderlo si la app se cierra en ese instante.
 - El repositorio solo contiene código, nunca datos.
 - El origen `carlosmera10.github.io` se comparte con otras apps: **no uses «borrar datos del sitio»**. Para vaciar el recetario usa **Ajustes y avisos → Vaciar**.
-- Para pasar recetas entre el móvil y el ordenador: exporta en uno e importa con «Fusionar» en el otro.
+- Para pasar recetas entre el móvil y el ordenador: activa la sincronización o exporta en uno e importa con «Fusionar» en el otro.
+- Con la sincronización activa, el token y la contraseña se guardan solo en el dispositivo (`recetario_v1_sync`). En GitHub todo va cifrado: el estado en un Gist con `recetario-sync.json` y las fotos en Gists con `recetario-fotos.txt`, un archivo por foto.
 
 ## Notas técnicas
 
 - HTML, CSS y JS vanilla en un único `index.html`, sin librerías ni compilación.
 - Service worker «primero la red» (`cache: 'no-store'`), registrado con `updateViaCache: 'none'`. **Subir el número de `CACHE` en `sw.js` cada vez que se cambie ese archivo.**
-- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `stepIngredients`, `ingCandidates`, `fold`, `buildShoppingList`, `shoppingText`, `computeMacros`, `parseOff`, `setState(json)`).
+- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `stepIngredients`, `ingCandidates`, `fold`, `buildShoppingList`, `shoppingText`, `computeMacros`, `parseOff`, `syncMerge`, `canon`, `encryptState`, `decryptEnv`, `syncNow`, `storePhoto`, `gcPhotos`, `usedPhotos`, `cookTiles`, `idbKeys`, `syncCfg`, `setSyncCfg`, `syncRt`, `setState(json)`).

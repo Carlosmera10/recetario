@@ -23,7 +23,7 @@ var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('cont
   --toast-bg:#2b211b;--toast-text:#fbf5ee;--toast-accent:#f2a27e;--overlay:rgba(30,18,8,.45);
   --shadow:0 1px 2px rgba(60,40,20,.06),0 4px 14px rgba(60,40,20,.06);
   --a-fruit:#4b7f2e;--a-meat:#b23a3a;--a-fish:#3565a8;--a-dairy:#927000;--a-bread:#9c5f1c;--a-pantry:#7f4f38;--a-frozen:#1f8a99;--a-drink:#7a4fa8;--a-other:#6f6054;
-  --a-x1:#a8455f;--a-x2:#2f7a70;--a-x3:#5a56a8;--a-x4:#6f6f22;--a-ink:#fff;
+  --a-x1:#a8455f;--a-x2:#2f7a70;--a-x3:#5a56a8;--a-x4:#6f6f22;--a-ink:#fff;--fav:#c98a00;
   --radius:14px;--sidebar-w:236px;color-scheme:light;
 }
 :root[data-theme=dark]{
@@ -34,7 +34,7 @@ var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('cont
   --toast-bg:#f1e9e0;--toast-text:#1c1714;--toast-accent:#b5532e;--overlay:rgba(0,0,0,.6);
   --shadow:0 1px 2px rgba(0,0,0,.25),0 4px 14px rgba(0,0,0,.2);color-scheme:dark;
   --a-fruit:#9bc46f;--a-meat:#ee8a80;--a-fish:#84ade8;--a-dairy:#e6c35c;--a-bread:#e5a862;--a-pantry:#d0a083;--a-frozen:#6fd0dc;--a-drink:#c5a2ec;--a-other:#b3a596;
-  --a-x1:#e79ab0;--a-x2:#7fcfc3;--a-x3:#aeb0ef;--a-x4:#c9c96f;--a-ink:#1c1714;
+  --a-x1:#e79ab0;--a-x2:#7fcfc3;--a-x3:#aeb0ef;--a-x4:#c9c96f;--a-ink:#1c1714;--fav:#f0c46a;
 }
 html.sb-c{--sidebar-w:68px}
 *{box-sizing:border-box}
@@ -105,12 +105,24 @@ input.inline:focus{background:var(--surface)}
 .search input{padding-left:38px}
 .count{color:var(--muted);font-size:14px;margin:2px 2px 10px}
 .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
-.rcard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px 14px 20px;cursor:pointer;overflow:hidden;content-visibility:auto;contain-intrinsic-size:auto 118px}
-.rcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cat,var(--primary))}
+.rcard{position:relative;display:grid;grid-template-columns:92px minmax(0,1fr);gap:0 12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px 12px 18px;cursor:pointer;overflow:hidden;content-visibility:auto;contain-intrinsic-size:auto 118px}
+.rcard::before{content:"";position:absolute;z-index:1;left:0;top:0;bottom:0;width:6px;background:var(--cat,var(--primary))}
+.rc-body{min-width:0}
+.rc-media{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:color-mix(in srgb,var(--cat,var(--primary)) 15%,var(--surface));color:var(--cat,var(--primary))}
+.rc-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rc-media img:not([src]){visibility:hidden}
+.art{width:64%;height:64%;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+:root[data-theme=dark] .art{filter:brightness(1.35)}
+.rc-fav{position:absolute;z-index:2;left:13px;top:7px;width:48px;height:48px;display:grid;place-items:center;padding:0;border:0;background:none;color:var(--muted);cursor:pointer}
+.rc-fav span{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:color-mix(in srgb,var(--surface) 88%,transparent);pointer-events:none}
+.rc-fav .ic{width:17px;height:17px;pointer-events:none}
+.rc-fav:hover{color:var(--fav)}
+.rc-fav.on,.fav-btn.on{color:var(--fav)}
+.rc-fav.on .ic,.fav-btn.on .ic{fill:currentColor}
 .rcard:hover{border-color:color-mix(in srgb,var(--cat,var(--primary)) 45%,var(--border))}
 .rcard h3{margin:3px 0 7px;font-size:17px;padding-right:46px}
 .rcard .eyebrow{padding-right:46px}
-.rc-cart{position:absolute;top:0;right:0;width:62px;height:62px;display:grid;place-items:center;padding:0;border:0;background:none;color:var(--muted);cursor:pointer}
+.rc-cart{position:absolute;z-index:2;top:0;right:0;width:62px;height:62px;display:grid;place-items:center;padding:0;border:0;background:none;color:var(--muted);cursor:pointer}
 .rc-cart span{width:38px;height:38px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--border);background:var(--surface);pointer-events:none}
 .rc-cart .ic{width:19px;height:19px;pointer-events:none}
 .rc-cart:hover{color:var(--primary)}
@@ -289,6 +301,79 @@ h2.sec-a{color:var(--text);margin:14px 0 4px;letter-spacing:.04em}
 .sr-row .serv{flex:1}
 .sr-row .serv input{width:54px}
 
+/* ---------- Fotos ---------- */
+.hero{width:100%;aspect-ratio:4/3;max-height:340px;margin:0 0 12px;border-radius:var(--radius);overflow:hidden;background:var(--surface-2)}
+.hero img{display:block;width:100%;height:100%;object-fit:cover}
+.title-row{display:flex;align-items:flex-start;gap:6px}
+.title-row h1{flex:1;min-width:0}
+.photo-add{margin:0 0 10px}
+.ed-photo{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ed-thumb{flex:none;position:relative;width:96px;height:96px;border-radius:10px;overflow:hidden;background:var(--surface-2);color:var(--muted);display:grid;place-items:center}
+.ed-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ed-thumb img:not([src]){visibility:hidden}
+
+/* ---------- Modo cocina ---------- */
+html.cooking #sidebar,html.cooking #bottombar{display:none}
+html.cooking #main{margin-left:0;padding:0 0 calc(96px + env(safe-area-inset-bottom))}
+html.cooking .wrap{max-width:none}
+html.cooking #toasts{left:12px;right:12px;bottom:calc(96px + env(safe-area-inset-bottom))}
+.cook-top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:4px;min-height:60px;padding:8px 10px;background:var(--surface);border-bottom:1px solid var(--border)}
+.cook-title{flex:1;min-width:0}
+.cook-title b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cook-title span{display:block;font-size:13px;font-weight:650;color:var(--muted)}
+.cook-wake{flex:none;width:32px;height:32px;display:none;place-items:center;color:var(--fav)}
+.cook-wake.on{display:grid}
+.cook-top .seg button{padding:7px 9px;display:grid;place-items:center}
+.cook-bar{height:5px;background:var(--surface-2)}
+.cook-bar i{display:block;height:100%;background:var(--primary);transition:width .2s}
+.cook-grid{display:grid;grid-template-columns:minmax(0,1fr)}
+.cook-main{min-width:0;padding:18px 16px}
+.cook-text{font-size:clamp(23px,6.4vw,32px);line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+.cook-main .ichips{margin-top:14px;gap:8px}
+.cook-main .ichip{font-size:18px;padding:6px 12px}
+.cook-prog{margin-top:16px}
+.cook-pn{margin-bottom:6px;font-size:14px;font-weight:750;color:var(--muted)}
+.cook-tiles{display:flex;flex-wrap:wrap;gap:8px}
+.cook-tile{flex:1 1 130px;min-width:0;padding:12px 8px;border-radius:14px;background:var(--primary-soft);color:var(--primary);text-align:center}
+.cook-tile b{display:block;font-size:clamp(26px,7.4vw,38px);font-weight:800;line-height:1.1}
+.cook-tile span{display:block;margin-top:3px;font-size:13px;font-weight:700}
+.cook-acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.cook-acc .acc{font-size:16px;padding:6px 12px}
+.cook-steps{list-style:none;counter-reset:s;margin:0;padding:0}
+.cook-steps>li{counter-increment:s;position:relative;padding:0 0 22px 50px;cursor:pointer}
+.cook-steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;background:var(--primary-soft);color:var(--primary);font-weight:800;display:grid;place-items:center}
+.cook-steps>li.done{opacity:.45}
+.cook-steps>li.done .cook-text{text-decoration:line-through}
+.cook-steps .cook-text{font-size:clamp(20px,5.4vw,26px)}
+.cook-nav{position:fixed;z-index:30;left:0;right:0;bottom:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--border)}
+.cook-nav .btn{min-height:60px;font-size:18px}
+.cook-nav.one{grid-template-columns:minmax(0,1fr)}
+.cook-ings{display:none}
+.cook-back{display:none}
+.cook.sheet .cook-back{display:block;position:fixed;z-index:44;inset:0;background:var(--overlay)}
+.cook.sheet .cook-ings{display:block;position:fixed;z-index:45;left:0;right:0;bottom:0;max-height:80vh;overflow:auto;padding:14px 16px calc(16px + env(safe-area-inset-bottom));background:var(--surface);border-radius:18px 18px 0 0}
+.cook-ings h2{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 6px;font-size:19px}
+.cook-ing{display:flex;align-items:baseline;gap:12px;width:100%;padding:12px 2px;border:0;border-bottom:1px dashed var(--border);background:none;color:inherit;font:inherit;font-size:18px;text-align:left;cursor:pointer}
+.cook-ing:last-child{border-bottom:0}
+.cook-ing b{flex:none;min-width:88px;color:var(--primary)}
+.cook-ing b.muted{color:var(--muted);font-weight:600;font-size:15px}
+.cook-ing small{color:var(--muted);font-size:15px}
+.cook-ing.done{opacity:.45;text-decoration:line-through}
+
+/* ---------- Sincronización ---------- */
+.sync-body{padding:12px 14px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.sync-form{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;width:100%;max-width:440px}
+.sync-help{width:100%}
+.sync-help summary{cursor:pointer;font-weight:650;color:var(--primary)}
+.sync-help ol{margin:8px 0 0;padding-left:20px;font-size:15px}
+.sync-help li{margin:6px 0}
+.sync-help .sync-form{margin-top:10px}
+.sync-help .btn{margin-top:10px}
+.sync-bad{color:var(--danger)!important}
+html.sync-error [data-view=settings]{position:relative}
+html.sync-error [data-view=settings]::after{content:"";position:absolute;top:8px;right:calc(50% - 18px);width:9px;height:9px;border-radius:50%;background:var(--danger)}
+html.sync-error .sb-item[data-view=settings]::after{right:12px;top:50%;margin-top:-4px}
+
 /* ---------- Avisos y diálogos ---------- */
 #toasts{position:fixed;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:60;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
 .toast{pointer-events:none;display:flex;align-items:center;gap:10px;background:var(--toast-bg);color:var(--toast-text);border-radius:12px;padding:9px 10px 9px 14px;box-shadow:0 6px 24px rgba(0,0,0,.25);max-width:100%;font-size:15px;animation:tin .18s ease-out}
@@ -325,6 +410,24 @@ h2.sec-a{color:var(--text);margin:14px 0 4px;letter-spacing:.04em}
   .toolbar{grid-template-columns:minmax(0,1fr) 220px 190px}
   .search{grid-column:auto}
   .grid.cards{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+  .rcard{grid-template-columns:minmax(0,1fr);padding:0;contain-intrinsic-size:auto 270px}
+  .rc-media{aspect-ratio:auto;height:150px;border-radius:0}
+  .rc-media .art{width:84px;height:84px}
+  .rc-body{padding:12px 16px 14px 20px}
+  .rcard h3,.rcard .eyebrow{padding-right:0}
+  .rc-fav{left:10px;top:6px}
+  .hero{aspect-ratio:21/9}
+  html.cooking #main{padding-bottom:110px}
+  html.cooking #toasts{left:20px;right:20px;bottom:100px}
+  .cook-top{padding:10px 24px}
+  .cook-grid{grid-template-columns:minmax(0,1fr) 360px;gap:24px;max-width:1240px;margin:0 auto;padding:0 24px}
+  .cook-main{padding:26px 0}
+  .cook-text{font-size:30px}
+  .cook-steps .cook-text{font-size:24px}
+  .cook-ings,.cook.sheet .cook-ings{display:block;position:sticky;z-index:1;top:80px;left:auto;right:auto;bottom:auto;margin-top:22px;max-height:calc(100vh - 200px);overflow:auto;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+  .cook.sheet .cook-back,.cook-ing-btn,.cook-ings .sheet-x{display:none}
+  .cook-nav{padding:12px 24px;grid-template-columns:220px 320px;justify-content:center}
+  .cook-nav.one{grid-template-columns:320px}
   .detail-title{font-size:34px}
   .facts{max-width:480px}
   .detail-grid{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:16px;align-items:start}
@@ -388,6 +491,18 @@ h2.sec-a{color:var(--text);margin:14px 0 4px;letter-spacing:.04em}
   <symbol id="i-a-frozen" viewBox="0 0 24 24"><path d="M12 2v20M4 6l16 12M20 6 4 18"/><path d="m9 4 3 3 3-3M9 20l3-3 3 3"/></symbol>
   <symbol id="i-a-drink" viewBox="0 0 24 24"><path d="M10 2h4v4l2 3v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9l2-3z"/><path d="M8 13h8"/></symbol>
   <symbol id="i-a-other" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45-4.7-4.6 6.5-.95z"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.500z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.500"/><path d="M12 2v2M12 20v2M4.900 4.900l1.400 1.400M17.700 17.700l1.400 1.400M2 12h2M20 12h2M4.900 19.100l1.400-1.400M17.700 6.300l1.400-1.400"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 24 24"><path d="M21 3v6h-6"/><path d="M3 21v-6h6"/><path d="M20.500 9A9 9 0 0 0 5.600 5.600L3 8"/><path d="M3.500 15a9 9 0 0 0 14.900 3.400L21 16"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+  <symbol id="art-pot" viewBox="0 0 64 64"><path d="M8 28h48"/><path d="M13 28v18a7 7 0 0 0 7 7h24a7 7 0 0 0 7-7V28"/><path d="M4 28h4M56 28h4"/><path d="M24 19c0-4 3-4 3-8M37 19c0-4 3-4 3-8"/></symbol>
+  <symbol id="art-cup" viewBox="0 0 64 64"><path d="M12 24h34v14a15 15 0 0 1-15 15h-4a15 15 0 0 1-15-15z"/><path d="M46 28h4a7 7 0 0 1 0 14h-5"/><path d="M8 58h44"/><path d="M23 16c0-4 3-4 3-8M33 16c0-4 3-4 3-8"/></symbol>
+  <symbol id="art-plate" viewBox="0 0 64 64"><circle cx="32" cy="32" r="17"/><circle cx="32" cy="32" r="9"/><path d="M6 12v12a3 3 0 0 0 3 3v25M12 12v12a3 3 0 0 1-3 3M9 12v9"/><path d="M57 52V12c-4 3-6 9-6 16a4 4 0 0 0 4 4h2"/></symbol>
+  <symbol id="art-cloche" viewBox="0 0 64 64"><path d="M6 48h52"/><path d="M11 48a21 21 0 0 1 42 0"/><path d="M32 27v-5"/><circle cx="32" cy="18.500" r="3.500"/><path d="M10 54h44"/></symbol>
+  <symbol id="art-cake" viewBox="0 0 64 64"><path d="M10 34a22 12 0 0 1 44 0v18a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3z"/><path d="M10 34c5 7 9 7 14 1 4 6 11 6 16 0 5 6 9 6 14-1"/><path d="M32 22v-9"/><path d="M32 13c-2-2-2-5 0-7 2 2 2 5 0 7z"/></symbol>
+  <symbol id="art-jar" viewBox="0 0 64 64"><path d="M20 8h24v7H20z"/><path d="M22 15c-5 3-8 7-8 13v22a6 6 0 0 0 6 6h24a6 6 0 0 0 6-6V28c0-6-3-10-8-13"/><path d="M14 32h36v14H14"/></symbol>
   <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
 </svg>
 
@@ -398,13 +513,15 @@ h2.sec-a{color:var(--text);margin:14px 0 4px;letter-spacing:.04em}
 </div>
 <div id="toasts" aria-live="polite"></div>
 <input type="file" id="import-file" accept="application/json,.json" hidden>
+<input type="file" id="photo-file" accept="image/*" hidden>
+<input type="file" id="photo-cam" accept="image/*" capture="environment" hidden>
 
 <script>
 'use strict';
 /* =========================================================
    Constantes
    ========================================================= */
-const APP_VERSION='1.6.0';
+const APP_VERSION='1.7.0';
 const DB_NAME='recetario_v1', UI_KEY='recetario_v1_ui', CHANNEL_NAME='recetario';
 const UNITS=['g','kg','ml','l','cda','cdta','ud'];
 const UNIT_INFO={g:{fam:'peso',f:1},kg:{fam:'peso',f:1000},ml:{fam:'volumen',f:1},l:{fam:'volumen',f:1000},cda:{fam:'volumen',f:15},cdta:{fam:'volumen',f:5},ud:{fam:'unidades',f:1}};
@@ -420,6 +537,10 @@ const TM_ACC={mariposa:'Mariposa',cestillo:'Cestillo',varoma:'Recipiente Varoma'
 const TM_MODES={amasar:'Amasar',turbo:'Turbo'};
 const TM_OTHER_RE=/alta\s+temperatura|cocci[oó]n\s+lenta|sous[\s-]?vide|fermentar|espesar|hervir\s+(?:huevos|agua)|pelador|cocinar\s+arroz/i;
 const TAB_ID=Math.random().toString(36).slice(2);
+// Fotos: la grande se guarda y se sincroniza; la miniatura se genera en cada dispositivo
+const PHOTO_MAX=1024,PHOTO_Q=.8,THUMB_MAX=400,THUMB_Q=.72;
+// Ilustración para las recetas sin foto: sale del nombre de la categoría
+const CAT_ART=[[/desayun|merienda/,'cup'],[/comida|almuerz|principal|plato/,'plate'],[/cena/,'cloche'],[/postre|dulce|tarta|bizcocho/,'cake'],[/salsa|base|aderezo/,'jar']];
 
 /* Instalación (igual que en el Revisor): se captura el aviso de Chrome lo antes posible
    y se muestra un botón propio «Instalar app». */
@@ -629,6 +750,7 @@ function normalizeItemRecipe(r,ctx){
     prepMin:intOrNull(r.prepMin),cookMin:intOrNull(r.cookMin),
     ingredients:lines,steps,
     notes:str(r.notes,10000),sourceUrl:str(r.sourceUrl,1000).trim(),
+    fav:!!r.fav,photo:str(r.photo,80)||null,
     createdAt:created,updatedAt:isoOr(r.updatedAt,created)
   };
 }
@@ -674,6 +796,11 @@ function normalizeState(raw){
     have:trueKeys(sh.have),
     extras:arr(sh.extras).filter(x=>x&&str(x.text).trim()).map(x=>({id:str(x.id,80)||uid(),text:str(x.text,200).trim(),done:!!x.done}))
   };
+  // Datos para sincronizar: marcas de tiempo de las listas y registro de borrados
+  out.aislesAt=isoOr(s.aislesAt,'');
+  out.shoppingAt=isoOr(s.shoppingAt,'');
+  out.deleted={};
+  if(s.deleted&&typeof s.deleted==='object')for(const k in s.deleted)if(/^[rgct]:/.test(k)&&isoOr(s.deleted[k],''))out.deleted[k]=s.deleted[k];
   const st=s.settings&&typeof s.settings==='object'?s.settings:{};
   const bd=intOrNull(st.backupDays);
   out.settings={lastBackup:ymdOr(st.lastBackup),backupDays:bd==null?14:bd,backupSnooze:ymdOr(st.backupSnooze),persistAsked:!!st.persistAsked};
@@ -697,6 +824,8 @@ function openDB(){
 }
 function idbGet(store,key){return new Promise((res,rej)=>{const rq=db.transaction(store,'readonly').objectStore(store).get(key);rq.onsuccess=()=>res(rq.result);rq.onerror=()=>rej(rq.error)})}
 function idbPut(store,key,val){return new Promise((res,rej)=>{const t=db.transaction(store,'readwrite');t.objectStore(store).put(val,key);t.oncomplete=()=>res();t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)})}
+function idbKeys(store){return new Promise((res,rej)=>{const rq=db.transaction(store,'readonly').objectStore(store).getAllKeys();rq.onsuccess=()=>res(rq.result);rq.onerror=()=>rej(rq.error)})}
+function idbDel(store,keys){return new Promise((res,rej)=>{const t=db.transaction(store,'readwrite'),os=t.objectStore(store);for(const k of keys)os.delete(k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)})}
 function idbAll(store){return new Promise((res,rej)=>{const out=[];const rq=db.transaction(store,'readonly').objectStore(store).openCursor();rq.onsuccess=()=>{const c=rq.result;if(c){out.push([c.key,c.value]);c.continue()}else res(out)};rq.onerror=()=>rej(rq.error)})}
 
 // Guardado: cada cambio se escribe al momento. Los cambios los provoca el usuario (no van letra a letra),
@@ -724,24 +853,45 @@ if(channel)channel.onmessage=async e=>{
   try{state=normalizeState(await idbGet('state','main'));undoStack.length=0;renderApp()}catch(err){console.error(err)}
 };
 
-const ui=Object.assign({view:'recipes',recipeId:null,q:'',cat:'',tags:[],method:'',sort:'az',theme:'auto',sbCollapsed:false,ingQ:'',shopCollapsed:[]},loadUI());
+const ui=Object.assign({view:'recipes',recipeId:null,q:'',cat:'',tags:[],method:'',sort:'az',theme:'auto',sbCollapsed:false,ingQ:'',shopCollapsed:[],fav:false,cookStep:0,cookList:false,cookServ:null},loadUI());
 if(!Array.isArray(ui.shopCollapsed))ui.shopCollapsed=[];
 function loadUI(){try{const u=JSON.parse(localStorage.getItem(UI_KEY)||'{}');return u&&typeof u==='object'?u:{}}catch(e){return {}}}
-function saveUI(){try{localStorage.setItem(UI_KEY,JSON.stringify({view:ui.view==='edit'?(ui.recipeId?'recipe':'recipes'):ui.view,recipeId:ui.recipeId,q:ui.q,cat:ui.cat,tags:ui.tags,method:ui.method,sort:ui.sort,theme:ui.theme,sbCollapsed:ui.sbCollapsed,ingQ:ui.ingQ,shopCollapsed:ui.shopCollapsed}))}catch(e){}}
+function saveUI(){try{localStorage.setItem(UI_KEY,JSON.stringify({view:ui.view==='edit'?(ui.recipeId?'recipe':'recipes'):ui.view,recipeId:ui.recipeId,q:ui.q,cat:ui.cat,tags:ui.tags,method:ui.method,sort:ui.sort,theme:ui.theme,sbCollapsed:ui.sbCollapsed,ingQ:ui.ingQ,shopCollapsed:ui.shopCollapsed,fav:ui.fav,cookStep:ui.cookStep,cookList:ui.cookList,cookServ:ui.cookServ}))}catch(e){}}
 let saveUITimer=null;const saveUISoon=()=>{clearTimeout(saveUITimer);saveUITimer=setTimeout(saveUI,400)};
 
 /* =========================================================
    Cambios de datos: commit + deshacer
    ========================================================= */
 const undoStack=[];
+// Para sincronizar: anota qué desaparece (registro de borrados), qué reaparece (se le renueva la fecha,
+// para que el borrado de otro dispositivo no lo vuelva a quitar) y cuándo cambian las listas sin fecha propia.
+const SYNC_KINDS=[['r','recipes'],['g','ingredients'],['c','categories'],['t','tags']];
+function changeBase(s){
+  const b={deleted:s.deleted,aisles:JSON.stringify(s.aisles),shopping:JSON.stringify(s.shopping),aislesAt:s.aislesAt,shoppingAt:s.shoppingAt};
+  for(const [k,key] of SYNC_KINDS)b[k]=new Set(s[key].map(x=>x.id));
+  return b;
+}
+function stampChanges(b){
+  const now=nowISO(),del=Object.assign({},b.deleted,state.deleted);
+  for(const [k,key] of SYNC_KINDS){
+    const cur=new Set();
+    for(const x of state[key]){cur.add(x.id);if(!b[k].has(x.id)&&del[k+':'+x.id]){delete del[k+':'+x.id];x.updatedAt=now}}
+    for(const id of b[k])if(!cur.has(id))del[k+':'+id]=now;
+  }
+  state.deleted=del;
+  state.aislesAt=JSON.stringify(state.aisles)!==b.aisles?now:b.aislesAt;
+  state.shoppingAt=JSON.stringify(state.shopping)!==b.shopping?now:b.shoppingAt;
+}
 function commit(msg,fn){
+  const base=changeBase(state);
   const snap=JSON.stringify(state);
   let r;
   try{r=fn(state)}catch(e){console.error(e);state=normalizeState(JSON.parse(snap));toast('Error: '+e.message,{icon:'alert'});return false}
   if(r===false){state=normalizeState(JSON.parse(snap));return false}
   undoStack.push(snap);if(undoStack.length>40)undoStack.shift();
   state=normalizeState(state);
-  save();renderApp();
+  stampChanges(base);
+  save();renderApp();scheduleSync();
   const text=typeof r==='string'?r:msg;
   if(text)toast(text,{undo:true});
   return true;
@@ -749,10 +899,16 @@ function commit(msg,fn){
 function undo(){
   if(!undoStack.length){toast('No hay nada que deshacer',{icon:'undo'});return false}
   const settings=state.settings;            // los ajustes no se deshacen
+  const base=changeBase(state),prev={};
+  for(const [,key] of SYNC_KINDS)prev[key]=new Map(state[key].map(x=>[x.id,JSON.stringify(x)]));
   state=normalizeState(JSON.parse(undoStack.pop()));
   state.settings=settings;
-  if(ui.view==='recipe'&&!recipeById(ui.recipeId))ui.view='recipes';
-  save();renderApp();toast('Cambio deshecho',{icon:'undo'});
+  // Lo que vuelve a una versión anterior cuenta como cambio nuevo: si no, ganaría la copia de GitHub
+  const now=nowISO();
+  for(const [,key] of SYNC_KINDS)for(const x of state[key]){const p=prev[key].get(x.id);if(p&&p!==JSON.stringify(x))x.updatedAt=now}
+  stampChanges(base);
+  if((ui.view==='recipe'||ui.view==='cook')&&!recipeById(ui.recipeId))ui.view='recipes';
+  save();renderApp();scheduleSync();toast('Cambio deshecho',{icon:'undo'});
   return true;
 }
 
@@ -770,11 +926,12 @@ function filteredRecipes(){
   const ingM=ingMap(),tagM=new Map(state.tags.map(t=>[t.id,t])),catM=new Map(state.categories.map(c=>[c.id,c]));
   const toks=norm(ui.q).split(' ').filter(Boolean);
   const list=state.recipes.filter(r=>{
+    if(ui.fav&&!r.fav)return false;
     if(ui.cat==='none'?r.categoryId:(ui.cat&&r.categoryId!==ui.cat))return false;
     if(ui.tags.length&&!ui.tags.every(t=>r.tags.includes(t)))return false;
     if(ui.method&&r.method!==ui.method)return false;
     if(toks.length){
-      const hay=norm([r.title,r.method==='thermomix'?'thermomix':'',catM.get(r.categoryId)?.name,...r.tags.map(t=>tagM.get(t)?.name),...r.ingredients.map(l=>ingM.get(l.ingId)?.name)].join(' '));
+      const hay=norm([r.title,r.method==='thermomix'?'thermomix':'',r.fav?'favorita':'',catM.get(r.categoryId)?.name,...r.tags.map(t=>tagM.get(t)?.name),...r.ingredients.map(l=>ingM.get(l.ingId)?.name)].join(' '));
       if(!toks.every(t=>hay.includes(t)))return false;
     }
     return true;
@@ -842,7 +999,7 @@ function go(view,params={},opt={}){
   if(editor&&(params.copy||params.draft))ui.recipeId=null;
   const st={view,recipeId:ui.recipeId};
   if(opt.replace)history.replaceState(st,'');else history.pushState(st,'');
-  if(view==='recipe'||view==='edit')scrollMem[viewKey()]=0;
+  if(view==='recipe'||view==='edit'||view==='cook')scrollMem[viewKey()]=0;
   saveUI();renderApp(true);
 }
 window.addEventListener('popstate',e=>{
@@ -872,7 +1029,7 @@ const NAV=[
   {v:'help',label:'Instrucciones',icon:'help'}
 ];
 const BOTTOM=[{v:'recipes',label:'Recetas',icon:'book'},{v:'shopping',label:'Compra',icon:'cart'},{v:'ingredients',label:'Ingredientes',icon:'leaf'},{v:'settings',label:'Ajustes',icon:'settings'}];
-function navActive(){const v=ui.view;if(v==='recipe'||v==='edit')return 'recipes';if(v==='aisles')return 'settings';return v}
+function navActive(){const v=ui.view;if(v==='recipe'||v==='edit'||v==='cook')return 'recipes';if(v==='aisles')return 'settings';return v}
 function navActiveMobile(){const v=navActive();return (v==='categories'||v==='tags'||v==='help')?'settings':v}
 
 function renderApp(navChanged=false){
@@ -880,6 +1037,7 @@ function renderApp(navChanged=false){
   ui.tags=ui.tags.filter(id=>tagById(id));
   if(ui.cat&&ui.cat!=='none'&&!catById(ui.cat))ui.cat='';
   document.documentElement.classList.toggle('sb-c',!!ui.sbCollapsed);
+  document.documentElement.classList.toggle('cooking',ui.view==='cook');
   const act=navActive(),nSel=state.shopping.selected.length;
   $('#sidebar').innerHTML=`<div class="sb-brand">${ic('pot')}<span>Recetario</span></div>`+
     NAV.map(n=>`<button class="sb-item ${act===n.v?'on':''}" data-act="nav" data-view="${n.v}" title="${esc(n.label)}">${ic(n.icon)}<span class="sb-label">${n.label}</span>${n.v==='recipes'?`<span class="cnt">${state.recipes.length}</span>`:n.v==='shopping'&&nSel?`<span class="cnt">${nSel}</span>`:''}</button>`).join('')+
@@ -890,13 +1048,14 @@ function renderApp(navChanged=false){
   // Conservar desplazamientos (vertical y horizontal)
   const keep={};$$('[data-scroll-key]').forEach(el=>keep[el.dataset.scrollKey]=el.scrollLeft);
   const y=navChanged?(scrollMem[viewKey()]||0):window.scrollY;
-  const views={recipes:vRecipes,recipe:vRecipe,edit:vEdit,categories:vCategories,tags:vTags,ingredients:vIngredients,settings:vSettings,help:vHelp,shopping:vShopping,aisles:vAisles};
+  const views={recipes:vRecipes,recipe:vRecipe,edit:vEdit,categories:vCategories,tags:vTags,ingredients:vIngredients,settings:vSettings,help:vHelp,shopping:vShopping,aisles:vAisles,cook:vCook};
   $('#main').innerHTML=`<div class="wrap">${(views[ui.view]||vRecipes)()}</div>`;
   $$('[data-scroll-key]').forEach(el=>{if(keep[el.dataset.scrollKey])el.scrollLeft=keep[el.dataset.scrollKey]});
   $$('textarea.autosize').forEach(autosize);
   window.scrollTo(0,y);
   if(ui.view==='settings')fillStorageInfo();
-  document.title=ui.view==='recipe'&&recipeById(ui.recipeId)?recipeById(ui.recipeId).title+' · Recetario':'Recetario';
+  hydrateImages();wakeUpdate();
+  document.title=(ui.view==='recipe'||ui.view==='cook')&&recipeById(ui.recipeId)?recipeById(ui.recipeId).title+' · Recetario':'Recetario';
 }
 const warnHTML=ws=>ws.map(w=>`<div class="warn">${ic('alert')}<span>${esc(w)}</span></div>`).join('');
 function autosize(t){t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px'}
@@ -915,7 +1074,8 @@ function vRecipes(){
   const cats=sortedCats(),due=backupDue();
   const sorts=[['az','A-Z'],['recent','Más recientes'],['time','Más rápidas']];
   const hasTm=state.recipes.some(r=>r.method==='thermomix');
-  const chips=[...(hasTm?[['thermomix','Thermomix'],['tradicional','Tradicional']].map(([v,l])=>`<button class="chip method ${ui.method===v?'on':''}" data-act="filter-method" data-v="${v}">${l}</button>`):[]),
+  const chips=[...(ui.fav||state.recipes.some(r=>r.fav)?[`<button class="chip ${ui.fav?'on':''}" data-act="filter-fav">${ic('star')}Favoritas</button>`,...(hasTm||state.tags.length?['<span class="chip-sep"></span>']:[])]:[]),
+    ...(hasTm?[['thermomix','Thermomix'],['tradicional','Tradicional']].map(([v,l])=>`<button class="chip method ${ui.method===v?'on':''}" data-act="filter-method" data-v="${v}">${l}</button>`):[]),
     ...(hasTm&&state.tags.length?['<span class="chip-sep"></span>']:[]),
     ...sortedTags().map(t=>`<button class="chip ${ui.tags.includes(t.id)?'on':''}" data-act="filter-tag" data-id="${t.id}">${esc(t.name)}</button>`)];
   return `<header class="topbar"><h1>Recetas</h1><div class="actions"><button class="btn" data-act="paste-recipe" title="Pegar receta" aria-label="Pegar receta">${ic('clip')}<span class="hide-m">Pegar receta</span></button><button class="btn primary" data-act="new-recipe">${ic('plus')}<span>Nueva<span class="hide-m"> receta</span></span></button></div></header>
@@ -931,7 +1091,7 @@ function vRecipes(){
 }
 function vResults(){
   if(!state.recipes.length)return `<div class="empty">${ic('pot')}<h2>Todavía no hay recetas</h2><div class="chips wrap" style="justify-content:center"><button class="btn primary" data-act="new-recipe">${ic('plus')}Crear la primera receta</button><button class="btn" data-act="paste-recipe">${ic('clip')}Pegar una receta</button></div></div>`;
-  const list=filteredRecipes(),filt=ui.q||ui.cat||ui.tags.length||ui.method,ingM=ingMap();
+  const list=filteredRecipes(),filt=ui.q||ui.cat||ui.tags.length||ui.method||ui.fav,ingM=ingMap();
   if(!list.length)return `<div class="empty">${ic('search')}<h2>Sin resultados</h2><button class="btn" data-act="clear-filters">Quitar filtros</button></div>`;
   return `<div class="count">${list.length} ${list.length===1?'receta':'recetas'}${filt?` · <button class="linkbtn" data-act="clear-filters">Quitar filtros</button>`:''}</div><div class="grid cards">${list.map(r=>cardHTML(r,ingM)).join('')}</div>`;
 }
@@ -940,10 +1100,12 @@ function cardHTML(r,ingM){
   const c=catById(r.categoryId),has=r.prepMin!=null||r.cookMin!=null,t=(r.prepMin||0)+(r.cookMin||0);
   const tags=r.tags.map(tagById).filter(Boolean).sort(byName);
   return `<article class="rcard" data-act="open-recipe" data-id="${r.id}" style="--cat:${catColor(c)}" tabindex="0">
+    <div class="rc-media">${artHTML(c)}${r.photo?photoImg(r.photo):''}</div>
+    <button class="rc-fav ${r.fav?'on':''}" data-act="fav" data-id="${r.id}" title="${r.fav?'Quitar de favoritas':'Añadir a favoritas'}" aria-label="${r.fav?'Quitar de favoritas':'Añadir a favoritas'}" aria-pressed="${r.fav}"><span>${ic('star')}</span></button>
     <button class="rc-cart ${inShopping(r.id)?'on':''}" data-act="shop-card" data-id="${r.id}" title="${inShopping(r.id)?'Quitar de la compra':'Añadir a la compra'}" aria-label="${inShopping(r.id)?'Quitar de la compra':'Añadir a la compra'}" aria-pressed="${inShopping(r.id)}"><span>${ic('cart')}</span></button>
-    <div class="eyebrow">${esc(c?c.name:'Sin categoría')}${r.method==='thermomix'?' · Thermomix':''}</div><h3>${esc(r.title)}</h3>
+    <div class="rc-body"><div class="eyebrow">${esc(c?c.name:'Sin categoría')}${r.method==='thermomix'?' · Thermomix':''}</div><h3>${esc(r.title)}</h3>
     <div class="meta">${has?`<span>${ic('clock')}${fmtMin(t)}</span>`:''}<span>${ic('users')}${fmtNum(r.servings)} rac.</span><span>${ic('list')}${r.ingredients.length} ingr.</span>${mc.counted?`<span title="Por ración${mc.complete?'':' (incompleto)'}">${ic('flame')}${fmtKcal(mc.perServing.kcal)}${mc.complete?'':'+'} kcal</span>`:''}</div>
-    ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t.name)}</span>`).join('')}</div>`:''}
+    ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t.name)}</span>`).join('')}</div>`:''}</div>
   </article>`;
 }
 
@@ -968,8 +1130,9 @@ function vRecipe(){
       <button class="btn icon ghost" data-act="dup-recipe" data-id="${r.id}" title="Duplicar" aria-label="Duplicar">${ic('copy')}</button>
       <button class="btn icon ghost danger" data-act="del-recipe" data-id="${r.id}" title="Borrar" aria-label="Borrar">${ic('trash')}</button>
       <button class="btn primary" data-act="edit-recipe" data-id="${r.id}">${ic('edit')}Editar</button></div></header>
+    ${r.photo?`<div class="hero"><img data-full="${esc(r.photo)}" alt=""></div>`:`<button class="btn sm photo-add" data-act="photo-add" data-id="${r.id}">${ic('camera')}Añadir foto</button>`}
     <div style="--cat:${catColor(c)}"><div class="eyebrow">${esc(c?c.name:'Sin categoría')}</div></div>
-    <h1 class="detail-title">${esc(r.title)}</h1>
+    <div class="title-row"><h1 class="detail-title">${esc(r.title)}</h1><button class="btn icon ghost fav-btn ${r.fav?'on':''}" data-act="fav" data-id="${r.id}" title="${r.fav?'Quitar de favoritas':'Añadir a favoritas'}" aria-label="${r.fav?'Quitar de favoritas':'Añadir a favoritas'}" aria-pressed="${r.fav}">${ic('star')}</button></div>
     ${tags.length||tm?`<div class="tags">${tm?`<span class="badge-tm">${ic('tm')}Thermomix ${TM_MODEL}</span>`:''}${tags.map(t=>`<span class="tag">${esc(t.name)}</span>`).join('')}</div>`:''}
     ${r.description?`<p class="desc">${esc(r.description)}</p>`:''}
     ${facts.length?`<div class="facts">${facts.map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('')}</div>`:'<div style="height:12px"></div>'}
@@ -982,22 +1145,23 @@ function vRecipe(){
         ${r.ingredients.length?shopButton(r,serv):''}
         ${macrosHTML(r,serv,ingM)}
       </section>
-      <section class="panel"><h2>Preparación</h2>
+      <section class="panel"><div class="panel-head"><h2>Preparación</h2>${r.steps.length?`<button class="btn primary sm" data-act="cook-start" data-id="${r.id}">${ic('play')}Modo cocina</button>`:''}</div>
         ${r.steps.length?(()=>{
-          const found=stepIngredients(r,ingM),firstStep={};
-          return `<ol class="steps">${r.steps.map((s,i)=>{
-            const fi=found[i];
-            // La cantidad va en el primer paso que nombra el ingrediente; en los siguientes, «(paso N)»
-            const chips=fi.lines.map(k=>{const l=r.ingredients[k],g=ingM.get(l.ingId),nm=esc(g?g.name:'?');
-              if(firstStep[k]!=null)return `<span class="ichip again">${nm}<span class="inote">(paso ${firstStep[k]+1})</span></span>`;
-              firstStep[k]=i;
-              return `<span class="ichip"><b>${l.qty==null?'al gusto':esc(fmtQty(l.qty*f,l.unit))}</b>${nm}${l.note?`<span class="inote"> · ${esc(l.note)}</span>`:''}</span>`}).join('');
-            return `<li data-act="step-done">${s.text?`<div class="st-text">${hlText(s.text,fi.ranges)}</div>`:''}${chips?`<div class="ichips">${chips}</div>`:''}${tm?stepTmHTML(s):''}</li>`;
-          }).join('')}</ol>`})():`<p class="muted">Sin pasos</p>`}
+          const found=stepIngredients(r,ingM),chips=stepChips(r,found,f,ingM);
+          return `<ol class="steps">${r.steps.map((s,i)=>`<li data-act="step-done">${s.text?`<div class="st-text">${hlText(s.text,found[i].ranges)}</div>`:''}${chips[i]?`<div class="ichips">${chips[i]}</div>`:''}${tm?stepTmHTML(s):''}</li>`).join('')}</ol>`})():`<p class="muted">Sin pasos</p>`}
         ${r.notes?`<h2 style="margin-top:12px">Notas</h2><p class="notes">${esc(r.notes)}</p>`:''}
         ${r.sourceUrl?`<p><a class="src" href="${esc(safeUrl(r.sourceUrl))}" target="_blank" rel="noopener">${ic('link')}${esc(r.sourceUrl)}</a></p>`:''}
       </section>
     </div>`;
+}
+// La cantidad va en el primer paso que nombra el ingrediente; en los siguientes, «(paso N)»
+function stepChips(r,found,f,ingM){
+  const firstStep={};
+  return found.map((fi,i)=>fi.lines.map(k=>{
+    const l=r.ingredients[k],g=ingM.get(l.ingId),nm=esc(g?g.name:'?');
+    if(firstStep[k]!=null)return `<span class="ichip again">${nm}<span class="inote">(paso ${firstStep[k]+1})</span></span>`;
+    firstStep[k]=i;
+    return `<span class="ichip"><b>${l.qty==null?'al gusto':esc(fmtQty(l.qty*f,l.unit))}</b>${nm}${l.note?`<span class="inote"> · ${esc(l.note)}</span>`:''}</span>`}).join(''));
 }
 function macrosHTML(r,serv,ingM){
   const m=computeMacros(r,ingM);if(!m.quantified)return '';
@@ -1103,7 +1267,7 @@ function makeEditor(id,from,params={}){
       description:dr.description||'',tagNames:[],
       lines:dr.ingredients.length?dr.ingredients.map(l=>{const ex=findIngByName(state.ingredients,l.name);return {qty:l.qty==null?'':qtyStr(l.qty),unit:l.unit,name:ex?ex.name:l.name,note:l.note,gpu:l.gpu}}):[{qty:'',unit:'g',name:'',note:''}],
       steps:dr.steps.length?dr.steps.map(s=>({id:uid(),text:s.text,programs:s.programs.map(progToEd),acc:s.acc.slice()})):[{id:uid(),text:'',programs:[],acc:[]}],
-      notes:dr.notes||'',sourceUrl:dr.sourceUrl||'',dirty:true};
+      notes:dr.notes||'',sourceUrl:dr.sourceUrl||'',photo:null,dirty:true};
   }
   const r=id?recipeById(id):null,ingM=ingMap(),copy=!!(params.copy&&r);
   return {
@@ -1117,7 +1281,7 @@ function makeEditor(id,from,params={}){
     tagNames:r?r.tags.map(t=>tagById(t)?.name).filter(Boolean):[],
     lines:r&&r.ingredients.length?r.ingredients.map(l=>({qty:l.qty==null?'':qtyStr(l.qty),unit:l.unit,name:ingM.get(l.ingId)?.name||'',note:l.note})):[{qty:'',unit:'g',name:'',note:''}],
     steps:r&&r.steps.length?r.steps.map(s=>({id:copy?uid():s.id,text:s.text,programs:s.programs.map(progToEd),acc:s.acc.slice()})):[{id:uid(),text:'',programs:[],acc:[]}],
-    notes:r?r.notes:'',sourceUrl:r?r.sourceUrl:'',dirty:copy
+    notes:r?r.notes:'',sourceUrl:r?r.sourceUrl:'',photo:r?r.photo:null,dirty:copy
   };
 }
 function vEdit(){
@@ -1169,6 +1333,7 @@ function vEdit(){
     <label class="field wide"><span>Descripción</span><textarea class="autosize" data-ed="description" rows="2">${esc(d.description)}</textarea></label>
     <div class="field wide"><span>Etiquetas</span><div class="chips wrap">${names.map(n=>`<button type="button" class="chip ${d.tagNames.some(x=>norm(x)===norm(n))?'on':''}" data-act="ed-tag" data-name="${esc(n)}">${esc(n)}</button>`).join('')}<span class="newtag"><input id="newtag" placeholder="Nueva etiqueta" autocomplete="off" maxlength="60"><button type="button" class="btn icon sm" data-act="ed-add-tag" aria-label="Añadir etiqueta">${ic('plus')}</button></span></div></div>
   </div></section>
+  <section class="panel"><h2>Foto</h2><div class="ed-photo"><div class="ed-thumb">${d.photo?photoImg(d.photo):''}${d.photo?'':ic('camera')}</div><div class="chips wrap"><button type="button" class="btn" data-act="ed-photo">${ic('camera')}${d.photo?'Cambiar foto':'Añadir foto'}</button>${d.photo?`<button type="button" class="btn danger" data-act="ed-photo-del">${ic('trash')}Quitar</button>`:''}</div></div></section>
   <section class="panel"><h2>Ingredientes</h2><div class="ing-rows">${d.lines.map(lineRow).join('')}</div><button type="button" class="btn" data-act="ed-line-add">${ic('plus')}Añadir ingrediente</button></section>
   <section class="panel"><h2>Pasos</h2><div class="step-rows">${d.steps.map(stepRow).join('')}</div><button type="button" class="btn" data-act="ed-step-add">${ic('plus')}Añadir paso</button></section>
   <section class="panel"><div class="ed-grid">
@@ -1218,8 +1383,8 @@ async function editorSave(){
       if(!g){g=newIngredient(cap(l.name),now);s.ingredients.push(g)}
       if(l.gpu>0&&l.unit==='ud'&&g.gramsPerUnit==null){g.gramsPerUnit=Math.round(l.gpu*10)/10;g.updatedAt=now}
       return {ingId:g.id,qty:l.qty,unit:l.unit,note:l.note}});
-    const rec={id:d.id,title,method:d.method,categoryId:catId,tags:tagIds,description:d.description.trim(),servings:serv,prepMin:prep,cookMin:cook,ingredients:ingLines,steps,notes:d.notes.trim(),sourceUrl:d.sourceUrl.trim(),createdAt:d.createdAt||now,updatedAt:now};
     const i=s.recipes.findIndex(r=>r.id===d.id);
+    const rec={id:d.id,title,method:d.method,categoryId:catId,tags:tagIds,description:d.description.trim(),servings:serv,prepMin:prep,cookMin:cook,ingredients:ingLines,steps,notes:d.notes.trim(),sourceUrl:d.sourceUrl.trim(),fav:i>=0&&s.recipes[i].fav,photo:d.photo||null,createdAt:d.createdAt||now,updatedAt:now};
     if(i>=0)s.recipes[i]=rec;else s.recipes.push(rec);
   });
   if(!ok)return;
@@ -1480,6 +1645,8 @@ function vSettings(){
   <div class="list"><div class="setrow"><span class="lbl">Secciones del súper<span class="sub">${state.aisles.length} secciones</span></span><button class="btn" data-act="nav" data-view="aisles">${ic('edit')}Editar</button></div></div>
   <h2 class="sec">Apariencia</h2>
   <div class="list"><div class="setrow"><span class="lbl">Tema</span><div class="seg">${[['auto','Automático'],['light','Claro'],['dark','Oscuro']].map(([v,l])=>`<button class="${ui.theme===v?'on':''}" data-act="theme" data-v="${v}">${l}</button>`).join('')}</div></div></div>
+  <h2 class="sec">Sincronización</h2>
+  <div class="list">${syncBoxHTML()}</div>
   <h2 class="sec">Copias de seguridad</h2>
   <div class="list">
     <div class="setrow"><span class="lbl">Exportar copia<span class="sub">Última: ${last?DTF_DATE.format(last):'nunca'}</span></span><button class="btn" data-act="export">${ic('download')}Exportar</button></div>
@@ -1498,7 +1665,7 @@ async function fillStorageInfo(){
   const el=$('#storage-info');if(!el||dbError)return;
   const parts=[];
   try{if(navigator.storage&&navigator.storage.persisted)parts.push(await navigator.storage.persisted()?'Guardado persistente':'Guardado no persistente')}catch(e){}
-  try{const photos=await idbAll('photos');parts.push(`${photos.length} ${photos.length===1?'foto':'fotos'}`)}catch(e){}
+  try{const n=(await idbKeys('photos')).filter(k=>!String(k).startsWith('t:')).length;parts.push(`${n} ${n===1?'foto':'fotos'}`)}catch(e){}
   try{const size=new Blob([JSON.stringify(state)]).size;parts.push(`datos: ${fmtNum(size/1024,0)} KB`)}catch(e){}
   if($('#storage-info'))$('#storage-info').textContent=parts.join(' · ');
 }
@@ -1517,6 +1684,21 @@ function vHelp(){
   <li>Se reconocen solos: en singular o en plural, sin importar tildes ni mayúsculas, y por la primera palabra si no hay duda («aceite» para «Aceite de oliva virgen extra», pero no «pimienta» si la receta lleva dos pimientas). Para que se reconozca uno, escribe en el paso el mismo nombre que en la lista de ingredientes.</li>
   <li>El botón del documento copia la receta como texto para pegarla en notas o WhatsApp.</li>
   <li><b>Duplicar</b> (botón de las dos hojas) crea una copia para adaptarla, por ejemplo para pasar una receta tradicional a Thermomix o al revés.</li></ul>
+  <h2>Favoritas</h2>
+  <ul><li>Toca la <b>estrella</b> de una tarjeta o de la ficha para marcar la receta. El botón <b>Favoritas</b> de arriba deja solo las marcadas y se combina con los demás filtros. También puedes escribir «favorita» en el buscador.</li></ul>
+  <h2>Fotos</h2>
+  <ul><li>En la ficha pulsa <b>Añadir foto</b>, o usa el apartado <b>Foto</b> del editor, donde también se cambia o se quita. En el móvil puedes elegir <b>Cámara</b> o <b>Galería</b>.</li>
+  <li>La foto se reduce a ${PHOTO_MAX} px, unos 100-200 KB. La lista solo carga las miniaturas de lo que aparece en pantalla.</li>
+  <li>Las recetas sin foto muestran un dibujo que sale del nombre de su categoría.</li>
+  <li>Las fotos van en las copias de seguridad y en la sincronización.</li></ul>
+  <h2>Modo cocina</h2>
+  <ul><li>En la ficha, elige las raciones y pulsa <b>Modo cocina</b>. Se ve un paso por pantalla, en letra grande, con los ingredientes que usa y sus cantidades.</li>
+  <li>Pasa de paso con <b>Siguiente</b> y <b>Anterior</b>, deslizando el dedo o, en el ordenador, con las flechas del teclado.</li>
+  <li>En las recetas de Thermomix, el programa se ve en grande: tiempo, temperatura, velocidad y giro.</li>
+  <li>Los dos botones de arriba cambian entre <b>un paso</b> y la <b>lista completa</b>, donde tocar un paso lo tacha.</li>
+  <li>En el móvil, el botón de la lista abre los <b>ingredientes</b>; tócalos para tacharlos según los vayas preparando. En el ordenador están siempre a la derecha.</li>
+  <li>La pantalla no se apaga mientras estés en el modo cocina: lo indica el sol de arriba. Si el navegador no lo permite, el sol no aparece.</li>
+  <li>Si sales de la app o se cierra, al volver sigues en el mismo paso.</li></ul>
   <h2>Thermomix ${TM_MODEL}</h2>
   <ul><li>En el editor, elige <b>Tipo: Thermomix ${TM_MODEL}</b>. Cada paso tiene sus <b>programas</b>: minutos y segundos, temperatura (37-120 °C o Varoma), velocidad (cuchara o de 0,5 a 10), <b>Hasta vel.</b> para velocidad progresiva (vel 5-10), giro inverso y modo (Amasar o Turbo con número de veces).</li>
   <li>Un paso puede tener varios programas (por ejemplo, trocear y después sofreír): pulsa <b>+ Programa</b>.</li>
@@ -1561,11 +1743,20 @@ function vHelp(){
   <li>Pulsa el contador «rec.» para ver las recetas que la usan.</li></ul>
   <h2>Deshacer</h2>
   <ul><li>Cada cambio muestra un aviso con <b>Deshacer</b>. En el ordenador también vale <b>Ctrl+Z</b> o el botón de la barra lateral. Los ajustes no se deshacen.</li></ul>
+  <h2>Sincronización</h2>
+  <ul><li>En <b>Ajustes y avisos → Sincronización</b> pega un <b>token de GitHub</b> y elige una <b>contraseña de cifrado</b>. Ahí mismo está «Cómo crear el token de GitHub», paso a paso.</li>
+  <li>Las recetas y las fotos se guardan <b>cifradas</b> en Gists secretos de tu cuenta de GitHub. Sin la contraseña no se pueden leer. El token y la contraseña solo se guardan en el dispositivo donde los escribes.</li>
+  <li>Haz lo mismo en el otro dispositivo, con <b>el mismo token y la misma contraseña</b>. Si la contraseña se pierde, la copia de GitHub no se puede recuperar; los datos de cada dispositivo siguen intactos.</li>
+  <li>Se sincroniza al abrir la app, unos segundos después de cada cambio y cada pocos minutos. Si una receta cambia en los dos dispositivos, se queda la versión modificada más tarde. Los borrados también se propagan.</li>
+  <li>Se sincronizan las recetas, las fotos, los ingredientes, las categorías, las etiquetas, las secciones del súper y la lista de la compra. El tema, los filtros y el modo cocina son de cada dispositivo.</li>
+  <li>La primera vez, las fotos pueden tardar y gastar datos: mejor con wifi.</li>
+  <li>Un <b>punto rojo</b> en Ajustes significa que está en pausa (token caducado, contraseña incorrecta…). Abre Ajustes para ver el motivo.</li></ul>
   <h2>Copias de seguridad</h2>
-  <ul><li>Los datos se guardan solo en este dispositivo y en este navegador. El móvil y el ordenador no se sincronizan solos.</li>
+  <ul><li>Los datos se guardan en este dispositivo y en este navegador. Si no activas la sincronización, el móvil y el ordenador no se comunican.</li>
   <li><b>Exportar</b> descarga un archivo JSON con todo. Hazlo de vez en cuando; la app te lo recuerda.</li>
   <li>Para pasar recetas de un dispositivo a otro: exporta en uno e <b>importa</b> en el otro eligiendo <b>Fusionar</b>. Se juntan las dos colecciones y, si una receta está en las dos, se queda la versión modificada más recientemente. Lo borrado en un dispositivo no se borra en el otro al fusionar.</li>
   <li><b>Sustituir</b> borra lo que hay y deja solo lo del archivo.</li>
+  <li>Con la sincronización activa, <b>Vaciar</b> y <b>Sustituir</b> también borran en tus otros dispositivos.</li>
   <li>Para borrar los datos usa <b>Vaciar</b> en Ajustes. No borres los «datos del sitio» desde el navegador: borrarías también los de tus otras aplicaciones.</li></ul>
   <h2>Instalar</h2>
   <ul><li>Abre la app en <b>Chrome</b> y pulsa el botón <b>Instalar app</b>: en el móvil está arriba, en Recetas; en el ordenador, en la barra lateral. También está en <b>Ajustes y avisos → Aplicación</b>. Confirma con <b>Instalar</b>.</li>
@@ -1580,7 +1771,7 @@ function vHelp(){
 const blobToDataURL=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(b)});
 async function exportJSON(){
   const photos={};
-  if(db){try{for(const [k,b] of await idbAll('photos'))if(b instanceof Blob)photos[k]=await blobToDataURL(b)}catch(e){console.error(e)}}
+  if(db){try{const used=usedPhotos();for(const [k,b] of await idbAll('photos'))if(used.has(k)&&b instanceof Blob)photos[k]=await blobToDataURL(b)}catch(e){console.error(e)}}
   const json=JSON.stringify({app:'recetario',version:1,exportedAt:nowISO(),state,photos});
   download(`recetario-copia-${ymd()}.json`,json,'application/json');
   state.settings.lastBackup=ymd();state.settings.backupSnooze='';save();renderApp();
@@ -1627,15 +1818,18 @@ async function importFile(file){
     body:`<p>El archivo tiene <b>${inc.recipes.length}</b> recetas y <b>${inc.ingredients.length}</b> ingredientes.</p><p><b>Fusionar</b> junta el archivo con lo que ya tienes. <b>Sustituir</b> borra lo que tienes y deja solo el archivo.</p>`,
     buttons:[{label:'Cancelar',value:null},{label:'Sustituir',cls:'danger',value:'replace'},{label:'Fusionar',cls:'primary',value:'merge'}]});
   if(!choice)return;
-  if(choice==='replace'&&!await confirmBox('¿Sustituir todo?',`Se borrarán tus ${state.recipes.length} recetas actuales.`,'Sustituir'))return;
+  if(choice==='replace'&&!await confirmBox('¿Sustituir todo?',`Se borrarán tus ${state.recipes.length} recetas actuales${syncCfg?', también en tus otros dispositivos':''}.`,'Sustituir'))return;
   let stats=null;
   commit('',()=>{
     if(choice==='merge'){const m=mergeStates(state,inc);stats=m.stats;state=m.state}
     else{const settings=state.settings;state=inc;state.settings=settings}
     return choice==='merge'?`Fusionado: ${stats.added} nuevas, ${stats.updated} actualizadas`:`Sustituido: ${inc.recipes.length} recetas`;
   });
-  // Fotos (para cuando existan)
-  if(db)for(const id in photos){try{if(recipeById(id)&&/^data:image\//.test(photos[id])){const b=await (await fetch(photos[id])).blob();await idbPut('photos',id,b)}}catch(e){console.error(e)}}
+  if(db){
+    const used=usedPhotos();let n=0;
+    for(const id in photos){try{if(used.has(id)&&/^data:image\//.test(photos[id])){const b=await (await fetch(photos[id])).blob();await idbPut('photos',id,b);n++}}catch(e){console.error(e)}}
+    if(n)refreshView();
+  }
 }
 
 /* =========================================================
@@ -1829,6 +2023,579 @@ async function pasteRecipe(){
 }
 
 /* =========================================================
+   Fotos
+   Cada foto tiene un id propio que no cambia: la receta guarda ese id. Así, deshacer, duplicar
+   y sincronizar nunca pisan una imagen; lo que ninguna receta usa se limpia al arrancar.
+   En el almacén `photos`: `<id>` es la foto (1024 px) y `t:<id>` su miniatura.
+   ========================================================= */
+const usedPhotos=(st=state)=>new Set(st.recipes.map(r=>r.photo).filter(Boolean));
+function artHTML(c){
+  const n=norm(c?c.name:''),m=CAT_ART.find(([re])=>re.test(n));
+  return `<svg class="art" aria-hidden="true"><use href="#art-${m?m[1]:'pot'}"/></svg>`;
+}
+async function decodeImage(blob){
+  if(window.createImageBitmap){
+    try{const b=await createImageBitmap(blob,{imageOrientation:'from-image'});return {src:b,w:b.width,h:b.height,close:()=>b.close()}}catch(e){}
+  }
+  const url=URL.createObjectURL(blob);
+  try{
+    const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('Imagen no válida'));i.src=url});
+    return {src:img,w:img.naturalWidth,h:img.naturalHeight,close:()=>URL.revokeObjectURL(url)};
+  }catch(e){URL.revokeObjectURL(url);throw e}
+}
+function imageToJpeg(d,max,q){
+  const k=Math.min(1,max/Math.max(d.w,d.h)),c=document.createElement('canvas');
+  c.width=Math.max(1,Math.round(d.w*k));c.height=Math.max(1,Math.round(d.h*k));
+  const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.imageSmoothingQuality='high';
+  g.drawImage(d.src,0,0,c.width,c.height);
+  return new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error('No se ha podido convertir la imagen')),'image/jpeg',q));
+}
+async function storePhoto(file){
+  const d=await decodeImage(file);
+  try{
+    const main=await imageToJpeg(d,PHOTO_MAX,PHOTO_Q),thumb=await imageToJpeg(d,THUMB_MAX,THUMB_Q),id=uid();
+    await idbPut('photos',id,main);await idbPut('photos','t:'+id,thumb);
+    return id;
+  }finally{d.close()}
+}
+async function gcPhotos(){
+  if(!db||!state.recipes.length)return;
+  try{
+    const used=usedPhotos(),old=(await idbKeys('photos')).filter(k=>!used.has(String(k).replace(/^t:/,'')));
+    if(old.length)await idbDel('photos',old);
+  }catch(e){console.error(e)}
+}
+// Miniaturas: se cargan al aparecer en pantalla y quedan en memoria para que repintar no parpadee
+const thumbUrls=new Map(),thumbLoad=new Map(),fullUrls=new Map();
+function photoImg(id){const u=thumbUrls.get(id);return u?`<img alt="" src="${u}">`:`<img alt="" data-thumb="${esc(id)}">`}
+function getThumb(id){
+  if(thumbUrls.has(id))return Promise.resolve(thumbUrls.get(id));
+  if(thumbLoad.has(id))return thumbLoad.get(id);
+  const p=(async()=>{
+    let t=await idbGet('photos','t:'+id);
+    if(!t){
+      // Llegada de otro dispositivo o de una copia: la miniatura se hace aquí
+      const main=await idbGet('photos',id);if(!main)return null;
+      const d=await decodeImage(main);
+      try{t=await imageToJpeg(d,THUMB_MAX,THUMB_Q)}finally{d.close()}
+      await idbPut('photos','t:'+id,t);
+    }
+    const u=URL.createObjectURL(t);thumbUrls.set(id,u);return u;
+  })().catch(e=>{console.error(e);return null}).finally(()=>thumbLoad.delete(id));
+  thumbLoad.set(id,p);return p;
+}
+async function showThumb(img){
+  const id=img.dataset.thumb;if(!id)return;
+  delete img.dataset.thumb;
+  const u=await getThumb(id);
+  if(u)img.src=u;else img.remove();
+}
+const thumbObs=('IntersectionObserver' in window)?new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){thumbObs.unobserve(e.target);showThumb(e.target)}},{rootMargin:'240px'}):null;
+function hydrateImages(){
+  $$('img[data-thumb]').forEach(i=>thumbObs?thumbObs.observe(i):showThumb(i));
+  $$('img[data-full]').forEach(async img=>{
+    const id=img.dataset.full;delete img.dataset.full;
+    let u=fullUrls.get(id);
+    if(!u){
+      const b=db&&await idbGet('photos',id).catch(()=>null);
+      if(!b){img.closest('.hero')?.remove();return}
+      u=URL.createObjectURL(b);fullUrls.set(id,u);
+      // Solo se guardan unas pocas grandes en memoria
+      if(fullUrls.size>6){const k=fullUrls.keys().next().value;URL.revokeObjectURL(fullUrls.get(k));fullUrls.delete(k)}
+    }
+    img.src=u;
+  });
+}
+let photoTarget=null;
+async function pickPhoto(target){
+  if(!db){toast('Sin acceso a la base de datos',{icon:'alert'});return}
+  let input='#photo-file';
+  if(isMobile()){
+    const c=await modal({title:'Añadir foto',buttons:[{label:'Cancelar',value:null},{label:'Galería',value:'gal'},{label:'Cámara',cls:'primary',value:'cam'}]});
+    if(!c)return;
+    if(c==='cam')input='#photo-cam';
+  }
+  photoTarget=target;
+  const f=$(input);f.value='';f.click();
+}
+async function photoChosen(file){
+  const target=photoTarget;photoTarget=null;
+  if(!file||!target)return;
+  let id;
+  try{id=await storePhoto(file)}catch(e){toast('No se ha podido leer la imagen',{icon:'alert'});return}
+  if(target==='editor'){if(editor){editor.photo=id;editor.dirty=true;renderApp()}}
+  else commit('Foto añadida',s=>{const r=s.recipes.find(x=>x.id===target);if(!r)return false;r.photo=id;r.updatedAt=nowISO()});
+}
+const refreshView=()=>{const a=document.activeElement;if(ui.view==='edit'||$('.overlay')||(a&&a.matches('input,textarea,select')))return;renderApp()};
+
+/* =========================================================
+   Modo cocina
+   ========================================================= */
+const cook={rid:null,sheet:false,ings:new Set(),done:new Set()};
+function cookTiles(p){
+  const t=[];
+  if(p.mode==='turbo'){t.push(['Turbo','Modo']);if(p.time!=null)t.push([fmtTime(p.time),'Tiempo']);if(p.reps)t.push([String(p.reps),p.reps===1?'vez':'veces']);return t}
+  if(p.time!=null)t.push([fmtTime(p.time),'Tiempo']);
+  if(p.temp!=null)t.push([p.temp==='varoma'?'Varoma':`${p.temp} °C`,'Temperatura']);
+  if(p.mode==='amasar')t.push(['Espiga','Velocidad']);
+  else if(p.speed)t.push([cap(fmtSpeed(p.speed))+(p.speedTo?'-'+fmtSpeed(p.speedTo):''),'Velocidad']);
+  if(p.reverse)t.push(['Inverso','Giro']);
+  return t;
+}
+function cookProgsHTML(s){
+  const many=s.programs.length>1;
+  return s.programs.map((p,i)=>`<div class="cook-prog">${many?`<div class="cook-pn">Programa ${i+1}</div>`:''}<div class="cook-tiles">${cookTiles(p).map(([a,b])=>`<div class="cook-tile"><b>${esc(a)}</b><span>${b}</span></div>`).join('')}</div></div>`).join('')+
+    (s.acc.length?`<div class="cook-acc">${s.acc.map(a=>`<span class="acc">${esc(TM_ACC[a])}</span>`).join('')}</div>`:'')+warnHTML(stepWarnings(s));
+}
+function vCook(){
+  const r=recipeById(ui.recipeId);
+  if(!r)return `<div class="empty">${ic('alert')}<h2>Esta receta ya no existe</h2><button class="btn" data-act="nav" data-view="recipes">Ver recetas</button></div>`;
+  if(cook.rid!==r.id){cook.rid=r.id;cook.sheet=false;cook.ings=new Set();cook.done=new Set()}
+  const n=r.steps.length,ingM=ingMap(),serv=ui.cookServ>0?ui.cookServ:r.servings,f=serv/r.servings,tm=r.method==='thermomix';
+  const i=ui.cookStep=Math.min(Math.max(0,ui.cookStep|0),Math.max(0,n-1));
+  const found=stepIngredients(r,ingM),chips=stepChips(r,found,f,ingM);
+  const body=k=>{const s=r.steps[k];return `${s.text?`<div class="cook-text">${hlText(s.text,found[k].ranges)}</div>`:''}${chips[k]?`<div class="ichips">${chips[k]}</div>`:''}${tm?cookProgsHTML(s):''}`};
+  const ings=r.ingredients.map((l,k)=>{const g=ingM.get(l.ingId);
+    return `<button class="cook-ing ${cook.ings.has(k)?'done':''}" data-act="cook-ing" data-k="${k}"><b class="${l.qty==null?'muted':''}">${l.qty==null?'al gusto':esc(fmtQty(l.qty*f,l.unit))}</b><span>${esc(g?g.name:'?')}${l.note?` <small>· ${esc(l.note)}</small>`:''}</span></button>`}).join('');
+  const list=ui.cookList&&n>0;
+  return `<div class="cook ${cook.sheet?'sheet':''}">
+    <div class="cook-top">
+      <button class="btn icon ghost" data-act="cook-exit" aria-label="Salir del modo cocina" title="Salir">${ic('x')}</button>
+      <div class="cook-title"><b>${esc(r.title)}</b><span>${list?`${n} ${n===1?'paso':'pasos'}`:n?`Paso ${i+1} de ${n}`:'Sin pasos'} · ${esc(fmtNum(serv))} rac.</span></div>
+      <span id="cook-wake" class="cook-wake" title="Pantalla siempre encendida" aria-label="Pantalla siempre encendida">${ic('sun')}</span>
+      <div class="seg" aria-label="Vista"><button class="${list?'':'on'}" data-act="cook-mode" data-v="one" title="Un paso" aria-label="Un paso">${ic('book')}</button><button class="${list?'on':''}" data-act="cook-mode" data-v="list" title="Lista completa" aria-label="Lista completa">${ic('text')}</button></div>
+      ${ings?`<button class="btn icon cook-ing-btn" data-act="cook-sheet" title="Ingredientes" aria-label="Ingredientes">${ic('list')}</button>`:''}
+    </div>
+    ${list||!n?'':`<div class="cook-bar"><i style="width:${(i+1)/n*100}%"></i></div>`}
+    <div class="cook-grid">
+      <div class="cook-main">${!n?'<p class="muted">Esta receta no tiene pasos</p>':list?`<ol class="cook-steps">${r.steps.map((s,k)=>`<li class="${cook.done.has(k)?'done':''}" data-act="cook-tick" data-k="${k}">${body(k)}</li>`).join('')}</ol>`:body(i)}</div>
+      ${ings?`<div class="cook-back" data-act="cook-sheet"></div><aside class="cook-ings"><h2>Ingredientes<button class="btn icon sm ghost sheet-x" data-act="cook-sheet" aria-label="Cerrar">${ic('x')}</button></h2>${ings}</aside>`:''}
+    </div>
+    ${list||!n?`<div class="cook-nav one"><button class="btn primary" data-act="cook-exit">${ic('check')}Terminar</button></div>`:`<div class="cook-nav"><button class="btn" data-act="cook-go" data-d="-1" ${i===0?'disabled':''}>${ic('left')}Anterior</button><button class="btn primary" data-act="cook-go" data-d="1">${i<n-1?`Siguiente${ic('right')}`:`${ic('check')}Terminar`}</button></div>`}
+  </div>`;
+}
+function cookMove(d,keepInside){
+  const r=recipeById(ui.recipeId);if(!r)return;
+  const next=ui.cookStep+d;
+  if(next<0)return;
+  if(next>=r.steps.length){if(!keepInside)history.back();return}
+  ui.cookStep=next;saveUI();renderApp();window.scrollTo(0,0);
+}
+let cookTouch=null;
+document.addEventListener('touchstart',e=>{
+  cookTouch=null;
+  if(ui.view!=='cook'||ui.cookList||cook.sheet||e.touches.length!==1||e.target.closest('button,a,input,select'))return;
+  cookTouch={x:e.touches[0].clientX,y:e.touches[0].clientY};
+},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(!cookTouch)return;
+  const t=e.changedTouches[0],dx=t.clientX-cookTouch.x,dy=t.clientY-cookTouch.y;cookTouch=null;
+  if(Math.abs(dx)>70&&Math.abs(dy)<60)cookMove(dx<0?1:-1,true);
+},{passive:true});
+// Pantalla siempre encendida: el sistema la suelta al salir de la app, así que se vuelve a pedir al regresar
+let wakeLock=null,wakeAsking=false;
+async function wakeUpdate(){
+  const want=ui.view==='cook'&&!document.hidden;
+  if(want&&!wakeLock&&!wakeAsking&&navigator.wakeLock){
+    wakeAsking=true;
+    try{
+      const w=await navigator.wakeLock.request('screen');
+      w.addEventListener('release',()=>{if(wakeLock===w){wakeLock=null;paintWake()}});
+      wakeLock=w;
+      if(ui.view!=='cook'){wakeLock=null;w.release()}
+    }catch(e){}
+    wakeAsking=false;
+  }else if(ui.view!=='cook'&&wakeLock){const w=wakeLock;wakeLock=null;w.release().catch(()=>{})}
+  paintWake();
+}
+function paintWake(){$('#cook-wake')?.classList.toggle('on',!!wakeLock)}
+document.addEventListener('visibilitychange',()=>{wakeUpdate()});
+
+/* =========================================================
+   Sincronización: Gists secretos de GitHub, cifrados (mismo sistema que el Revisor)
+   - Estado: un archivo en un Gist. Sin fotos: se lee y se escribe en cada ciclo.
+   - Fotos: un archivo cifrado por foto, en Gists aparte (hasta PHOTO_PER_GIST en cada uno).
+     Solo se tocan cuando falta alguna: leer el Gist del estado no arrastra las imágenes.
+   ========================================================= */
+const SYNC_KEY='recetario_v1_sync',SYNC_FILE='recetario-sync.json',SYNC_DESC='Recetario · copia cifrada (no borrar ni editar)';
+const PHOTO_MARK='recetario-fotos.txt',PHOTO_DESC='Recetario · fotos cifradas (no borrar ni editar)',PHOTO_PER_GIST=250,PHOTO_BATCH=6;
+const PBKDF2_ITER=600000,AAD='recetario|1';
+const tsOf=s=>{const n=Date.parse(s);return isNaN(n)?0:n};
+function syncErr(kind,msg){const e=new Error(msg);e.kind=kind;return e}
+const clone=o=>JSON.parse(JSON.stringify(o));
+
+/* ---- Fusión elemento a elemento: gana la versión más reciente y se respetan los borrados ---- */
+// En caso de empate, una elección fija para que todos los dispositivos coincidan
+function newest(a,b){const ta=tsOf(a.updatedAt),tb=tsOf(b.updatedAt);if(ta!==tb)return ta>tb?a:b;return JSON.stringify(a)>=JSON.stringify(b)?a:b}
+function uniteById(la,ra){const m=new Map();for(const x of [...la,...ra]){const y=m.get(x.id);m.set(x.id,y?newest(y,x):x)}return [...m.values()]}
+function pickList(a,aAt,b,bAt){const ta=tsOf(aAt),tb=tsOf(bAt);if(ta!==tb)return ta>tb?[a,aAt]:[b,bAt];return JSON.stringify(a)>=JSON.stringify(b)?[a,aAt]:[b,bAt]}
+// Dos dispositivos pueden haber creado «Tomate» por su cuenta: se juntan en el id menor, igual en ambos
+function dedupeByName(list,remap,fill){
+  const groups=new Map();
+  for(const x of list){const k=norm(x.name);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(x)}
+  const out=[];
+  for(const g of groups.values()){
+    if(g.length===1){out.push(g[0]);continue}
+    g.sort((a,b)=>a.id<b.id?-1:a.id>b.id?1:0);
+    const id=g[0].id,w=clone(g.reduce(newest));w.id=id;
+    for(const x of g)if(x.id!==id)remap[x.id]=id;
+    if(fill)fill(w,g);
+    out.push(w);
+  }
+  return out;
+}
+function fillIngredient(w,g){
+  for(const x of g){
+    for(const k of ['kcal','protein','carbs','fat','fiber'])if(w.per100[k]==null&&x.per100[k]!=null)w.per100[k]=x.per100[k];
+    if(w.gPerMl==null)w.gPerMl=x.gPerMl;
+    if(w.gramsPerUnit==null)w.gramsPerUnit=x.gramsPerUnit;
+    if(w.aisle==='Otros'&&x.aisle!=='Otros')w.aisle=x.aisle;
+  }
+}
+function syncMerge(local,remote){
+  const del={};
+  for(const d of [local.deleted,remote.deleted])for(const k in d)if(!del[k]||tsOf(d[k])>tsOf(del[k]))del[k]=d[k];
+  const alive=(key,at)=>{const t=del[key];if(t===undefined)return true;if(tsOf(at)>tsOf(t)){delete del[key];return true}return false};
+  const recipes=uniteById(local.recipes,remote.recipes).filter(r=>alive('r:'+r.id,r.updatedAt)).map(clone);
+  // Un ingrediente borrado que otra receta sigue usando se conserva
+  const usedIng=new Set(recipes.flatMap(r=>r.ingredients.map(l=>l.ingId)));
+  const ingAll=uniteById(local.ingredients,remote.ingredients).filter(g=>{if(usedIng.has(g.id)){delete del['g:'+g.id];return true}return alive('g:'+g.id,g.updatedAt)});
+  const catMap={},tagMap={},ingMapId={};
+  const categories=dedupeByName(uniteById(local.categories,remote.categories).filter(c=>alive('c:'+c.id,c.updatedAt)),catMap).sort((a,b)=>a.order-b.order||(a.id<b.id?-1:1));
+  const tags=dedupeByName(uniteById(local.tags,remote.tags).filter(t=>alive('t:'+t.id,t.updatedAt)),tagMap);
+  const ingredients=dedupeByName(ingAll,ingMapId,fillIngredient);
+  for(const r of recipes){
+    if(catMap[r.categoryId])r.categoryId=catMap[r.categoryId];
+    r.tags=[...new Set(r.tags.map(t=>tagMap[t]||t))];
+    r.ingredients.forEach(l=>{if(ingMapId[l.ingId])l.ingId=ingMapId[l.ingId]});
+  }
+  const [aisles0,aislesAt]=pickList(local.aisles,local.aislesAt,remote.aisles,remote.aislesAt);
+  const aisles=aisles0.slice();
+  for(const g of ingredients)if(!aisles.includes(g.aisle))aisles.splice(Math.max(0,aisles.length-1),0,g.aisle);
+  const [shop0,shoppingAt]=pickList(local.shopping,local.shoppingAt,remote.shopping,remote.shoppingAt);
+  const fixKeys=o=>{const out={};for(const k in o){const i=k.indexOf('|'),id=k.slice(0,i);out[(ingMapId[id]||id)+k.slice(i)]=true}return out};
+  const shopping=clone(shop0);shopping.checked=fixKeys(shopping.checked);shopping.have=fixKeys(shopping.have);
+  return normalizeState({version:1,aisles,aislesAt,categories,tags,ingredients,recipes,shopping,shoppingAt,deleted:del,settings:local.settings});
+}
+// Forma canónica para comparar dos estados sin depender del orden
+const sortKeys=o=>Object.keys(o||{}).sort().reduce((r,k)=>{r[k]=o[k];return r},{});
+function canon(st){
+  const byId=a=>a.slice().sort((x,y)=>x.id<y.id?-1:x.id>y.id?1:0),sh=st.shopping;
+  return JSON.stringify({r:byId(st.recipes),g:byId(st.ingredients),c:byId(st.categories),t:byId(st.tags),a:st.aisles,aa:st.aislesAt,
+    s:{selected:sh.selected.slice().sort((x,y)=>x.recipeId<y.recipeId?-1:1),checked:sortKeys(sh.checked),have:sortKeys(sh.have),extras:sh.extras},sa:st.shoppingAt,d:sortKeys(st.deleted)});
+}
+// Un dispositivo recién estrenado adopta lo de GitHub tal cual
+const isPristine=st=>!st.recipes.length&&!st.ingredients.length&&!st.tags.length&&!Object.keys(st.deleted).length&&!st.shopping.extras.length;
+function adoptRemote(remote,local){const st=clone(remote);st.settings=local.settings;return normalizeState(st)}
+function applyMerged(st){state=st;undoStack.length=0;save();refreshView()}
+
+/* ---- Cifrado: PBKDF2 (600 000 vueltas) + AES-GCM de 256 bits ---- */
+const te=new TextEncoder(),td=new TextDecoder();
+const b64e=u8=>{let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)};
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const keyCache={id:'',key:null};
+async function deriveKey(pass,salt,iter){
+  const id=pass+'|'+b64e(salt)+'|'+iter;
+  if(keyCache.id===id)return keyCache.key;
+  const base=await crypto.subtle.importKey('raw',te.encode(pass),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+  keyCache.id=id;keyCache.key=key;return key;
+}
+async function pipeBytes(u8,stream){
+  const w=stream.writable.getWriter();w.write(u8).catch(()=>{});w.close().catch(()=>{});
+  return new Uint8Array(await new Response(stream.readable).arrayBuffer());
+}
+async function encryptState(st,saltB64){
+  const payload={app:'recetario',v:1,savedAt:nowISO(),recipes:st.recipes,ingredients:st.ingredients,categories:st.categories,tags:st.tags,aisles:st.aisles,aislesAt:st.aislesAt,shopping:st.shopping,shoppingAt:st.shoppingAt,deleted:st.deleted};
+  let bytes=te.encode(JSON.stringify(payload)),z=0;
+  if(typeof CompressionStream==='function'){try{bytes=await pipeBytes(bytes,new CompressionStream('gzip'));z=1}catch(e){bytes=te.encode(JSON.stringify(payload));z=0}}
+  const salt=saltB64?b64d(saltB64):crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const key=await deriveKey(syncCfg.pass,salt,PBKDF2_ITER);
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:te.encode(AAD)},key,bytes));
+  return {salt:b64e(salt),content:JSON.stringify({app:'recetario',v:1,kdf:'PBKDF2-SHA256',iter:PBKDF2_ITER,salt:b64e(salt),iv:b64e(iv),z,data:b64e(ct)})};
+}
+async function decryptEnv(text){
+  const bad=()=>syncErr('format','Los datos guardados en GitHub no tienen el formato esperado.');
+  let env;try{env=JSON.parse(text)}catch(e){throw bad()}
+  if(!env||env.app!=='recetario'||!env.data||!env.salt||!env.iv)throw bad();
+  if(env.v!==1)throw syncErr('version','Los datos de GitHub los guardó una versión más nueva de la app. Cierra la app y ábrela de nuevo para actualizarla.');
+  const key=await deriveKey(syncCfg.pass,b64d(env.salt),env.iter||PBKDF2_ITER);
+  let plain;
+  try{plain=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(env.iv),additionalData:te.encode(AAD)},key,b64d(env.data)))}
+  catch(e){throw syncErr('password','La contraseña de cifrado no coincide con la de los datos guardados en GitHub.')}
+  if(env.z){
+    if(typeof DecompressionStream!=='function')throw syncErr('version','Este navegador no puede leer los datos comprimidos de GitHub. Actualiza Chrome.');
+    plain=await pipeBytes(plain,new DecompressionStream('gzip'));
+  }
+  let obj;try{obj=JSON.parse(td.decode(plain))}catch(e){throw bad()}
+  if(!obj||!Array.isArray(obj.recipes)||!Array.isArray(obj.categories))throw bad();
+  return {st:normalizeState(obj),salt:env.salt};
+}
+async function encryptPhoto(blob,salt,id){
+  const key=await deriveKey(syncCfg.pass,b64d(salt),PBKDF2_ITER),iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:te.encode(AAD+'|f|'+id)},key,await blob.arrayBuffer()));
+  return b64e(iv)+'.'+b64e(ct);
+}
+async function decryptPhoto(text,salt,id){
+  const [iv,data]=String(text).split('.');
+  const key=await deriveKey(syncCfg.pass,b64d(salt),PBKDF2_ITER);
+  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(iv),additionalData:te.encode(AAD+'|f|'+id)},key,b64d(data));
+  return new Blob([plain],{type:'image/jpeg'});
+}
+
+/* ---- API de GitHub (Gists) ---- */
+async function gh(path,opts={}){
+  let res;
+  try{
+    res=await fetch('https://api.github.com'+path,{method:opts.method||'GET',cache:'no-store',
+      headers:Object.assign({Accept:'application/vnd.github+json',Authorization:'Bearer '+syncCfg.token},opts.body?{'Content-Type':'application/json'}:{}),
+      body:opts.body?JSON.stringify(opts.body):undefined});
+  }catch(e){throw syncErr('network','No se ha podido conectar con GitHub.')}
+  if(res.ok)return res;
+  if(res.status===401)throw syncErr('token','El token de GitHub no es válido o ha caducado.');
+  if(res.status===403||res.status===429){
+    if(res.status===429||res.headers.get('x-ratelimit-remaining')==='0'||res.headers.get('retry-after'))throw syncErr('limit','GitHub ha limitado las peticiones por un rato. Se reintentará solo.');
+    throw syncErr('perm','El token no tiene permiso para los Gists. Créalo de nuevo con «Gists: Read and write».');
+  }
+  if(res.status===404)throw syncErr('notfound','No se encuentra el Gist de sincronización.');
+  throw syncErr('http','GitHub ha respondido con un error ('+res.status+').');
+}
+// Escribir devuelve el Gist entero, con el contenido de cada foto: esa respuesta no se descarga
+async function ghWrite(path,opts){const res=await gh(path,opts);try{await res.body?.cancel()}catch(e){}}
+// El listado trae los metadatos de los archivos, no su contenido
+async function listGists(){
+  const out=[];
+  for(let page=1;page<=10;page++){
+    const list=await (await gh(`/gists?per_page=100&page=${page}`)).json();
+    out.push(...list);
+    if(list.length<100)break;
+  }
+  return out;
+}
+// Si hay varios, el más antiguo: así todos los dispositivos eligen el mismo
+async function findGist(){
+  let best=null;
+  for(const g of await listGists())if(g.files&&g.files[SYNC_FILE]&&(!best||tsOf(g.created_at)<tsOf(best.created_at)))best=g;
+  return best?best.id:'';
+}
+async function readGist(id){
+  const g=await (await gh('/gists/'+encodeURIComponent(id))).json(),f=g.files&&g.files[SYNC_FILE];
+  if(!f)return null;
+  if(f.truncated||typeof f.content!=='string'){
+    let r;try{r=await fetch(f.raw_url,{cache:'no-store'})}catch(e){throw syncErr('network','No se ha podido conectar con GitHub.')}
+    if(!r.ok)throw syncErr('http','GitHub ha respondido con un error ('+r.status+').');
+    return r.text();
+  }
+  return f.content;
+}
+async function writeGist(id,content){
+  if(id){await ghWrite('/gists/'+encodeURIComponent(id),{method:'PATCH',body:{files:{[SYNC_FILE]:{content}}}});return id}
+  const g=await (await gh('/gists',{method:'POST',body:{description:SYNC_DESC,public:false,files:{[SYNC_FILE]:{content}}}})).json();
+  return g.id;
+}
+
+/* ---- Fotos en GitHub ---- */
+const saltTag=salt=>salt.replace(/[^A-Za-z0-9]/g,'').slice(0,8);
+const PHOTO_RE=/^f-(.+)-([A-Za-z0-9]{8})\.enc$/;
+function syncNote(t){syncRt.note=t;paintSyncStatus()}
+async function syncPhotos(st,salt){
+  const wanted=[...usedPhotos(st)].sort(),sig=saltTag(salt)+'|'+wanted.join(',');
+  const local=new Set((await idbKeys('photos')).map(String));
+  const missing=wanted.filter(id=>!local.has(id));
+  if(!missing.length&&syncCfg.photoSig===sig)return;
+  const tag=saltTag(salt),gists=(await listGists()).filter(g=>g.files&&g.files[PHOTO_MARK]);
+  const remote=new Map(),stale=[],room=[];
+  for(const g of gists){
+    const names=Object.keys(g.files);
+    room.push({id:g.id,n:names.length});
+    for(const name of names){
+      const m=PHOTO_RE.exec(name);if(!m)continue;
+      if(m[2]===tag&&wanted.includes(m[1]))remote.set(m[1],{gid:g.id,raw:g.files[name].raw_url,name});
+      // Lo cifrado con otra contraseña solo se quita si la foto sigue en este dispositivo
+      else if(!wanted.includes(m[1])||local.has(m[1]))stale.push({gid:g.id,name});
+    }
+  }
+  // Subir lo que falta en GitHub, por tandas
+  const up=wanted.filter(id=>local.has(id)&&!remote.has(id));
+  let done=0;
+  while(up.length){
+    let box=room.find(b=>b.n<PHOTO_PER_GIST);
+    if(!box){
+      const g=await (await gh('/gists',{method:'POST',body:{description:PHOTO_DESC,public:false,files:{[PHOTO_MARK]:{content:'Fotos cifradas del Recetario. No borrar ni editar.'}}}})).json();
+      box={id:g.id,n:1};room.push(box);
+    }
+    const batch=up.splice(0,Math.min(PHOTO_BATCH,PHOTO_PER_GIST-box.n)),files={};
+    syncNote(`Subiendo fotos: ${done+batch.length} de ${done+batch.length+up.length}`);
+    for(const id of batch)files[`f-${id}-${tag}.enc`]={content:await encryptPhoto(await idbGet('photos',id),salt,id)};
+    await ghWrite('/gists/'+encodeURIComponent(box.id),{method:'PATCH',body:{files}});
+    box.n+=batch.length;done+=batch.length;
+  }
+  // Bajar lo que falta aquí
+  const fullGist=new Map();
+  async function readPhoto(r){
+    if(r.raw&&!syncRt.rawBlocked){
+      try{const x=await fetch(r.raw,{cache:'no-store'});if(x.ok)return await x.text()}catch(e){syncRt.rawBlocked=true}
+    }
+    // Vía alternativa: leer el Gist entero una sola vez por ciclo
+    if(!fullGist.has(r.gid))fullGist.set(r.gid,await (await gh('/gists/'+encodeURIComponent(r.gid))).json());
+    return fullGist.get(r.gid).files?.[r.name]?.content;
+  }
+  const down=missing.filter(id=>remote.has(id));
+  let got=0,failed=0;
+  for(const id of down){
+    syncNote(`Bajando fotos: ${got+1} de ${down.length}`);
+    try{
+      const text=await readPhoto(remote.get(id));
+      if(!text)throw new Error('vacía');
+      await idbPut('photos',id,await decryptPhoto(text,salt,id));got++;
+    }catch(e){if(e&&e.kind)throw e;console.error(e);failed++}
+  }
+  if(got){window.setTimeout(refreshView,0)}
+  // Quitar de GitHub lo que ya no usa ninguna receta
+  const byGist=new Map();
+  for(const f of stale){if(!byGist.has(f.gid))byGist.set(f.gid,{});byGist.get(f.gid)[f.name]=null}
+  for(const [gid,files] of byGist)await ghWrite('/gists/'+encodeURIComponent(gid),{method:'PATCH',body:{files}});
+  syncNote('');
+  // Solo se da por terminado si no falta nada: si no, se reintenta en el siguiente ciclo
+  if(got===missing.length&&!failed){syncCfg.photoSig=sig;saveSyncCfg()}
+}
+
+/* ---- Ciclo ---- */
+function loadSyncCfg(){
+  try{
+    const c=JSON.parse(localStorage.getItem(SYNC_KEY));
+    if(c&&typeof c==='object'&&c.token&&c.pass)return {token:String(c.token),pass:String(c.pass),gistId:String(c.gistId||''),lastSync:isoOr(c.lastSync,''),synced:!!c.synced,photoSig:String(c.photoSig||'')};
+  }catch(e){}
+  return null;
+}
+let syncCfg=loadSyncCfg();
+function saveSyncCfg(){try{if(syncCfg)localStorage.setItem(SYNC_KEY,JSON.stringify(syncCfg));else localStorage.removeItem(SYNC_KEY)}catch(e){}}
+const syncRt={busy:false,pending:false,timer:null,status:'off',err:null,halt:'',toastKind:'',note:'',rawBlocked:false};
+async function syncCycle(){
+  if(!syncCfg.gistId){syncCfg.gistId=await findGist();saveSyncCfg()}
+  let remote=null,salt='';
+  if(syncCfg.gistId){
+    let text;
+    try{text=await readGist(syncCfg.gistId)}
+    catch(e){if(e.kind==='notfound'){syncCfg.gistId='';saveSyncCfg();text=null}else throw e}
+    if(text){const r=await decryptEnv(text);remote=r.st;salt=r.salt}
+  }
+  // Desde aquí hasta aplicar la fusión no hay esperas: se usa el estado de este mismo instante
+  const local=state,localFp=canon(local),remoteFp=remote?canon(remote):'';
+  const merged=!remote?local:(!syncCfg.synced&&isPristine(local))?adoptRemote(remote,local):syncMerge(local,remote);
+  const mergedFp=canon(merged);
+  if(merged!==local&&mergedFp!==localFp)applyMerged(merged);
+  if(!remote||mergedFp!==remoteFp){
+    const enc=await encryptState(merged,salt);
+    salt=enc.salt;
+    syncCfg.gistId=await writeGist(syncCfg.gistId,enc.content);
+  }
+  syncCfg.synced=true;saveSyncCfg();
+  await syncPhotos(merged,salt);
+}
+async function syncNow(opts={}){
+  if(!syncCfg||dbError||!state)return {ok:false};
+  if(syncRt.busy){syncRt.pending=true;return {ok:false,busy:true}}
+  if(syncRt.halt&&!opts.force)return {ok:false};
+  syncRt.busy=true;syncRt.halt='';setSyncStatus('syncing');
+  let res={ok:true};
+  try{
+    if(navigator.locks&&navigator.locks.request)await navigator.locks.request('recetario_sync',syncCycle);else await syncCycle();
+    syncCfg.lastSync=nowISO();saveSyncCfg();syncRt.err=null;syncRt.toastKind='';
+    setSyncStatus('ok');
+  }catch(e){res={ok:false,err:e};handleSyncError(e,opts.quiet)}
+  finally{syncRt.busy=false;syncRt.note='';paintSyncStatus();if(syncRt.pending){syncRt.pending=false;if(!syncRt.halt)scheduleSync(2000)}}
+  return res;
+}
+function scheduleSync(delay=5000){
+  if(!syncCfg||syncRt.halt)return;
+  clearTimeout(syncRt.timer);syncRt.timer=setTimeout(()=>syncNow({quiet:true}),delay);
+}
+function handleSyncError(e,quiet){
+  const known=e&&e.kind,kind=known||'unknown',msg=known?e.message:'Ha ocurrido un error inesperado al sincronizar.';
+  if(!known)console.error(e);
+  syncRt.err={kind,msg};
+  if(['token','password','perm','version','format'].includes(kind))syncRt.halt=kind;
+  setSyncStatus('error');
+  if((!quiet||syncRt.halt)&&kind!=='network'&&kind!=='limit'&&syncRt.toastKind!==kind){
+    syncRt.toastKind=kind;
+    toast(msg+(syncRt.halt?' La sincronización está en pausa.':''),{icon:'alert'});
+  }
+}
+function setSyncStatus(s){
+  syncRt.status=s;
+  document.documentElement.classList.toggle('sync-error',s==='error'&&!!syncRt.halt);
+  paintSyncStatus();
+}
+const DTF_SYNC=new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+function syncStatusText(){
+  if(!syncCfg)return 'Desactivada en este dispositivo';
+  if(syncRt.note)return syncRt.note;
+  if(syncRt.status==='syncing')return 'Sincronizando…';
+  if(syncRt.status==='error'&&syncRt.err)return syncRt.err.msg+(syncRt.halt?' En pausa: corrígelo y pulsa «Sincronizar ahora».':' Se reintentará.');
+  return syncCfg.lastSync?`Activa. Última vez: ${DTF_SYNC.format(new Date(syncCfg.lastSync))}`:'Activa';
+}
+function paintSyncStatus(){
+  const el=$('#sync-status');if(!el)return;
+  el.textContent=syncStatusText();el.classList.toggle('sync-bad',syncRt.status==='error');
+  const b=$('#sync-now');if(b)b.disabled=syncRt.busy;
+}
+function syncBoxHTML(){
+  const on=!!syncCfg;
+  const form=`<div class="sync-form">
+    <label class="field"><span>Token de GitHub</span><input id="sync-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${on?'Guardado; escribe uno nuevo para cambiarlo':'github_pat_…'}"></label>
+    <label class="field"><span>Contraseña de cifrado</span><input id="sync-pass" type="password" autocomplete="new-password" placeholder="${on?'Guardada; escribe otra para cambiarla':'Al menos 8 caracteres'}"></label>
+    <label class="field"><span>Repite la contraseña</span><input id="sync-pass2" type="password" autocomplete="new-password"></label></div>`;
+  return `<div class="setrow"><span class="lbl">Estado<span class="sub ${syncRt.status==='error'?'sync-bad':''}" id="sync-status">${esc(syncStatusText())}</span></span>${on?`<button class="btn" id="sync-now" data-act="sync-now" ${syncRt.busy?'disabled':''}>${ic('sync')}Sincronizar ahora</button>`:''}</div>
+  <div class="sync-body">
+    ${on?`<details class="sync-help"><summary>Cambiar el token o la contraseña</summary>${form}<button class="btn primary" data-act="sync-activate">Guardar cambios</button></details>`:`${form}<button class="btn primary" data-act="sync-activate">${ic('sync')}Activar sincronización</button>`}
+    <details class="sync-help"><summary>Cómo crear el token de GitHub</summary><ol>
+      <li>Si ya sincronizas el Revisor de Tareas, <b>sirve el mismo token</b>: cópialo y sáltate estos pasos.</li>
+      <li>En el ordenador, entra en <b>github.com</b> e inicia sesión.</li>
+      <li>Pulsa tu <b>foto de perfil</b> (arriba a la derecha) y elige <b>Settings</b>.</li>
+      <li>En el menú de la izquierda, baja hasta el final y pulsa <b>Developer settings</b>.</li>
+      <li>Despliega <b>Personal access tokens</b> y pulsa <b>Fine-grained tokens</b>.</li>
+      <li>Pulsa el botón verde <b>Generate new token</b>.</li>
+      <li><b>Token name</b>: «Recetario sync». <b>Expiration</b>: elige <b>Custom</b> y una fecha dentro de un año (anótala: al caducar habrá que crear otro). <b>Repository access</b>: «Public repositories (read-only)».</li>
+      <li>En <b>Permissions</b>, pulsa <b>Add permissions</b> (o despliega <b>Account permissions</b>), marca <b>Gists</b> y elige <b>Read and write</b>. No añadas ningún otro.</li>
+      <li>Pulsa <b>Generate token</b> y confirma. Copia el token (empieza por <code>github_pat_</code>): GitHub lo muestra una sola vez.</li>
+      <li>Pégalo arriba, escribe dos veces la contraseña de cifrado y pulsa <b>Activar sincronización</b>.</li>
+      <li>En el otro dispositivo repite solo el paso anterior, con <b>el mismo token y la misma contraseña</b>. Pásalos con un gestor de contraseñas, no por correo ni chat.</li>
+    </ol></details>
+    ${on?`<button class="btn danger" data-act="sync-off">Desactivar en este dispositivo</button>`:''}
+  </div>`;
+}
+async function activateSync(){
+  const prev=syncCfg,token=($('#sync-token')?.value||'').trim()||(prev?prev.token:''),p1=$('#sync-pass')?.value||'',p2=$('#sync-pass2')?.value||'';
+  if(!token){toast('Pega el token de GitHub',{icon:'alert'});$('#sync-token')?.focus();return}
+  if(!prev||p1||p2){
+    if(p1.length<8){toast('La contraseña debe tener al menos 8 caracteres',{icon:'alert'});$('#sync-pass')?.focus();return}
+    if(p1!==p2){toast('Las dos contraseñas no coinciden',{icon:'alert'});$('#sync-pass2')?.focus();return}
+  }
+  const pass=(p1||(prev?prev.pass:'')).normalize('NFC'),same=prev&&prev.token===token;
+  syncCfg={token,pass,gistId:same?prev.gistId:'',lastSync:'',synced:same?prev.synced:false,photoSig:''};
+  keyCache.id='';syncRt.halt='';syncRt.toastKind='';
+  let r=await syncNow({force:true,quiet:true});
+  if(!r.ok&&r.err&&r.err.kind==='password'&&syncCfg.gistId&&await confirmBox('La contraseña no coincide','Ya hay datos en GitHub cifrados con otra contraseña. Si la olvidaste o te equivocaste al crearla, puedes sobrescribir esa copia con los datos de este dispositivo. Se perderá lo que solo estuviera allí.','Sobrescribir')){
+    try{
+      const enc=await encryptState(state,'');
+      await writeGist(syncCfg.gistId,enc.content);
+      syncCfg.synced=true;syncRt.err=null;syncRt.halt='';setSyncStatus('ok');
+      r=await syncNow({force:true,quiet:true});
+    }catch(e){r={ok:false,err:e}}
+  }
+  if(r.ok){toast('Sincronización activada');renderApp()}
+  else{
+    syncCfg=prev;saveSyncCfg();keyCache.id='';syncRt.err=null;syncRt.halt='';setSyncStatus(prev?'ok':'off');
+    const e=r.err;toast((e&&e.kind?e.message:'No se ha podido activar la sincronización')+(e&&e.kind==='token'?' Revisa que lo has copiado entero.':''),{icon:'alert'});
+  }
+}
+async function disableSync(){
+  if(!await confirmBox('¿Desactivar la sincronización?','Se borrarán el token y la contraseña de este dispositivo. Tus recetas aquí y la copia cifrada de GitHub no se tocan.','Desactivar'))return;
+  clearTimeout(syncRt.timer);syncCfg=null;saveSyncCfg();keyCache.id='';syncRt.err=null;syncRt.halt='';setSyncStatus('off');renderApp();
+}
+
+/* =========================================================
    Eventos
    ========================================================= */
 const ACTIONS={
@@ -1852,8 +2619,26 @@ const ACTIONS={
   'copy-recipe':async el=>{const r=recipeById(el.dataset.id);if(r&&await copyText(recipeToMarkdown(r)))toast('Receta copiada como texto',{icon:'copy'})},
   'serv':el=>{const r=recipeById(ui.recipeId);if(!r)return;detailServ[r.id]=stepServ(detailServ[r.id]??r.servings,+el.dataset.d);renderApp()},
   'step-done':el=>el.classList.toggle('done'),
+  'fav':el=>{const id=el.dataset.id;commit('',s=>{const r=s.recipes.find(x=>x.id===id);if(!r)return false;r.fav=!r.fav;r.updatedAt=nowISO()})},
+  'filter-fav':()=>{ui.fav=!ui.fav;saveUI();renderApp()},
+  // Fotos
+  'photo-add':el=>pickPhoto(el.dataset.id),
+  'ed-photo':()=>pickPhoto('editor'),
+  'ed-photo-del':()=>{editor.photo=null;editor.dirty=true;renderApp()},
+  // Modo cocina
+  'cook-start':el=>{const r=recipeById(el.dataset.id);if(!r)return;ui.cookStep=0;ui.cookServ=detailServ[r.id]??r.servings;cook.rid=null;go('cook',{recipeId:r.id})},
+  'cook-exit':()=>history.back(),
+  'cook-go':el=>cookMove(+el.dataset.d),
+  'cook-mode':el=>{ui.cookList=el.dataset.v==='list';saveUI();renderApp(true)},
+  'cook-sheet':()=>{cook.sheet=!cook.sheet;$('.cook')?.classList.toggle('sheet',cook.sheet)},
+  'cook-ing':el=>{const k=+el.dataset.k;if(cook.ings.has(k))cook.ings.delete(k);else cook.ings.add(k);el.classList.toggle('done',cook.ings.has(k))},
+  'cook-tick':el=>{const k=+el.dataset.k;if(cook.done.has(k))cook.done.delete(k);else cook.done.add(k);el.classList.toggle('done',cook.done.has(k))},
+  // Sincronización
+  'sync-activate':()=>activateSync(),
+  'sync-now':async()=>{const r=await syncNow({force:true});if(r.ok)toast('Sincronizado')},
+  'sync-off':()=>disableSync(),
   'filter-tag':el=>{const id=el.dataset.id;ui.tags=ui.tags.includes(id)?ui.tags.filter(t=>t!==id):[...ui.tags,id];saveUI();renderApp()},
-  'clear-filters':()=>{ui.q='';ui.cat='';ui.tags=[];ui.method='';saveUI();renderApp()},
+  'clear-filters':()=>{ui.q='';ui.cat='';ui.tags=[];ui.method='';ui.fav=false;saveUI();renderApp()},
   'filter-method':el=>{ui.method=ui.method===el.dataset.v?'':el.dataset.v;saveUI();renderApp()},
   'paste-recipe':()=>pasteRecipe(),
   'dup-recipe':el=>{if(recipeById(el.dataset.id))go('edit',{recipeId:el.dataset.id,copy:true})},
@@ -1928,7 +2713,7 @@ const ACTIONS={
   'export-md':()=>{const list=state.recipes.slice().sort((a,b)=>COLL.compare(a.title,b.title));download(`recetario-${ymd()}.md`,list.map(recipeToMarkdown).join('\n\n---\n\n'),'text/markdown');toast('Recetas exportadas en texto')},
   'import':()=>{const f=$('#import-file');f.value='';f.click()},
   'wipe':async()=>{
-    const ok=await modal({title:'¿Vaciar el recetario?',body:`<p>Se borrarán ${state.recipes.length} recetas, el catálogo de ingredientes, las categorías y las etiquetas de esta aplicación. Las demás aplicaciones no se tocan.</p><p>Exporta antes una copia si quieres conservarlas.</p>`,buttons:[{label:'Cancelar',value:false},{label:'Exportar copia',value:'export'},{label:'Vaciar',cls:'danger',value:true}]});
+    const ok=await modal({title:'¿Vaciar el recetario?',body:`<p>Se borrarán ${state.recipes.length} recetas, el catálogo de ingredientes, las categorías y las etiquetas de esta aplicación. Las demás aplicaciones no se tocan.</p>${syncCfg?'<p><b>La sincronización está activa: también se borrarán en tus otros dispositivos.</b></p>':''}<p>Exporta antes una copia si quieres conservarlas.</p>`,buttons:[{label:'Cancelar',value:false},{label:'Exportar copia',value:'export'},{label:'Vaciar',cls:'danger',value:true}]});
     if(ok==='export'){exportJSON();return}
     if(ok!==true)return;
     commit('Recetario vaciado',()=>{const settings=state.settings;state=normalizeState({});state.settings=settings});
@@ -1953,6 +2738,11 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{
   const typing=e.target.closest('input,textarea,select,[contenteditable]');
   if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&e.key.toLowerCase()==='z'&&!typing&&!$('.overlay')){e.preventDefault();undo();return}
+  if(ui.view==='cook'&&!typing&&!$('.overlay')){
+    if(e.key==='ArrowRight'&&!ui.cookList){e.preventDefault();cookMove(1,true);return}
+    if(e.key==='ArrowLeft'&&!ui.cookList){e.preventDefault();cookMove(-1,true);return}
+    if(e.key==='Escape'){if(cook.sheet)ACTIONS['cook-sheet']();else history.back();return}
+  }
   if(e.key==='Enter'&&e.target.matches('.rcard')){e.target.click();return}
   if(e.key==='Enter'&&e.target.id==='off-q'){e.preventDefault();offSearch();return}
   if((e.key==='Enter'||e.key===' ')&&e.target.matches('.sl-row[data-act]')){e.preventDefault();e.target.click();return}
@@ -1961,7 +2751,7 @@ document.addEventListener('keydown',e=>{
 });
 document.addEventListener('input',e=>{
   const t=e.target;
-  if(t.id==='q'){ui.q=t.value;saveUISoon();$('#results').innerHTML=vResults();return}
+  if(t.id==='q'){ui.q=t.value;saveUISoon();$('#results').innerHTML=vResults();hydrateImages();return}
   if(t.id==='ingq'){ui.ingQ=t.value;saveUISoon();$('#ing-results').innerHTML=vIngResults();return}
   if(!editor)return;
   if(t.dataset.pf){
@@ -1978,6 +2768,7 @@ document.addEventListener('input',e=>{
 document.addEventListener('change',async e=>{
   const t=e.target;
   if(t.id==='import-file'){if(t.files[0])importFile(t.files[0]);return}
+  if(t.id==='photo-file'||t.id==='photo-cam'){photoChosen(t.files[0]);return}
   if(t.id==='serv'){const r=recipeById(ui.recipeId);const v=parseQty(t.value);if(r&&v>0)detailServ[r.id]=v;else if(r)toast('Raciones no válidas',{icon:'alert'});renderApp();return}
   if(t.dataset.shopServ){
     const id=t.dataset.shopServ,v=parseQty(t.value);
@@ -2068,9 +2859,9 @@ async function boot(){
     console.error(e);dbError=true;state=normalizeState(null);
     toast('No se puede acceder al almacenamiento: los cambios no se guardarán',{icon:'alert'});
   }
-  if(ui.view==='edit'||!['recipes','recipe','categories','tags','ingredients','settings','help','shopping','aisles'].includes(ui.view))ui.view='recipes';
-  if(ui.view==='recipe'&&!recipeById(ui.recipeId))ui.view='recipes';
-  if(ui.view!=='recipe')ui.recipeId=null;
+  if(ui.view==='edit'||!['recipes','recipe','categories','tags','ingredients','settings','help','shopping','aisles','cook'].includes(ui.view))ui.view='recipes';
+  if((ui.view==='recipe'||ui.view==='cook')&&!recipeById(ui.recipeId))ui.view='recipes';
+  if(ui.view!=='recipe'&&ui.view!=='cook')ui.recipeId=null;
   // Entrada base en el historial para que «atrás» vuelva a la lista antes de salir
   if(ui.view!=='recipes'){history.replaceState({view:'recipes',recipeId:null},'');history.pushState({view:ui.view,recipeId:ui.recipeId},'')}
   else history.replaceState({view:'recipes',recipeId:null},'');
@@ -2080,12 +2871,18 @@ async function boot(){
     try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
   }
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(e=>console.warn('SW',e));
+  if(!dbError)setTimeout(gcPhotos,4000);
+  setTimeout(()=>syncNow({quiet:true}),2500);
+  setInterval(()=>{if(!document.hidden)syncNow({quiet:true})},180000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&syncCfg&&Date.now()-tsOf(syncCfg.lastSync)>60000)syncNow({quiet:true})});
+  window.addEventListener('online',()=>syncNow({quiet:true}));
 }
 
 // Ganchos de prueba
 window.__recetario={
   get state(){return state},normalizeState,convertUnit,toGrams,parseQty,fmtQty,mergeStates,undo,
   parseRecipeText,extractPrograms,parseIngLine,fmtProgram,stepWarnings,stepIngredients,ingCandidates,fold,buildShoppingList,shoppingText,computeMacros,parseOff,
+  syncMerge,canon,encryptState,decryptEnv,syncNow,storePhoto,gcPhotos,usedPhotos,cookTiles,idbKeys,get syncCfg(){return syncCfg},setSyncCfg(c){syncCfg=c;keyCache.id='';saveSyncCfg()},get syncRt(){return syncRt},
   async setState(j){state=normalizeState(typeof j==='string'?JSON.parse(j):j);undoStack.length=0;await writeNow();renderApp(true)}
 };
 boot();
