@@ -389,6 +389,7 @@ html.sync-error .sb-item[data-view=settings]::after{right:12px;top:50%;margin-to
 @media(min-width:761px){
   #sidebar{display:flex;flex-direction:column;gap:4px;position:fixed;top:0;bottom:0;left:0;width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);padding:14px 10px;z-index:40;overflow-y:auto;overflow-x:hidden}
   #bottombar{display:none}
+  .chips{flex-wrap:wrap;overflow:visible;row-gap:8px}
   #main{margin-left:var(--sidebar-w);padding:0 32px 48px}
   .wrap{max-width:1120px;margin:0 auto}
   .topbar{margin:0 -32px 12px;padding:14px 32px;min-height:66px}
@@ -521,7 +522,7 @@ html.sync-error .sb-item[data-view=settings]::after{right:12px;top:50%;margin-to
 /* =========================================================
    Constantes
    ========================================================= */
-const APP_VERSION='1.7.0';
+const APP_VERSION='1.7.1';
 const DB_NAME='recetario_v1', UI_KEY='recetario_v1_ui', CHANNEL_NAME='recetario';
 const UNITS=['g','kg','ml','l','cda','cdta','ud'];
 const UNIT_INFO={g:{fam:'peso',f:1},kg:{fam:'peso',f:1000},ml:{fam:'volumen',f:1},l:{fam:'volumen',f:1000},cda:{fam:'volumen',f:15},cdta:{fam:'volumen',f:5},ud:{fam:'unidades',f:1}};
