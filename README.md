@@ -25,7 +25,11 @@ Aplicación web personal (PWA) para guardar recetas, instalable en el ordenador 
 - **Sincronización** entre dispositivos con Gists secretos de GitHub, cifrados con AES-GCM y una contraseña propia. Se activa en **Ajustes y avisos → Sincronización**, donde están los pasos para crear el token.
 - Tema automático, claro u oscuro.
 
-Próximas ideas: planificador semanal con el menú del colegio.
+- **Plan semanal**: comida y cena de lunes a domingo, con el **menú del cole** (se importa un JSON preparado a partir del PDF del colegio). Propone cenas que complementan lo que comieron según la tabla «Si hemos comido… podemos cenar», equilibra la semana (carne, pescado, huevo, legumbre), evita repetir, admite **sobras** y texto libre, y pasa la semana a la lista de la compra.
+- **Grupos de alimento** por receta, automáticos (título e ingredientes, con mínimo por ración) o elegidos a mano.
+- **«La hice hoy»**: historial de cuándo se cocinó cada receta (se apunta solo al terminar el modo cocina) y orden «Hace más que no la hago».
+- **Básicos de casa**: ingredientes que nunca salen en la lista de la compra.
+- **Temporizadores** en el modo cocina a partir de los tiempos de cada paso, con sonido y vibración.
 
 ## Instalación
 
@@ -60,4 +64,4 @@ No abras `index.html` desde el disco (`file://`): no se instala ni funciona el s
 
 - HTML, CSS y JS vanilla en un único `index.html`, sin librerías ni compilación.
 - Service worker «primero la red» (`cache: 'no-store'`), registrado con `updateViaCache: 'none'`. **Subir el número de `CACHE` en `sw.js` cada vez que se cambie ese archivo.**
-- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `stepIngredients`, `ingCandidates`, `fold`, `buildShoppingList`, `shoppingText`, `computeMacros`, `parseOff`, `syncMerge`, `canon`, `encryptState`, `decryptEnv`, `syncNow`, `storePhoto`, `gcPhotos`, `usedPhotos`, `cookTiles`, `idbKeys`, `syncCfg`, `setSyncCfg`, `syncRt`, `setState(json)`).
+- Ganchos de prueba en `window.__recetario` (`state`, `normalizeState`, `convertUnit`, `toGrams`, `parseQty`, `fmtQty`, `mergeStates`, `undo`, `parseRecipeText`, `extractPrograms`, `parseIngLine`, `fmtProgram`, `stepWarnings`, `stepIngredients`, `ingCandidates`, `fold`, `buildShoppingList`, `shoppingText`, `computeMacros`, `parseOff`, `foodGroups`, `recipeGroups`, `autoGroups`, `rankFor`, `adviceFor`, `slotContext`, `weekCounts`, `parseMenu`, `importMenu`, `stepTimes`, `timers`, `tickTimers`, `syncMerge`, `canon`, `encryptState`, `decryptEnv`, `syncNow`, `storePhoto`, `gcPhotos`, `usedPhotos`, `cookTiles`, `idbKeys`, `syncCfg`, `setSyncCfg`, `syncRt`, `setState(json)`).
